@@ -30,5 +30,13 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}
 
+  frontend:
+    build:
+      context: /web
+      dockerfile: Dockerfile
+    container_name: frontend_container
+    ports:
+      - "3000:80"
+
 volumes:
   postgres_data:
