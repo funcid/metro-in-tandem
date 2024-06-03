@@ -13,6 +13,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 8080
+EXPOSE 3000
 
 ENTRYPOINT ["npm", "run", "dev"]

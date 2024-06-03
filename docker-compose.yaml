@@ -30,11 +30,26 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}
 
+  backend:
+    build: internal
+    container_name: backend_container
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    ports:
+      - "8081:8081"
+
   frontend:
     build: web
     container_name: frontend_container
     ports:
-      - "8080:8080"
+      - "3000:3000"
 
 volumes:
   postgres_data:
