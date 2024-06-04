@@ -1,11 +1,11 @@
-package me.func.tandem
+package me.func.internal
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class TandemApplication
+class InternalApplication
 
 fun main(args: Array<String>) {
-	runApplication<TandemApplication>(*args)
+	runApplication<InternalApplication>(*args)
 }

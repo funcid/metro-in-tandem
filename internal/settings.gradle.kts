@@ -1,1 +1,1 @@
-rootProject.name = "tandem"
+rootProject.name = "internal"

@@ -1,23 +1,16 @@
-# Используем официальный образ Gradle для сборки проекта
-FROM gradle:7.3.3-jdk11 AS build
+FROM openjdk:22-jdk
 
-# Устанавливаем рабочую директорию внутри контейнера
-WORKDIR /gradle
+RUN microdnf install findutils
 
-# Копируем весь проект в контейнер
-COPY . .
-
-# Сборка проекта
-RUN gradle build
-
-# Используем официальный образ для Java для запуска приложения
-FROM openjdk:11-jre-slim
-
-# Создаем директорию для приложения
 WORKDIR /app
 
-# Копируем собранный jar файл из предыдущего этапа
-COPY --from=build /gradlebuild/libs/*.jar app.jar
+COPY . .
 
-# Указываем команду для запуска приложения
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Даём права на выполнение скрипта gradlew
+RUN chmod +x gradlew
+
+# Скачиваем все зависимости и собираем проект
+RUN ./gradlew build --no-daemon
+
+# Устанавливаем команду для запуска приложения
+CMD ["java", "-jar", "build/libs/internal-0.0.1-SNAPSHOT.jar"]
