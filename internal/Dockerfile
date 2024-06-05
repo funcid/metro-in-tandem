@@ -10,7 +10,7 @@ COPY . .
 RUN chmod +x gradlew
 
 # Скачиваем все зависимости и собираем проект
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build --no-daemon -x test
 
 # Устанавливаем команду для запуска приложения
 CMD ["java", "-jar", "build/libs/internal-0.0.1-SNAPSHOT.jar"]

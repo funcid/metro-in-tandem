@@ -34,6 +34,7 @@ dependencies {
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("com.jayway.jsonpath:json-path")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
