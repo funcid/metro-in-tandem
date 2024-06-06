@@ -29,6 +29,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.liquibase:liquibase-core")
 	implementation("org.springframework.session:spring-session-core")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 
 	runtimeOnly("org.postgresql:postgresql")
 
