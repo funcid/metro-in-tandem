@@ -28,6 +28,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.liquibase:liquibase-core")
+	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	implementation("org.springframework.session:spring-session-core")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 

@@ -29,13 +29,11 @@ data class Application(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     val time4: Time,
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "cat_pas")
     @JsonProperty("cat_pas")
     @Convert(converter = PassengerCategoryConverter::class)
     val catPas: PassengerCategory,
 
-    @Enumerated(EnumType.STRING)
     @Convert(converter = RequestStatusConverter::class)
     val status: RequestStatus,
 

@@ -1,6 +1,9 @@
 package me.func.internal.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
+import me.func.internal.converter.PassengerCategoryConverter
+import me.func.internal.dto.PassengerCategory
 
 @Entity
 data class Passenger(
@@ -17,8 +20,10 @@ data class Passenger(
     @Column(nullable = false)
     val gender: String = "",
 
-    @Column(nullable = false)
-    val category: String = "",
+    @Column(name = "category")
+    @JsonProperty("category")
+    @Convert(converter = PassengerCategoryConverter::class)
+    val category: PassengerCategory,
 
     @Column
     val additionalInfo: String? = null,

@@ -11,7 +11,7 @@ services:
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
-      - postgres_data2:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
       interval: 3s
@@ -52,4 +52,4 @@ services:
       - "3000:3000"
 
 volumes:
-  postgres_data2:
+  postgres_data:

@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper
 import me.func.internal.InternalApplication
+import me.func.internal.dto.PassengerCategory
 import me.func.internal.model.ContactNumber
 import me.func.internal.model.Passenger
 import org.junit.jupiter.api.Test
@@ -39,7 +40,7 @@ class PassengerE2ETests {
             fullName = "John Doe",
             contactNumbers = setOf(ContactNumber(number = "1234567890", description = "Home")),
             gender = "Male",
-            category = "Adult",
+            category = PassengerCategory.PL,
             additionalInfo = "VIP",
             hasPacemaker = false
         )

@@ -4,5 +4,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <!-- Should be only links to per-version cumulative changelog files. -->
     <include file="db/changelog/changelog-v1.0.0-cumulative.xml" relativeToChangelogFile="true"/>
+    <include file="db/changelog/changelog-v1.0.1-cumulative.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
