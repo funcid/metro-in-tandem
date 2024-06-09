@@ -1,33 +1,20 @@
 package me.func.internal;
 
+import RequestStatus
 import com.fasterxml.jackson.databind.ObjectMapper
 import me.func.internal.dto.PassengerCategory
 import me.func.internal.model.Application
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.sql.Timestamp
 import java.sql.Time
+import java.sql.Timestamp
 
-@DirtiesContext
-@ActiveProfiles("test")
-@ExtendWith(SpringExtension::class)
-@SpringBootTest(
-    classes = [InternalApplication::class],
-    webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-)
-@AutoConfigureMockMvc
-class ApplicationE2ETests {
+class ApplicationE2ETests : AbstractTest() {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
