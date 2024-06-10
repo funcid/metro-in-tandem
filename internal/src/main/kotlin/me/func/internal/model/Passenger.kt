@@ -6,6 +6,7 @@ import me.func.internal.converter.PassengerCategoryConverter
 import me.func.internal.dto.PassengerCategory
 
 @Entity
+@Table(name = "passenger")
 data class Passenger(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,

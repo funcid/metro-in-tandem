@@ -1,8 +1,8 @@
 package me.func.internal
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import me.func.internal.model.LoginRequest
-import me.func.internal.model.RegisterRequest
+import me.func.internal.dto.LoginRequest
+import me.func.internal.dto.RegisterRequest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

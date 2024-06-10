@@ -1,6 +1,6 @@
 package me.func.internal.converter
 
-import RequestStatus
+import me.func.internal.dto.RequestStatus
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
 

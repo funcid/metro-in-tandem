@@ -1,6 +1,6 @@
 package me.func.internal;
 
-import RequestStatus
+import me.func.internal.dto.RequestStatus
 import com.fasterxml.jackson.databind.ObjectMapper
 import me.func.internal.dto.PassengerCategory
 import me.func.internal.model.Application

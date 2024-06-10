@@ -1,4 +1,4 @@
-package me.func.internal.model
+package me.func.internal.dto
 
 data class LoginRequest(
     val username: String,

@@ -1,6 +1,7 @@
 package me.func.internal.controller
 
-import RequestStatus
+import me.func.internal.dto.RequestStatus
+import me.func.internal.dto.ApplicationResponse
 import me.func.internal.model.Application
 import me.func.internal.service.ApplicationService
 import org.springframework.http.HttpStatus
@@ -40,7 +41,7 @@ class ApplicationController(private val applicationService: ApplicationService) 
     }
 
     @GetMapping
-    fun getAllApplications(): ResponseEntity<List<Application>> {
+    fun getAllApplications(): ResponseEntity<List<ApplicationResponse>> {
         val applications = applicationService.getAllApplications()
         return ResponseEntity.ok(applications)
     }

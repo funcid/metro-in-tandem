@@ -1,6 +1,6 @@
 package me.func.internal.model
 
-import RequestStatus
+import me.func.internal.dto.RequestStatus
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
@@ -35,7 +35,7 @@ data class Application(
     val catPas: PassengerCategory,
 
     @Convert(converter = RequestStatusConverter::class)
-    val status: RequestStatus,
+    val status: RequestStatus?,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     val tpz: Timestamp,

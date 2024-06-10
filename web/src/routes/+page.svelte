@@ -3,12 +3,12 @@
 
 	import Header from '../components/Header.svelte';
 	import Home from '../components/Experience.svelte';
-	import Applications from '../components/Applications.svelte';
+	import Applications from '../components/applications/Applications.svelte';
 	import Passengers from '../components/Job.svelte';
 	import Employees from '../components/Employee.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
 	import Team from '../components/Footer.svelte';
-	import Login from '../components/Login.svelte';
+	import Login from '../components/login/Login.svelte';
 	import Footer from '../components/Footer.svelte';
 
     const routes = {
@@ -28,7 +28,7 @@
 </svelte:head>
 
 <div class="w-full flex justify-center py-[60rem] px-[120rem] font-moscowsans">
-	<div class="w-full text-[32rem] flex flex-col gap-[200rem] ra">
+	<div class="w-full text-[32rem] flex flex-col gap-[120rem]">
 		<Header />
 		<Router {routes} />
 		<Footer />

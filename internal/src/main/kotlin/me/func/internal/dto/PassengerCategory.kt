@@ -12,7 +12,8 @@ enum class PassengerCategory(val categoryCode: String) {
     RDK("РДК"),     // Родители с детскими колясками
     OGD("ОГД"),     // Организованные группы детей
     OV("ОВ"),     // Временно маломобильные
-    IU("ИУ");      // Люди с ментальной инвалидностью
+    IU("ИУ"),;      // Люди с ментальной инвалидностью
+
 
     companion object {
         private val map = entries.associateBy(PassengerCategory::categoryCode)

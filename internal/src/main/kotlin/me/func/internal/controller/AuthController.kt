@@ -1,8 +1,8 @@
 package me.func.internal.controller
 
 import me.func.internal.service.AuthService
-import me.func.internal.model.LoginRequest
-import me.func.internal.model.RegisterRequest
+import me.func.internal.dto.LoginRequest
+import me.func.internal.dto.RegisterRequest
 import me.func.internal.model.Role
 import me.func.internal.model.User
 import me.func.internal.service.UserService

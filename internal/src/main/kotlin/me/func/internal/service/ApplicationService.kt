@@ -1,13 +1,16 @@
 package me.func.internal.service
 
-import RequestStatus
+import me.func.internal.dto.RequestStatus
+import me.func.internal.dto.ApplicationResponse
 import me.func.internal.model.Application
 import me.func.internal.repository.ApplicationRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class ApplicationService(private val applicationRepository: ApplicationRepository) {
+class ApplicationService(
+    private val applicationRepository: ApplicationRepository
+) {
 
     fun createApplication(application: Application): Application {
         return applicationRepository.save(application)
@@ -32,8 +35,20 @@ class ApplicationService(private val applicationRepository: ApplicationRepositor
         applicationRepository.deleteById(id)
     }
 
-    fun getAllApplications(): List<Application> {
-        return applicationRepository.findAll().toList()
+    fun getAllApplications(): List<ApplicationResponse> {
+        return applicationRepository.findAllApplicationsWithPassengerInfo().map { info ->
+            ApplicationResponse(
+                info.id,
+                info.time3.toString(),
+                info.time4.toString(),
+                info.timeOver.toString(),
+                info.status ?: "Нет статуса",
+                info.catPas,
+                info.datetime.toString(),
+                info.fullName,
+                info.number ?: "Мобильный номер отсутствует",
+            )
+        }
     }
 
     fun getApplicationsByStatus(status: RequestStatus): List<Application> {
