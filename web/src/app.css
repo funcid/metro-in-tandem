@@ -25,6 +25,10 @@ html {
   }
 }
 
+.topic:hover {
+  color: #D4212D;
+}
+
 .project-item {
   transition: 0.1s cubic-bezier(1,-.27,0,1.58);
   box-shadow: 0rem 0rem 0rem 0rem;
