@@ -8,6 +8,7 @@
 	import Employees from '../components/Project.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
 	import Team from '../components/Footer.svelte';
+	import Footer from '../components/Footer.svelte';
 
     const routes = {
         '/': Home,
@@ -28,6 +29,7 @@
 	<div class="w-full text-[32rem] flex flex-col gap-[200rem] ra">
 		<Header />
 		<Router {routes} />
+		<Footer />
 	</div>
 </div>
 
