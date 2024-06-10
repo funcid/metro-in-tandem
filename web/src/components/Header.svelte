@@ -14,11 +14,11 @@
         </div>
     </div>
     <div class="flex justify-between">
-        <button class="topic">Главная</button>
-        <button class="topic">Заявки</button>
-        <button class="topic">Пассажиры</button>
-        <button class="topic">Сотрудники</button>
-        <button class="topic">Распределение</button>
-        <button class="topic">Команда</button>
+        <a href="#/" class="topic">Главная</a>
+        <a href="#/requests" class="topic">Заявки</a>
+        <a href="#/passengers" class="topic">Пассажиры</a>
+        <a href="#/employees" class="topic">Сотрудники</a>
+        <a href="#/distribution" class="topic">Распределение</a>
+        <a href="#/team" class="topic">Команда</a>
     </div>
 </div>
