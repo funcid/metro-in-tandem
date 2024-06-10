@@ -3,20 +3,22 @@
 
 	import Header from '../components/Header.svelte';
 	import Home from '../components/Experience.svelte';
-	import Requests from '../components/Portfolio.svelte';
+	import Applications from '../components/Applications.svelte';
 	import Passengers from '../components/Job.svelte';
-	import Employees from '../components/Project.svelte';
+	import Employees from '../components/Employee.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
 	import Team from '../components/Footer.svelte';
+	import Login from '../components/Login.svelte';
 	import Footer from '../components/Footer.svelte';
 
     const routes = {
         '/': Home,
-        '/requests': Requests,
+        '/applications': Applications,
         '/passengers': Passengers,
         '/employees': Employees,
         '/distribution': Distribution,
-        '/team': Team
+        '/team': Team,
+		'/login': Login
     };
 </script>
 
