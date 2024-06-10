@@ -8,14 +8,14 @@
         <img src="https://apps3proxy.mosmetro.tech/webapp-mosmetro/mm-logo-red.svg" alt="#" width="221rem" height="56.61rem" />
         <div class="flex gap-[60rem] items-center">
             <button class="flex gap-[20rem] bg-[#D4212D] py-[12rem] px-[26rem] rounded-[12rem] items-center">
-                <p class="text-white text-[27rem]">Войти</p> 
+                <a href="#/login" class="text-white text-[27rem]">Войти</a> 
                 <img src={Login} alt="#" width="27rem" height="27rem"/>
             </button>
         </div>
     </div>
     <div class="flex justify-between">
         <a href="#/" class="topic">Главная</a>
-        <a href="#/requests" class="topic">Заявки</a>
+        <a href="#/applications" class="topic">Заявки</a>
         <a href="#/passengers" class="topic">Пассажиры</a>
         <a href="#/employees" class="topic">Сотрудники</a>
         <a href="#/distribution" class="topic">Распределение</a>
