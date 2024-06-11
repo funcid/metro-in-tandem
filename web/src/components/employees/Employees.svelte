@@ -74,7 +74,7 @@
     {:else}
         <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-2">
             {#each employees as employee}
-                <div class="bg-white border border-gray-300 shadow-md overflow-hidden cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem] ml-[12rem] mb-[12rem] on:click={() => handleClick(employee.id)}">
+                <div on:click={() => handleClick(employee.id)} class="bg-white border border-gray-300 shadow-md overflow-hidden cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem] ml-[12rem] mb-[12rem]">
                     <p>
                         {employee.fio} ({employee.rank})
                     </p>

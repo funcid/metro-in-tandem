@@ -3,7 +3,7 @@
 	import { isAuthenticated } from "../components/login/Login.svelte"
 
 	import Header from '../components/Header.svelte';
-	import Home from '../components/Experience.svelte';
+	import Home from '../components/home/Home.svelte';
 	import Applications from '../components/applications/Applications.svelte';
 	import ApplicationDetail from '../components/applications/ApplicationDetail.svelte';
 	import Passengers from '../components/passengers/Passengers.svelte';

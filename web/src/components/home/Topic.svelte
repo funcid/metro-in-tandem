@@ -7,9 +7,14 @@
     export let date: string;
     export let position: string;
     export let actual: boolean = false;
+    export let route: string;
+
+    const handleClick = () => {
+        window.location.hash = `/${route}`;
+    };
 </script>
 
-<div class="lg:min-w-[820rem] min-w-[830rem] h-[160rem] flex gap-[30rem]">
+<div on:click={handleClick} class="lg:min-w-[820rem] min-w-[830rem] h-[200rem] flex gap-[30rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[30rem]">
     <img src={icon} alt={jobName}/>
     <div class="w-full flex justify-between">
         <div class="flex flex-col h-full justify-between">
