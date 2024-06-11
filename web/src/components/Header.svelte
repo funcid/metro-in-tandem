@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { JWT, isAuthenticated, username } from './login/Login.svelte';
     import Login from '$lib/images/login.svg';
 
@@ -11,6 +11,7 @@
     function logout() {
         JWT.set(null);
         showLogoutModal = false;
+        window.location.href = '/';
     }
 </script>
 

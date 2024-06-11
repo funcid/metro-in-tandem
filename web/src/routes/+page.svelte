@@ -1,6 +1,7 @@
-<script>
-	import Router from "svelte-spa-router";
-  
+<script lang="ts">
+	import Router, { push } from "svelte-spa-router";
+	import { isAuthenticated } from "../components/login/Login.svelte"
+
 	import Header from '../components/Header.svelte';
 	import Home from '../components/Experience.svelte';
 	import Applications from '../components/applications/Applications.svelte';
@@ -13,38 +14,44 @@
 	import Team from '../components/Footer.svelte';
 	import Login from '../components/login/Login.svelte';
 	import Footer from '../components/Footer.svelte';
-
+  
 	const routes = {
-		'/': Home,
-	  	'/applications': Applications,
-	  	'/applications/:id': ApplicationDetail,
-	  	'/passengers': Passengers,
-		'/passengers/:id': PassengerDetail,
-		'/create-passenger': CreatePassenger,
-	  	'/employees': Employees,
-	  	'/distribution': Distribution,
-	  	'/team': Team,
-	  	'/login': Login
+	  '/': Home,
+	  '/applications': Applications,
+	  '/applications/:id': ApplicationDetail,
+	  '/passengers': Passengers,
+	  '/passengers/:id': PassengerDetail,
+	  '/create-passenger': CreatePassenger,
+	  '/employees': Employees,
+	  '/distribution': Distribution,
+	  '/team': Team,
+	  '/login': Login
 	};
-</script>
-
-<svelte:head>
+  
+	const handleRoute = (event: any) => {
+	  	if (!$isAuthenticated && event.detail.route !== '/' && event.detail.route !== '/login') {
+			push('/login');
+	  	}
+	};
+  </script>
+  
+  <svelte:head>
 	<title>Home</title>
 	<meta name="description" content="Funcfolio" />
-</svelte:head>
-
-<div class="w-full flex justify-center py-[60rem] px-[120rem] font-moscowsans">
+  </svelte:head>
+  
+  <div class="w-full flex justify-center py-[60rem] px-[120rem] font-moscowsans">
 	<div class="w-full text-[32rem] flex flex-col gap-[120rem]">
-		<Header />
-		<Router {routes} />
-		<Footer />
+	  <Header />
+	  <Router {routes} on:routeLoaded={handleRoute} />
+	  <Footer />
 	</div>
-</div>
-
-<style>
+  </div>
+  
+  <style>
 	@font-face {
-		font-family: "MoscowSans";
-		src: url("/public/fonts/moscowsans-regular.ttf") format("truetype");
-		font-style: normal;
+	  font-family: "MoscowSans";
+	  src: url("/public/fonts/moscowsans-regular.ttf") format("truetype");
+	  font-style: normal;
 	}
-</style>
+  </style>
