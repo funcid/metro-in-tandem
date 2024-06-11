@@ -46,6 +46,7 @@
 </script>
 
 <main>
+    <p class="font-bold text-[40rem] mb-[20rem]">Заявки на сопровождение</p>
     {#if loading}
         <p class="text-gray-500">Загрузка заявок...</p>
     {:else if errorMessage}
@@ -54,7 +55,7 @@
     <div>
         <ul class="list-none p-0">
             {#each applications as app}
-                <li class="p-4 mb-[20rem] bg-white border border-gray-400 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={() => handleClick(app.id)}>
+                <li class="p-4 mb-[20rem] bg-white border border-gray-300 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={() => handleClick(app.id)}>
                     <div class="flex justify-between items-center">
                         <div class="flex flex-col gap-[12rem]">
                             <div><span class="font-bold">ФИО:</span> {app.fullName}</div>

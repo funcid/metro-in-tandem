@@ -59,29 +59,30 @@
 </script>
 
 <main>
+    <p class="font-bold text-[40rem] mb-[20rem]">Пассажиры</p>
     {#if loading}
         <p class="text-gray-500">Загрузка пассажиров...</p>
     {:else if errorMessage}
         <p class="text-red-500">{errorMessage}</p>
     {:else}
         <div class="flex flex-col gap-[20rem]">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between">
                 <input
                     type="text"
                     placeholder="Поиск по ФИО/номеру телефона"
                     bind:value={searchQuery}
-                    class="border border-gray-400 py-[12rem] px-[26rem] rounded-[12rem] w-1/2"
+                    class="border border-gray-400 p-[20rem] rounded-[20rem] w-1/2"
                     on:input={handleSearch} />
                 <button
-                    class="flex gap-[20rem] bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white"
+                    class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
                     on:click={handleCreatePassenger}>
-                    Создать пассажира
+                    Новый пассажир
                 </button>
             </div>
             <hr/>
             <div class="grid grid-cols-2">
                 {#each filteredPassengers as pas}
-                    <div class="bg-white ml-[12rem] mb-[12rem] border border-gray-400 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={() => handleClick(pas.id)}>
+                    <div class="bg-white ml-[12rem] mb-[12rem] border border-gray-300 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={() => handleClick(pas.id)}>
                         <div class="flex justify-between items-center">
                             <div class="flex flex-col gap-[10rem]">
                                 <div class="flex items-center">

@@ -39,17 +39,32 @@
     $: if (selectedSection) {
         fetchEmployeesBySection(selectedSection);
     }
+
+    const handleCreateEmployee = () => {
+        window.location.hash = '/create-employee';
+    };
+
+    // Функция для обработки клика по заявке
+    const handleClick = (id: string) => {
+        window.location.hash = `/employees/${id}`;
+    };
 </script>
 
 <main class="flex flex-col gap-[20rem]">
+    <p class="font-bold text-[40rem]">Сотрудники сопровождения</p>
     <div class="flex justify-between">
-        <p class="font-bold text-[40rem]">Сотрудники</p>
         <select bind:value={selectedSection} class="border border-gray-400 p-[20rem] rounded-[20rem]">
             {#each sections as section}
                 <option value={section}>{section}</option>
             {/each}
         </select>
+        <button
+            class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
+            on:click={handleCreateEmployee}>
+            Новый работник
+        </button>
     </div>
+    <hr/>
     {#if loading}
         <p class="text-gray-500 text-center">Загрузка сотрудников...</p>
     {:else if errorMessage}
@@ -59,7 +74,7 @@
     {:else}
         <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-2">
             {#each employees as employee}
-                <div class="bg-white border border-gray-300 shadow-md overflow-hidden rounded-[20rem] p-[20rem] ml-[12rem] mb-[12rem]">
+                <div class="bg-white border border-gray-300 shadow-md overflow-hidden cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem] ml-[12rem] mb-[12rem] on:click={() => handleClick(employee.id)}">
                     <p>
                         {employee.fio} ({employee.rank})
                     </p>
