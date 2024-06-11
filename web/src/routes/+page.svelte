@@ -1,9 +1,10 @@
 <script>
 	import Router from "svelte-spa-router";
-
+  
 	import Header from '../components/Header.svelte';
 	import Home from '../components/Experience.svelte';
 	import Applications from '../components/applications/Applications.svelte';
+	import ApplicationDetail from '../components/applications/ApplicationDetail.svelte';
 	import Passengers from '../components/Job.svelte';
 	import Employees from '../components/Employee.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
@@ -11,15 +12,17 @@
 	import Login from '../components/login/Login.svelte';
 	import Footer from '../components/Footer.svelte';
 
-    const routes = {
-        '/': Home,
-        '/applications': Applications,
-        '/passengers': Passengers,
-        '/employees': Employees,
-        '/distribution': Distribution,
-        '/team': Team,
-		'/login': Login
-    };
+	const routes = {
+		'/': Home,
+	  	'/applications': Applications,
+	  	'/applications/:id': ApplicationDetail,
+	  	'/passengers': Passengers,
+	  	'/employees': Employees,
+	  	'/distribution': Distribution,
+	  	'/team': Team,
+	  	'/login': Login
+	};
+
 </script>
 
 <svelte:head>

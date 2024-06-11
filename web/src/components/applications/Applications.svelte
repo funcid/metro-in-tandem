@@ -34,7 +34,7 @@
 
     // Функция для обработки клика по заявке
     const handleClick = (id: string) => {
-        window.location.href = `/#/applications/${id}`;
+        window.location.hash = `/applications/${id}`;
     };
 
     const calculateMinutesSince = (datetime: string): number => {
