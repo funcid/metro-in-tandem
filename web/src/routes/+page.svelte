@@ -9,7 +9,7 @@
 	import Passengers from '../components/passengers/Passengers.svelte';
 	import PassengerDetail from '../components/passengers/PassengerDetail.svelte';
 	import CreatePassenger from '../components/passengers/CreatePassenger.svelte';
-	import Employees from '../components/Employee.svelte';
+	import Employees from '../components/employees/Employees.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
 	import Team from '../components/Footer.svelte';
 	import Login from '../components/login/Login.svelte';

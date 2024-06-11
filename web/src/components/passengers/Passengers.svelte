@@ -81,7 +81,7 @@
             <hr/>
             <div class="grid grid-cols-2">
                 {#each filteredPassengers as pas}
-                    <div class="bg-white mr-[12rem] mb-[12rem] border border-gray-400 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={() => handleClick(pas.id)}>
+                    <div class="bg-white ml-[12rem] mb-[12rem] border border-gray-400 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={() => handleClick(pas.id)}>
                         <div class="flex justify-between items-center">
                             <div class="flex flex-col gap-[10rem]">
                                 <div class="flex items-center">
