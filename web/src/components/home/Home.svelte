@@ -23,7 +23,7 @@
             route="passengers" 
         />
         <Topic 
-            jobName="Сотрудники" 
+            jobName="Команда" 
             icon={EmployeeImage} 
             date="Отображение сотрудников по участку,"
             position="настройка прав"

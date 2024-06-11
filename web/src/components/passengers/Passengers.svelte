@@ -86,7 +86,7 @@
                         <div class="flex justify-between items-center">
                             <div class="flex flex-col gap-[10rem]">
                                 <div class="flex items-center">
-                                    <span class="font-bold">{pas.fullName}</span>
+                                    {pas.fullName}
                                     <span class="ml-[10rem]">{pas.category}</span>
                                     {#if pas.hasPacemaker}
                                         <span class="text-red-500 ml-[10rem]">❤️</span>

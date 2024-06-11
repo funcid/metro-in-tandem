@@ -51,7 +51,7 @@
 </script>
 
 <main class="flex flex-col gap-[20rem]">
-    <p class="font-bold text-[40rem]">Сотрудники сопровождения</p>
+    <p class="font-bold text-[40rem]">Сотрудники</p>
     <div class="flex justify-between">
         <select bind:value={selectedSection} class="border border-gray-400 p-[20rem] rounded-[20rem]">
             {#each sections as section}

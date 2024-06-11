@@ -20,7 +20,7 @@
         <img src="https://apps3proxy.mosmetro.tech/webapp-mosmetro/mm-logo-red.svg" alt="#" width="221rem" height="56.61rem" />
         <div class="flex gap-[60rem] items-center">
             {#if $isAuthenticated}
-                <div class="flex items-center gap-[10rem]" on:click={toggleLogoutModal}>
+                <div class="flex items-center gap-[10rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={toggleLogoutModal}>
                     <p>{$username}</p>
                     <div class="w-[60rem] h-[60rem] ml-[10rem] rounded-full bg-gradient-to-r from-blue-500 to-purple-500"></div> <!-- Gradient circle -->
                 </div>
@@ -38,9 +38,8 @@
         <a href="#/" class="topic">Главная</a>
         <a href="#/applications" class="topic">Заявки</a>
         <a href="#/passengers" class="topic">Пассажиры</a>
-        <a href="#/employees" class="topic">Сотрудники</a>
         <a href="#/distribution" class="topic">Распределение</a>
-        <a href="#/team" class="topic">Команда</a>
+        <a href="#/employees" class="topic">Команда</a>
     </div>
 
     {#if showLogoutModal}

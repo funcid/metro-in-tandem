@@ -11,7 +11,6 @@
 	import CreatePassenger from '../components/passengers/CreatePassenger.svelte';
 	import Employees from '../components/employees/Employees.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
-	import Team from '../components/Footer.svelte';
 	import Login from '../components/login/Login.svelte';
 	import Footer from '../components/Footer.svelte';
   
@@ -22,9 +21,8 @@
 	  '/passengers': Passengers,
 	  '/passengers/:id': PassengerDetail,
 	  '/create-passenger': CreatePassenger,
-	  '/employees': Employees,
 	  '/distribution': Distribution,
-	  '/team': Team,
+	  '/employees': Employees,
 	  '/login': Login
 	};
   
