@@ -1,7 +1,17 @@
 <script>
-    import { isAuthenticated, username } from './login/Login.svelte';
+    import { JWT, isAuthenticated, username } from './login/Login.svelte';
     import Login from '$lib/images/login.svg';
-    import Navigation from '$lib/images/navigation.svg?raw';
+
+    let showLogoutModal = false;
+
+    function toggleLogoutModal() {
+        showLogoutModal = !showLogoutModal;
+    }
+
+    function logout() {
+        JWT.set(null);
+        showLogoutModal = false;
+    }
 </script>
 
 <div class="flex flex-col gap-[40rem]">
@@ -9,7 +19,7 @@
         <img src="https://apps3proxy.mosmetro.tech/webapp-mosmetro/mm-logo-red.svg" alt="#" width="221rem" height="56.61rem" />
         <div class="flex gap-[60rem] items-center">
             {#if $isAuthenticated}
-                <div class="flex items-center gap-[10rem]">
+                <div class="flex items-center gap-[10rem]" on:click={toggleLogoutModal}>
                     <p>{$username}</p>
                     <div class="w-[60rem] h-[60rem] ml-[10rem] rounded-full bg-gradient-to-r from-blue-500 to-purple-500"></div> <!-- Gradient circle -->
                 </div>
@@ -31,4 +41,13 @@
         <a href="#/distribution" class="topic">Распределение</a>
         <a href="#/team" class="topic">Команда</a>
     </div>
+
+    {#if showLogoutModal}
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" on:click={toggleLogoutModal}>
+            <div class="flex flex-col bg-white p-5 rounded-[24rem] p-[24rem] gap-[12rem]" on:click|stopPropagation>
+                <p>Вы уверены, что хотите выйти?</p>
+                <button class="bg-[#D4212D] text-white p-[12rem] rounded-[12rem]" on:click={logout}>Выйти</button>
+            </div>
+        </div>
+    {/if}
 </div>
