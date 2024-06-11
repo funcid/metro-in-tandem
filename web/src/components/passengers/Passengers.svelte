@@ -73,7 +73,7 @@
                     class="border border-gray-400 py-[12rem] px-[26rem] rounded-[12rem] w-1/2"
                     on:input={handleSearch} />
                 <button
-                    class="flex gap-[20rem] bg-[#D4212D] py-[12rem] px-[26rem] rounded-[12rem] items-center text-white"
+                    class="flex gap-[20rem] bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white"
                     on:click={handleCreatePassenger}>
                     Создать пассажира
                 </button>

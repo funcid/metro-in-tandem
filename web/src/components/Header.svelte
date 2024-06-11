@@ -26,7 +26,7 @@
                 </div>
             {:else}
                 <a class="text-white text-[27rem]" href="#/login">
-                    <button class="flex gap-[20rem] bg-[#D4212D] py-[12rem] px-[26rem] rounded-[12rem] items-center">
+                    <button class="flex gap-[20rem] bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center">
                         Войти
                         <img src={Login} alt="#" width="27rem" height="27rem"/>
                     </button>
@@ -47,7 +47,7 @@
         <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" on:click={toggleLogoutModal}>
             <div class="flex flex-col bg-white p-5 rounded-[24rem] p-[24rem] gap-[12rem]" on:click|stopPropagation>
                 <p>Вы уверены, что хотите выйти?</p>
-                <button class="bg-[#D4212D] text-white p-[12rem] rounded-[12rem]" on:click={logout}>Выйти</button>
+                <button class="bg-[#D4212D] hover:bg-red-700 text-white p-[12rem] rounded-[12rem]" on:click={logout}>Выйти</button>
             </div>
         </div>
     {/if}
