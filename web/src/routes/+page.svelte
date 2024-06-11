@@ -5,7 +5,9 @@
 	import Home from '../components/Experience.svelte';
 	import Applications from '../components/applications/Applications.svelte';
 	import ApplicationDetail from '../components/applications/ApplicationDetail.svelte';
-	import Passengers from '../components/passangers/Passangers.svelte';
+	import Passengers from '../components/passengers/Passengers.svelte';
+	import PassengerDetail from '../components/passengers/PassengerDetail.svelte';
+	import CreatePassenger from '../components/passengers/CreatePassenger.svelte';
 	import Employees from '../components/Employee.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
 	import Team from '../components/Footer.svelte';
@@ -17,6 +19,8 @@
 	  	'/applications': Applications,
 	  	'/applications/:id': ApplicationDetail,
 	  	'/passengers': Passengers,
+		'/passengers/:id': PassengerDetail,
+		'/create-passenger': CreatePassenger,
 	  	'/employees': Employees,
 	  	'/distribution': Distribution,
 	  	'/team': Team,
