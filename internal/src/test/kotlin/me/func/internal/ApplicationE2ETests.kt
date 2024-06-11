@@ -1,8 +1,8 @@
 package me.func.internal;
 
-import me.func.internal.dto.RequestStatus
+import me.func.internal.model.RequestStatus
 import com.fasterxml.jackson.databind.ObjectMapper
-import me.func.internal.dto.PassengerCategory
+import me.func.internal.model.PassengerCategory
 import me.func.internal.model.Application
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,6 +1,6 @@
 package me.func.internal.controller
 
-import me.func.internal.dto.RequestStatus
+import me.func.internal.model.RequestStatus
 import me.func.internal.dto.ApplicationResponse
 import me.func.internal.model.Application
 import me.func.internal.service.ApplicationService

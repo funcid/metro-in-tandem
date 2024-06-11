@@ -2,7 +2,7 @@ package me.func.internal.converter
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import me.func.internal.dto.PassengerCategory
+import me.func.internal.model.PassengerCategory
 
 @Converter(autoApply = true)
 class PassengerCategoryConverter : AttributeConverter<PassengerCategory, String> {

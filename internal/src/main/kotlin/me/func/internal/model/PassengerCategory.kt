@@ -1,4 +1,4 @@
-package me.func.internal.dto
+package me.func.internal.model
 
 enum class PassengerCategory(val categoryCode: String) {
     IZ("ИЗ"),     // Инвалид по зрению (тотальный)

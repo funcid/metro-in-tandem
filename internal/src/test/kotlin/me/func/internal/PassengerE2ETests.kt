@@ -1,7 +1,7 @@
 package me.func.internal
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import me.func.internal.dto.PassengerCategory
+import me.func.internal.model.PassengerCategory
 import me.func.internal.model.ContactNumber
 import me.func.internal.model.Passenger
 import org.junit.jupiter.api.Test

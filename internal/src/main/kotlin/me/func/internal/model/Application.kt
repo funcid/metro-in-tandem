@@ -1,12 +1,10 @@
 package me.func.internal.model
 
-import me.func.internal.dto.RequestStatus
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
 import me.func.internal.converter.PassengerCategoryConverter
 import me.func.internal.converter.RequestStatusConverter
-import me.func.internal.dto.PassengerCategory
 import java.sql.Time
 import java.sql.Timestamp
 

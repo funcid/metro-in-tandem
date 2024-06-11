@@ -5,7 +5,7 @@
 	import Home from '../components/Experience.svelte';
 	import Applications from '../components/applications/Applications.svelte';
 	import ApplicationDetail from '../components/applications/ApplicationDetail.svelte';
-	import Passengers from '../components/Job.svelte';
+	import Passengers from '../components/passangers/Passangers.svelte';
 	import Employees from '../components/Employee.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
 	import Team from '../components/Footer.svelte';
@@ -22,7 +22,6 @@
 	  	'/team': Team,
 	  	'/login': Login
 	};
-
 </script>
 
 <svelte:head>

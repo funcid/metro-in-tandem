@@ -1,4 +1,4 @@
-package me.func.internal.dto
+package me.func.internal.model
 
 enum class RequestStatus(val statusCode: String) {
     REQUEST_COMPLETED("Заявка закончена"),

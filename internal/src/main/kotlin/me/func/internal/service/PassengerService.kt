@@ -34,4 +34,8 @@ class PassengerService(private val repository: PassengerRepository) {
     fun searchPassengers(query: String): List<Passenger> {
         return repository.searchByFullNameOrCategory(query)
     }
+
+    fun getAllPassengers(): List<Passenger>  {
+        return repository.findAll()
+    }
 }

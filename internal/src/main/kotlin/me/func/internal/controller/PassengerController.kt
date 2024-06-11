@@ -1,5 +1,6 @@
 package me.func.internal.controller
 
+import me.func.internal.dto.PassengerResponse
 import me.func.internal.model.Passenger
 import me.func.internal.service.PassengerService
 import org.springframework.http.HttpHeaders
@@ -52,6 +53,22 @@ class PassengerController(private val service: PassengerService) {
     @GetMapping
     fun searchPassengers(@RequestParam search: String): ResponseEntity<List<Passenger>> {
         val passengers = service.searchPassengers(search)
+        return ResponseEntity.ok(passengers)
+    }
+
+    @GetMapping("/all")
+    fun getAllPassengers(): ResponseEntity<List<PassengerResponse>> {
+        val passengers = service.getAllPassengers().map {
+            PassengerResponse(
+                id = it.id,
+                fullName = it.fullName,
+                contactNumbers = it.contactNumbers,
+                gender = it.gender,
+                category = it.category.categoryCode,
+                additionalInfo = it.additionalInfo,
+                hasPacemaker = it.hasPacemaker,
+            )
+        }
         return ResponseEntity.ok(passengers)
     }
 }

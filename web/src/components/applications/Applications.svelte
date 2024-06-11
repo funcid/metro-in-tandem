@@ -47,7 +47,7 @@
 
 <main>
     {#if loading}
-        <p class="text-gray-500">Loading applications...</p>
+        <p class="text-gray-500">Загрузка заявок...</p>
     {:else if errorMessage}
         <p class="text-red-500">{errorMessage}</p>
     {:else}

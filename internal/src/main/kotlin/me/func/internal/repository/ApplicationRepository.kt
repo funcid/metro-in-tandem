@@ -1,6 +1,6 @@
 package me.func.internal.repository
 
-import me.func.internal.dto.RequestStatus
+import me.func.internal.model.RequestStatus
 import me.func.internal.dto.ApplicationPassengerInfo
 import me.func.internal.model.Application
 import org.springframework.data.jpa.repository.Query
