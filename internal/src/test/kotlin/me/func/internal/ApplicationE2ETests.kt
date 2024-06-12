@@ -1,6 +1,6 @@
 package me.func.internal;
 
-import me.func.internal.model.RequestStatus
+import me.func.internal.model.ApplicationStatus
 import com.fasterxml.jackson.databind.ObjectMapper
 import me.func.internal.model.PassengerCategory
 import me.func.internal.model.Application
@@ -32,7 +32,7 @@ class ApplicationE2ETests : AbstractTest() {
             time3 = Time.valueOf("07:13:52"),
             time4 = Time.valueOf("07:51:11"),
             catPas = PassengerCategory.IZT,
-            status = RequestStatus.REQUEST_COMPLETED,
+            status = ApplicationStatus.REQUEST_COMPLETED,
                 tpz = Timestamp.valueOf("2024-03-15 22:48:43"),
                 inspSexM = 0,
                 inspSexF = 1,
@@ -73,7 +73,7 @@ class ApplicationE2ETests : AbstractTest() {
                 .andExpect(jsonPath("$.id_pas").value("11059"))
 
         // Search for the Application by status
-        mockMvc.perform(get("/api/v1/applications").param("status", RequestStatus.REQUEST_COMPLETED.name))
+        mockMvc.perform(get("/api/v1/applications").param("status", ApplicationStatus.REQUEST_COMPLETED.name))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$[0].id_pas").value("11059"))
 

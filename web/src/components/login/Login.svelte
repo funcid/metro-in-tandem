@@ -48,12 +48,12 @@
         <div class="flex flex-col gap-[5rem]">
             <label for="username">Логин</label>
             <input id="username" type="text" bind:value={inputUsername} required 
-                   class="border-[1rem] border-[rgb(255,0,31)] rounded-[12rem] p-[8rem]"/>
+                   class="border-[1rem] border-gray-700 rounded-[12rem] p-[12rem]"/>
         </div>
         <div class="flex flex-col gap-[5rem]">
             <label for="password">Пароль</label>
             <input id="password" type="password" bind:value={password} required 
-                   class="border-[1rem] border-[rgb(255,0,31)] rounded-[12rem] p-[8rem]"/>
+                   class="border-[1rem] border-gray-700 rounded-[12rem] p-[12rem]"/>
         </div>
         <button type="submit" 
                 class="bg-[#D4212D] text-white border-none p-2 cursor-pointer hover:bg-red-700 py-[15rem] px-[26rem]">

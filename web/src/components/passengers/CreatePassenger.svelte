@@ -97,7 +97,7 @@
 
             <div class="mb-4">
                 <label class="block text-gray-700 mb-2" for="contactDescription">Описание контакта</label>
-                <input type="text" id="contactDescription" bind:value={contactDescription} class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <input type="text" id="contactDescription" bind:value={contactDescription} class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
     
             <div class="mb-4">

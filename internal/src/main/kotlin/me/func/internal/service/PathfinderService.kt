@@ -6,6 +6,7 @@ import me.func.internal.repository.MetroStationRepository
 import me.func.internal.repository.MetroTimeRepository
 import me.func.internal.repository.MetroTransferTimeRepository
 import org.springframework.stereotype.Service
+import kotlin.math.floor
 
 @Service
 class PathfinderService(
@@ -23,10 +24,10 @@ class PathfinderService(
         findPath(201, 369)
     }
 
-    private final fun findPath(
+    fun findPath(
         startStationId: Int,
         endStationId: Int
-    ): List<MetroStation> {
+    ): Pair<List<MetroStation>, Double> {
         println("Исходная станция: ${metroStations.first { it.id == startStationId.toString() }.nameStation}")
 
         val startTime = System.currentTimeMillis()
@@ -64,6 +65,6 @@ class PathfinderService(
         }
         println("Общее время в пути: ${shortestPath.totalTime} минут")
         println("Время выполнения функции me.func.internal.util.findShortestPath: $duration миллисекунд")
-        return shortestPath.stations
+        return shortestPath.stations to String.format("%.1f", shortestPath.totalTime).toDouble()
     }
 }

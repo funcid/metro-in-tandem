@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
 import me.func.internal.converter.PassengerCategoryConverter
-import me.func.internal.converter.RequestStatusConverter
+import me.func.internal.converter.ApplicationStatusConverter
 import java.sql.Time
 import java.sql.Timestamp
 
@@ -33,8 +33,8 @@ data class Application(
     @Convert(converter = PassengerCategoryConverter::class)
     val catPas: PassengerCategory,
 
-    @Convert(converter = RequestStatusConverter::class)
-    val status: RequestStatus?,
+    @Convert(converter = ApplicationStatusConverter::class)
+    val status: ApplicationStatus,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     val tpz: Timestamp,

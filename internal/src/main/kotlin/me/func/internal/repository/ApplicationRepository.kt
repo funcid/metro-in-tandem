@@ -1,6 +1,6 @@
 package me.func.internal.repository
 
-import me.func.internal.model.RequestStatus
+import me.func.internal.model.ApplicationStatus
 import me.func.internal.dto.ApplicationPassengerInfo
 import me.func.internal.model.Application
 import org.springframework.data.jpa.repository.Query
@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource
 @RepositoryRestResource(collectionResourceRel = "applications", path = "applications")
 interface ApplicationRepository : CrudRepository<Application, Long> {
 
-    fun findByStatus(status: RequestStatus): List<Application>
+    fun findByStatus(status: ApplicationStatus): List<Application>
 
     @Query("""
         SELECT a.id, a.time3, a.time4, a.time_over as timeOver, a.status, a.datetime, a.cat_pas as catPas, 

@@ -1,11 +1,18 @@
 type ApplicationDetailResponse = {
-    id: string,
-    time3: string,
-    time4: string,
-    timeOver: string,
-    status: string,
-    catPas: string,
-    datetime: string,
-    fullName: string, 
-    mobileNumber: string 
-};
+    idPas: string;
+    fio: string;
+    datetime: string; // Формат dd.MM.yyyy HH:mm:ss
+    time3: string; // Формат HH:mm:ss
+    time4: string; // Формат HH:mm:ss
+    catPas: string;
+    status?: string;
+    tpz: string; // Формат dd.MM.yyyy HH:mm:ss
+    inspSexM: number;
+    inspSexF: number;
+    timeOver: string; // Формат HH:mm:ss
+    idSt1: string;
+    station1Name: string;
+    idSt2: string;
+    station2Name: string;
+    duration: string;
+}

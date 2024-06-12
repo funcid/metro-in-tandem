@@ -8,7 +8,7 @@ interface ApplicationPassengerInfo {
     val time3: Time
     val time4: Time
     val timeOver: Time
-    val status: String?
+    val status: String
     val catPas: String
     val datetime: Timestamp
     val fullName: String
