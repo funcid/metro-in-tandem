@@ -16,11 +16,11 @@ class ApplicationService(
         return applicationRepository.save(application)
     }
 
-    fun getApplication(id: String): Application? {
+    fun getApplication(id: Long): Application? {
         return applicationRepository.findByIdOrNull(id)
     }
 
-    fun updateApplication(id: String, application: Application): Application {
+    fun updateApplication(id: Long, application: Application): Application {
         if (!applicationRepository.existsById(id)) {
             throw NoSuchElementException("Application not found")
         }
@@ -28,7 +28,7 @@ class ApplicationService(
         return applicationRepository.save(application)
     }
 
-    fun deleteApplication(id: String) {
+    fun deleteApplication(id: Long) {
         if (!applicationRepository.existsById(id)) {
             throw NoSuchElementException("Application not found")
         }

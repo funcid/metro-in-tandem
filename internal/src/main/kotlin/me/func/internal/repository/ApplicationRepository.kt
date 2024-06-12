@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
 @RepositoryRestResource(collectionResourceRel = "applications", path = "applications")
-interface ApplicationRepository : CrudRepository<Application, String> {
+interface ApplicationRepository : CrudRepository<Application, Long> {
 
     fun findByStatus(status: RequestStatus): List<Application>
 

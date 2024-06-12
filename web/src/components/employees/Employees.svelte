@@ -1,7 +1,8 @@
 <script lang="ts">
     import { JWT } from '../login/Login.svelte';
 
-    const sections = ["ЦУ-1", "ЦУ-2", "ЦУ-3", "ЦУ-3 (Н)", "ЦУ-4", "ЦУ-4 (Н)", "ЦУ-5", "ЦУ-8"];
+    let sections = ["ЦУ-1", "ЦУ-2", "ЦУ-3", "ЦУ-3 (Н)", "ЦУ-4", "ЦУ-4 (Н)", "ЦУ-5", "ЦУ-8"];
+    
     let selectedSection = sections[0];
     let employees: EmployeeResponse[] = []; // Типизация массива сотрудников
     let loading = false;

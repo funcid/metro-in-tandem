@@ -1,7 +1,9 @@
 package me.func.internal.controller
 
+import me.func.internal.dto.CreateEmployeeRequest
 import me.func.internal.model.Employee
 import me.func.internal.service.EmployeeService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -40,5 +42,11 @@ class EmployeeController(private val employeeService: EmployeeService) {
         } else {
             ResponseEntity.noContent().build()
         }
+    }
+
+    @PostMapping
+    fun createEmployee(@RequestBody request: CreateEmployeeRequest): ResponseEntity<Employee> {
+        val createdEmployee = employeeService.createEmployee(request)
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEmployee)
     }
 }

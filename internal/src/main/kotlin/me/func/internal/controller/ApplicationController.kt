@@ -19,7 +19,7 @@ class ApplicationController(private val applicationService: ApplicationService) 
     }
 
     @GetMapping("/{id}")
-    fun getApplication(@PathVariable id: String): ResponseEntity<Application> {
+    fun getApplication(@PathVariable id: Long): ResponseEntity<Application> {
         val application = applicationService.getApplication(id)
         return if (application != null) {
             ResponseEntity.ok(application)
@@ -29,13 +29,13 @@ class ApplicationController(private val applicationService: ApplicationService) 
     }
 
     @PutMapping("/{id}")
-    fun updateApplication(@PathVariable id: String, @RequestBody application: Application): ResponseEntity<Application> {
+    fun updateApplication(@PathVariable id: Long, @RequestBody application: Application): ResponseEntity<Application> {
         val updatedApplication = applicationService.updateApplication(id, application)
         return ResponseEntity.ok(updatedApplication)
     }
 
     @DeleteMapping("/{id}")
-    fun deleteApplication(@PathVariable id: String): ResponseEntity<Void> {
+    fun deleteApplication(@PathVariable id: Long): ResponseEntity<Void> {
         applicationService.deleteApplication(id)
         return ResponseEntity.noContent().build()
     }

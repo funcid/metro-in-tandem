@@ -12,7 +12,8 @@ import java.sql.Timestamp
 @Table(name = "applications")
 data class Application(
     @Id
-    var id: String,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0L,
 
     @Column(name = "id_pas")
     @JsonProperty("id_pas")

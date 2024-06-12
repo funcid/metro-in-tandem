@@ -1,17 +1,14 @@
 package me.func.internal.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.time.LocalDate
 
 @Entity
 @Table(name = "employees")
 data class Employee(
     @Id
-    @Column(name = "id")
-    val id: String,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
 
     @Column(name = "date")
     val date: LocalDate,

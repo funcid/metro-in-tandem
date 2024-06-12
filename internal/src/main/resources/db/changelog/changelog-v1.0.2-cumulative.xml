@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="func">
+        <!-- Drop constraints that might be dependent on the old ID type -->
+        <dropAllForeignKeyConstraints baseTableName="applications"/>
+
+        <!-- Add a new column with Long type -->
+        <addColumn tableName="applications">
+            <column name="new_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <!-- Мigrate the data from old column to the new column with type casting -->
+        <update tableName="applications">
+            <column name="new_id" valueNumeric="CAST(id AS BIGINT)"/>
+        </update>
+
+        <!-- Drop the old ID column -->
+        <dropColumn tableName="applications" columnName="id"/>
+
+        <!-- Rename the new column to the original column name -->
+        <renameColumn tableName="applications" oldColumnName="new_id" newColumnName="id" columnDataType="BIGINT"/>
+
+        <!-- Re-add any constraints needed after change -->
+        <addPrimaryKey columnNames="id" tableName="applications"/>
+    </changeSet>
+
+    <changeSet id="2" author="func">
+        <!-- Drop constraints that might be dependent on the old ID type -->
+        <dropAllForeignKeyConstraints baseTableName="employees"/>
+
+        <!-- Add a new column with Long type -->
+        <addColumn tableName="employees">
+            <column name="new_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <!-- Мigrate the data from old column to the new column with type casting -->
+        <update tableName="employees">
+            <column name="new_id" valueNumeric="CAST(id AS BIGINT)"/>
+        </update>
+
+        <!-- Drop the old ID column -->
+        <dropColumn tableName="employees" columnName="id"/>
+
+        <!-- Rename the new column to the original column name -->
+        <renameColumn tableName="employees" oldColumnName="new_id" newColumnName="id" columnDataType="BIGINT"/>
+
+        <!-- Re-add any constraints needed after change -->
+        <addPrimaryKey columnNames="id" tableName="employees"/>
+    </changeSet>
+</databaseChangeLog>

@@ -10,6 +10,7 @@
 	import PassengerDetail from '../components/passengers/PassengerDetail.svelte';
 	import CreatePassenger from '../components/passengers/CreatePassenger.svelte';
 	import Employees from '../components/employees/Employees.svelte';
+	import CreateEmployee from '../components/employees/CreateEmployee.svelte';
 	import Distribution from '../components/SocialMedia.svelte';
 	import Login from '../components/login/Login.svelte';
 	import Footer from '../components/Footer.svelte';
@@ -23,6 +24,7 @@
 	  '/create-passenger': CreatePassenger,
 	  '/distribution': Distribution,
 	  '/employees': Employees,
+	  '/create-employee': CreateEmployee,
 	  '/login': Login
 	};
   
