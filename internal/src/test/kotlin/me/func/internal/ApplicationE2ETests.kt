@@ -26,7 +26,7 @@ class ApplicationE2ETests : AbstractTest() {
     fun `E2E test for Application API`() {
         // Create an Application
         val application = Application(
-            id = "test_id",
+            id = 1,
             idPas = "11058",
             datetime = Timestamp.valueOf("2024-04-24 07:30:00"),
             time3 = Time.valueOf("07:13:52"),

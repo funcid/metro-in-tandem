@@ -28,7 +28,7 @@ class EmployeeControllerTest : AbstractTest() {
     @Test
     fun `should return employee by id`() {
         val employee = Employee(
-            id = "1",
+            id = 1,
             date = LocalDate.of(2023, 10, 15),
             timeWork = "08:00-17:00",
             fio = "John Doe",
@@ -62,7 +62,7 @@ class EmployeeControllerTest : AbstractTest() {
     @Test
     fun `should update employee`() {
         val updatedEmployee = Employee(
-            id = "1",
+            id = 1,
             date = LocalDate.of(2023, 10, 15),
             timeWork = "08:00-17:00",
             fio = "John Doe Updated",
@@ -87,7 +87,7 @@ class EmployeeControllerTest : AbstractTest() {
     @Test
     fun `should return not found when updating non-existing employee`() {
         val updatedEmployee = Employee(
-            id = "2",
+            id = 2,
             date = LocalDate.of(2023, 10, 15),
             timeWork = "08:00-17:00",
             fio = "Jane Doe",
@@ -110,7 +110,7 @@ class EmployeeControllerTest : AbstractTest() {
     @Test
     fun `should return employees by region`() {
         val employees = listOf(Employee(
-            id = "1",
+            id = 1,
             date = LocalDate.of(2023, 10, 15),
             timeWork = "08:00-17:00",
             fio = "John Doe",
