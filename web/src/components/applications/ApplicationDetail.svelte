@@ -6,7 +6,6 @@
     let status: string = '';
     let loading: boolean = true;
     let errorMessage: string = '';
-    let successMessage: string = '';
 
     const getIdFromUrl = () => {
         const url = window.location.hash;
@@ -88,8 +87,7 @@
             if (!response.ok) {
                 throw new Error('Failed to delete application');
             }
-            successMessage = 'Application deleted successfully!';
-            setTimeout(() => window.location.hash = `/applications`, 2000); // Redirect to applications page after 2 seconds
+            window.location.hash = `/applications`
         } catch (err) {
             errorMessage = 'Failed to delete application. Please try again later.';
             console.error(err);
@@ -194,14 +192,11 @@
                         </div>
                     </div>
                     <div class="flex space-x-4 mt-[30rem]">
-                        <button type="submit" class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full">
                             Сохранить изменения
                         </button>
                     </div>
                 </form>
-                {#if successMessage}
-                    <p class="text-green-500 mt-2">{successMessage}</p>
-                {/if}
             </div>
             {/if}
         </div>

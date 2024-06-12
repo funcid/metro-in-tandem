@@ -60,17 +60,18 @@
     };
 </script>
 
-<main>
-    <form class="flex flex-col items-center" on:submit={handleSubmit}>
-        <div class="flex flex-col items-center gap-[16rem] w-full">
+<main class="flex flex-col justify-center items-center">
+    <p class="font-bold text-[40rem] mb-[20rem]">Создать нового сотрудника</p>
+    <div class="flex justify-center bg-white border border-gray-300 shadow-md w-3/5 rounded-[30rem]">
+    <form on:submit={handleSubmit}>
+        <div class="flex flex-col items-center gap-[16rem] w-full p-[40rem]">
 
-            <h2 class="font-bold mb-12 text-center text-[36rem]">Создать нового сотрудника</h2>
         
             {#if errorMessage}
                 <p class="text-red-500 mb-4">{errorMessage}</p>
             {/if}
 
-            <div class="grid grid-cols-1 gap-x-[32rem] *:content-end md:grid-cols-2 w-2/3 *:m-[5rem]">
+            <div class="grid grid-cols-1 gap-x-[32rem] *:content-end md:grid-cols-2 *:m-[5rem] mb-[16rem]">
                 
                 <div>
                     <label class="block text-gray-700 mb-2" for="fullName">ФИО полностью</label>
@@ -142,9 +143,10 @@
                 </div>
             </div>
             
-            <div class="w-1/4">
+            <div class="w-2/4">
                 <button type="submit" class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full">Создать сотрудника</button>
             </div>
         </div>
     </form>
+</div>
 </main>

@@ -60,11 +60,11 @@
     };
 </script>
 
-<main>
-    <form class="flex flex-col items-center" on:submit={handleSubmit}>
+<main class="flex flex-col justify-center items-center">
+    <p class="font-bold text-[40rem] mb-[20rem]">Создать нового пассажира</p>
+    <div class="flex justify-center bg-white border border-gray-300 shadow-md w-2/5 rounded-[30rem]">
+    <form class="flex flex-col items-center p-[40rem]" on:submit={handleSubmit}>
         <div class="flex flex-col gap-[16rem]">
-            <h2 class="font-bold mb-12 text-center text-[36rem]">Создать нового пассажира</h2>
-        
             {#if errorMessage}
                 <p class="text-red-500 mb-4">{errorMessage}</p>
             {/if}
@@ -115,4 +115,5 @@
             </div>
         </div>
     </form>
+</div>
 </main>
