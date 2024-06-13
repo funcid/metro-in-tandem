@@ -55,4 +55,27 @@
         <!-- Re-add any constraints needed after change -->
         <addPrimaryKey columnNames="id" tableName="employees"/>
     </changeSet>
+
+    <changeSet id="3" author="func">
+        <insert tableName="users">
+            <column name="username" value="admin_user"/>
+            <column name="password" value="$2a$12$cD566PgFV959Y6e706L1geOl85b0EwDweSOFAOWK.MbAVOy/Civqm"/> <!-- admin_pass -->
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="specialist_user"/>
+            <column name="password" value="$2a$12$LYX9Rs9rC4Ang9FtP2J2au6EeI0nSQm/b4cPypLxReKrxQ6qqUIB6"/> <!-- specialist_pass -->
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="operator_user"/>
+            <column name="password" value="$2a$12$3tFxcOYmzwfdXpXnAiLspuOjea2BAwo9lzxyw51T36nvNotirHnqu"/> <!-- operator_pass -->
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="employee_user"/>
+            <column name="password" value="$2a$12$48ESlpZv6L81A2jm4i80Ie5vtiyg4662yAuULmQYz/OwKcIU1TZ6W"/> <!-- employee_pass -->
+            <column name="role_id" valueNumeric="4"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
