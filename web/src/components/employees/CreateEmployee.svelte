@@ -71,7 +71,7 @@
                 <p class="text-red-500 mb-4">{errorMessage}</p>
             {/if}
 
-            <div class="grid grid-cols-1 gap-x-[32rem] *:content-end md:grid-cols-2 *:m-[5rem] mb-[16rem]">
+            <div class="*:flex *:flex-wrap grid grid-cols-1 gap-x-[32rem] *:content-end md:grid-cols-2 *:m-[5rem] mb-[16rem]">
                 
                 <div>
                     <label class="block text-gray-700 mb-2" for="fullName">ФИО полностью</label>

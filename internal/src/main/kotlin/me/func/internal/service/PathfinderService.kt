@@ -19,11 +19,6 @@ class PathfinderService(
     private val metroTimes  = metroTimeRepository.findAll().toList()
     private val metroTransferTimes  = metroTransferTimeRepository.findAll().toList()
 
-    init {
-        findPath(200, 367)
-        findPath(201, 369)
-    }
-
     fun findPath(
         startStationId: Int,
         endStationId: Int
@@ -65,6 +60,8 @@ class PathfinderService(
         }
         println("Общее время в пути: ${shortestPath.totalTime} минут")
         println("Время выполнения функции me.func.internal.util.findShortestPath: $duration миллисекунд")
-        return shortestPath.stations to String.format("%.1f", shortestPath.totalTime).toDouble()
+        return shortestPath.stations to String.format("%.1f", shortestPath.totalTime)
+            .replace(',', '.')
+            .toDouble()
     }
 }
