@@ -4,6 +4,7 @@ import me.func.internal.dto.ApplicationDetailsResponse
 import me.func.internal.model.ApplicationStatus
 import me.func.internal.dto.ApplicationResponse
 import me.func.internal.dto.ApplicationUpdateRequest
+import me.func.internal.dto.CreateApplicationRequest
 import me.func.internal.model.Application
 import me.func.internal.service.ApplicationService
 import org.springframework.http.HttpStatus
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 class ApplicationController(private val applicationService: ApplicationService) {
 
     @PostMapping
-    fun createApplication(@RequestBody application: Application): ResponseEntity<Application> {
+    fun createApplication(@RequestBody application: CreateApplicationRequest): ResponseEntity<Application> {
         val createdApplication = applicationService.createApplication(application)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdApplication)
     }

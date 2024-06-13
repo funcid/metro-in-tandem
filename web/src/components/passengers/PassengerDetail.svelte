@@ -33,6 +33,10 @@
         await fetchPassenger();
     });
 
+    const handleClick = () => {
+        window.location.hash = `/create-application/${id}`;
+    };
+
     const fetchPassenger = async () => {
         loading = true;
         try {
@@ -90,26 +94,6 @@
             window.location.hash = '/passengers'; // обновление Hash
         } catch (err) {
             errorMessage = 'Failed to delete passenger. Please try again later.';
-            console.error(err);
-        }
-    };
-
-    const createEscortRequest = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/v1/escort-requests`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${$JWT}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ passengerId: id })
-            });
-            if (!response.ok) {
-                throw new Error('Failed to create escort request');
-            }
-            alert('Escort request created successfully.');
-        } catch (err) {
-            errorMessage = 'Failed to create escort request. Please try again later.';
             console.error(err);
         }
     };
@@ -181,7 +165,7 @@
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full">
                         Сохранить изменения
                     </button>
-                    <button type="button" on:click={createEscortRequest} class="bg-green-500 hover:bg-green-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full mt-4">
+                    <button type="button" on:click={() => handleClick()} class="bg-green-500 hover:bg-green-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full mt-4">
                         Создать заявку на сопровождение
                     </button>
                 </form>

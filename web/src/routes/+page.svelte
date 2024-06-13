@@ -14,6 +14,7 @@
 	import EmployeeDetail from '../components/employees/EmployeeDetail.svelte';
 	import Login from '../components/login/Login.svelte';
 	import Footer from '../components/Footer.svelte';
+    import CreateApplication from "../components/applications/CreateApplication.svelte";
   
 	const routes = {
 	  '/': Home,
@@ -26,7 +27,8 @@
 	  '/employees': Employees,
 	  '/employees/:id': EmployeeDetail,
 	  '/create-employee': CreateEmployee,
-	  '/login': Login
+	  '/login': Login,
+	  '/create-application/:id': CreateApplication,
 	};
   
 	const handleRoute = (event: any) => {

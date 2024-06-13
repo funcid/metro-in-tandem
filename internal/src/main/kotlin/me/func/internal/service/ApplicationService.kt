@@ -5,12 +5,15 @@ import me.func.internal.dto.ApplicationDetailsResponse
 import me.func.internal.model.ApplicationStatus
 import me.func.internal.dto.ApplicationResponse
 import me.func.internal.dto.ApplicationUpdateRequest
+import me.func.internal.dto.CreateApplicationRequest
 import me.func.internal.model.Application
+import java.sql.Timestamp
 import me.func.internal.repository.ApplicationRepository
 import me.func.internal.repository.MetroStationRepository
 import me.func.internal.repository.PassengerRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.sql.Time
 
 @Service
 @Transactional
@@ -21,8 +24,22 @@ class ApplicationService(
     private val stationRepository: MetroStationRepository
 ) {
 
-    fun createApplication(application: Application): Application {
-        return applicationRepository.save(application)
+    fun createApplication(application: CreateApplicationRequest): Application {
+        val newApplication = Application(
+            idPas = application.idPas,
+            datetime = application.dateTime,
+            status = application.status,
+            catPas = application.catPas,
+            inspSexF = application.inspSexF,
+            inspSexM = application.inspSexM,
+            idSt1 =  application.idSt1,
+            idSt2 = application.idSt2,
+            time4 = Time(System.currentTimeMillis()), // подставишь тут то что нужно
+            time3 = Time(System.currentTimeMillis()), // подставишь тут то что нужно
+            timeOver = Time(System.currentTimeMillis()), // подставишь тут то что нужно
+            tpz = Timestamp(System.currentTimeMillis()), // подставишь тут то что нужно
+        )
+        return applicationRepository.save(newApplication)
     }
 
     fun getApplication(id: Long): ApplicationDetailsResponse? {

@@ -1,5 +1,6 @@
 package me.func.internal.controller
 
+import me.func.internal.dto.PassengerDetailsResponse
 import me.func.internal.dto.PassengerResponse
 import me.func.internal.model.Passenger
 import me.func.internal.service.PassengerService
@@ -22,13 +23,17 @@ class PassengerController(private val service: PassengerService) {
     }
 
     @GetMapping("/{id}")
-    fun getPassenger(@PathVariable id: Long): ResponseEntity<Passenger> {
-        val passenger = service.getPassengerById(id)
-        return if (passenger != null) {
-            ResponseEntity.ok(passenger)
-        } else {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
-        }
+    fun getPassenger(@PathVariable id: Long): ResponseEntity<PassengerDetailsResponse> {
+        val passenger = service.getPassengerById(id) ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+        val response = PassengerDetailsResponse(
+            passenger.fullName,
+            passenger.contactNumbers,
+            passenger.gender,
+            passenger.category.categoryCode,
+            passenger.additionalInfo,
+            passenger.hasPacemaker
+        )
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
