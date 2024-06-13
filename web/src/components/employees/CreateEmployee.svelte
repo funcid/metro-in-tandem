@@ -1,7 +1,10 @@
 <script lang="ts">
     import { JWT } from '../login/Login.svelte'; 
     
-    let sections = ["ЦУ-1", "ЦУ-2", "ЦУ-3", "ЦУ-3 (Н)", "ЦУ-4", "ЦУ-4 (Н)", "ЦУ-5", "ЦУ-8"];
+    const sections = ["ЦУ-1", "ЦУ-2", "ЦУ-3", "ЦУ-3 (Н)", "ЦУ-4", "ЦУ-4 (Н)", "ЦУ-5", "ЦУ-8"];
+    const shifts = ["1", "2", "1(Н)", "2(Н)", "5"];
+    const positions = ["ЦСИ", "ЦИ"];
+    const workTimes = ["07:00-19:00", "08:00-20:00", "20:00-08:00", "08:00-17:00"];
 
     let fullName = '';
     let uchastok = '';
@@ -14,10 +17,6 @@
     let employeeID = '';
     let lightDuty = false;
     let errorMessage = '';
-
-    const shifts = ["1", "2", "1(Н)", "2(Н)", "5"];
-    const positions = ["ЦСИ", "ЦИ"];
-    const workTimes = ["07:00-19:00", "08:00-20:00", "20:00-08:00", "08:00-17:00"];
     
     const handleSubmit = async (event: Event) => {
         event.preventDefault();

@@ -1,5 +1,6 @@
 package me.func.internal.service
 
+import jakarta.transaction.Transactional
 import me.func.internal.dto.ApplicationDetailsResponse
 import me.func.internal.model.ApplicationStatus
 import me.func.internal.dto.ApplicationResponse
@@ -12,6 +13,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
+@Transactional
 class ApplicationService(
     private val applicationRepository: ApplicationRepository,
     private val pathfinderService: PathfinderService,

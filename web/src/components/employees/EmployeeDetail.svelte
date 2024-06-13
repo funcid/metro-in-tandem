@@ -3,9 +3,13 @@
     import { JWT } from '../login/Login.svelte';
 
     let employee: EmployeeDetailResponse | null = null;
-    let status: string = '';
     let loading: boolean = true;
     let errorMessage: string = '';
+
+    const sections = ["ЦУ-1", "ЦУ-2", "ЦУ-3", "ЦУ-3 (Н)", "ЦУ-4", "ЦУ-4 (Н)", "ЦУ-5", "ЦУ-8"];
+    const shifts = ["1", "2", "1(Н)", "2(Н)", "5"];
+    const positions = ["ЦСИ", "ЦИ", "ЦУ"];
+    const workTimes = ["07:00-19:00", "08:00-20:00", "20:00-08:00", "08:00-17:00"];
 
     const getIdFromUrl = () => {
         const url = window.location.hash;
@@ -18,23 +22,6 @@
     onMount(async () => {
         await fetchEmployee();
     });
-
-    const statusOptions = [
-        { value: "REQUEST_COMPLETED", label: "Заявка закончена" },
-        { value: "NOT_APPROVED", label: "Не подтверждена" },
-        { value: "CANCELLED_BY_PASSENGER", label: "Отмена заявки по просьбе пассажира" },
-        { value: "NOT_VISITED_BY_PASSENGER", label: "Отмена заявки по неявке пассажира" },
-        { value: "ACCEPTED", label: "Принята" },
-        { value: "INSPECTOR_ON_THE_WAY", label: "Инспектор выехал" },
-        { value: "INSPECTOR_ARRIVED", label: "Инспектор на месте" },
-        { value: "TRIP", label: "Поездка" },
-        { value: "PASSENGER_DELAYED", label: "Пассажир опаздывает" },
-        { value: "INSPECTOR_DELAYED", label: "Инспектор опаздывает" }
-    ];
-
-    let sections = ["ЦУ-1", "ЦУ-2", "ЦУ-3", "ЦУ-3 (Н)", "ЦУ-4", "ЦУ-4 (Н)", "ЦУ-5", "ЦУ-8"];
-    
-    let selectedSection = sections[0];
 
     const fetchEmployee = async () => {
         loading = true;
@@ -50,7 +37,6 @@
                 throw new Error('Failed to fetch application');
             }
             employee = await response.json();
-            status = employee?.status || '';
         } catch (err) {
             errorMessage = 'Failed to load application. Please try again later.';
             console.error(err);
@@ -110,21 +96,9 @@
             <div class="flex justify-between p-[40rem] w-full gap-[40rem]">
                 <div class="w-1/2 flex flex-col justify-between">
                     <p class="font-bold">Информация:</p>
-                    <div class="flex flex-col justify-between h-full py-[40rem]">
-                        <div>
-                            <p>ID: {id}<br/></p>
-                            <p>ФИО: {employee.fio}</p>
-                            <p>Категория: {employee.catPas}</p>
-                            <p>Дата создания: {employee.tpz}</p>
-                        </div>
-                        <div>
-                            <p>{employee.station1Name} ➜ {employee.station2Name}</p>
-                            <p>Время прибытия: {employee.timeOver}</p>
-                            <p>Оценка: {employee.duration}</p>
-                        </div>
-                        <div>
-                            <p>Статус: {status}</p> 
-                        </div>
+                    <div class="flex flex-col h-full py-[40rem]">
+                        <p>ID: {id}<br/></p>
+                        <p>ФИО: {employee.fio}</p>
                     </div>
                     <button type="button" on:click={deleteEmployee} class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full">
                         Удалить заявку
@@ -134,7 +108,7 @@
                     <div class="mb-4">
                         <label class="block text-gray-700">Участок</label>
                         <select 
-                            bind:value={employee.status} 
+                            bind:value={employee.uchastok} 
                             class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
                         >
                             {#each sections as section}
@@ -144,11 +118,40 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700">Рабочее время</label>
-                        <input 
-                            type="text" 
+                        <select 
                             bind:value={employee.timeWork} 
-                            class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700" 
-                        />
+                            class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
+                        >
+                            {#each workTimes as workTime}
+                                <option value={workTime}>{workTime}</option>
+                            {/each}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Смена</label>
+                        <select 
+                            bind:value={employee.smena} 
+                            class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
+                        >
+                            {#each shifts as smena}
+                                <option value={smena}>{smena}</option>
+                            {/each}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Пол</label>
+                        <select bind:value={employee.sex} class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <option value="Мужской">Мужской</option>
+                            <option value="Женский">Женский</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Должность</label>
+                        <select bind:value={employee.rank} class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            {#each positions as rank}
+                                <option value={rank}>{rank}</option>
+                            {/each}
+                        </select>
                     </div>
                     <div class="flex space-x-4 mt-[30rem]">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full">

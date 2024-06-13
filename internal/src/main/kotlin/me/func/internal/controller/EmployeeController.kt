@@ -34,6 +34,16 @@ class EmployeeController(private val employeeService: EmployeeService) {
         }
     }
 
+    @DeleteMapping("/{id}")
+    fun deleteEmployee(@PathVariable id: String): ResponseEntity<Any>  {
+        return try {
+            employeeService.deleteEmployee(id)
+            ResponseEntity.ok().build()
+        } catch (e: NoSuchElementException) {
+            ResponseEntity.notFound().build()
+        }
+    }
+
     @GetMapping
     fun getEmployeesByRegion(@RequestParam("region") region: String): ResponseEntity<List<Employee>> {
         val employees = employeeService.getEmployeesByRegion(region)

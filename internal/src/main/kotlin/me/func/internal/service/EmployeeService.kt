@@ -1,14 +1,15 @@
 package me.func.internal.service
 
+import jakarta.transaction.Transactional
 import me.func.internal.dto.CreateEmployeeRequest
 import me.func.internal.model.Employee
 import me.func.internal.repository.EmployeeRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 @Service
+@Transactional
 class EmployeeService(private val employeeRepository: EmployeeRepository) {
 
     fun getEmployeeById(id: String): Optional<Employee> {
@@ -37,5 +38,9 @@ class EmployeeService(private val employeeRepository: EmployeeRepository) {
             sex = request.gender
         )
         return employeeRepository.save(newEmployee)
+    }
+
+    fun deleteEmployee(id: String)  {
+        employeeRepository.deleteById(id)
     }
 }
