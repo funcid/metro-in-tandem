@@ -6,7 +6,7 @@ type ApplicationResponse = {
     status: string,
     catPas: string,
     datetime: string,
-    fullName: string, 
+    fullName: string,
     mobileNumber: string,
     tpz: string
 };

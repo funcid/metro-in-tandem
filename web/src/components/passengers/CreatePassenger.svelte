@@ -2,6 +2,7 @@
     import { PUBLIC_API_HOST } from "$env/static/public";
     import validateRussianPhoneNumber from "../../utils/validatePhoneNumber";
     import { JWT } from "../login/Login.svelte";
+    import { categories } from "../Variables.svelte";
 
     let fullName = "";
     let contactNumber = "";
@@ -12,21 +13,6 @@
     let hasPacemaker = false;
     let errorMessage = "";
 
-    const categories = [
-        { value: "IZ", label: "ИЗ (Инвалид по зрению, тотальный)" },
-        { value: "IZT", label: "ИЗТ (Инвалид по зрению, слабовидящий)" },
-        { value: "IS", label: "ИС (Инвалид по слуху)" },
-        { value: "IK", label: "ИК (Инвалид колясочник)" },
-        { value: "IO", label: "ИО (Инвалид опорник)" },
-        { value: "DI", label: "ДИ (Ребенок инвалид)" },
-        { value: "PL", label: "ПЛ (Пожилой человек)" },
-        { value: "RD", label: "РД (Родители с детьми)" },
-        { value: "RDK", label: "РДК (Родители с детскими колясками)" },
-        { value: "OGD", label: "ОГД (Организованные группы детей)" },
-        { value: "OV", label: "ОВ (Временно маломобильные)" },
-        { value: "IU", label: "ИУ (Люди с ментальной инвалидностью)" },
-    ];
-
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
 
@@ -34,7 +20,7 @@
             errorMessage = "Неверный формат контактного номера";
             return;
         }
-        
+
         const newPassenger = {
             fullName,
             contactNumbers: [

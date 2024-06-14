@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { JWT } from '../login/Login.svelte';
-    import { PUBLIC_API_HOST } from '$env/static/public';
+    import { onMount } from "svelte";
+    import { JWT } from "../login/Login.svelte";
+    import { PUBLIC_API_HOST } from "$env/static/public";
 
     let applications: ApplicationResponse[] = [];
     let loading: boolean = true;
-    let errorMessage: string = '';
+    let errorMessage: string = "";
 
     onMount(async () => {
         await fetchApplications();
@@ -14,19 +14,23 @@
     const fetchApplications = async () => {
         loading = true;
         try {
-            const response = await fetch(PUBLIC_API_HOST + `api/v1/applications`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${$JWT}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await fetch(
+                PUBLIC_API_HOST + `api/v1/applications`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${$JWT}`,
+                        "Content-Type": "application/json",
+                    },
+                },
+            );
             if (!response.ok) {
                 return;
             }
             applications = await response.json();
         } catch (err) {
-            errorMessage = 'Failed to load applications. Please try again later.';
+            errorMessage =
+                "Failed to load applications. Please try again later.";
             console.error(err);
         } finally {
             loading = false;
@@ -53,30 +57,49 @@
     {:else if errorMessage}
         <p class="text-red-500">{errorMessage}</p>
     {:else}
-    <div>
-        <ul class="list-none p-0">
-            {#each applications as app}
-                <li class="p-4 mb-[20rem] bg-white border border-gray-300 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={() => handleClick(app.id)}>
-                    <div class="flex justify-between items-center">
-                        <div class="flex flex-col gap-[12rem]">
-                            <div><span class="font-bold">ФИО:</span> {app.fullName}</div>
-                            <div><span class="font-bold">Контакт:</span> {app.mobileNumber}</div>
-                            <div><span class="font-bold">Категория:</span> {app.catPas}</div>
-                            <div><span class="font-bold">Статус:</span> {app.status}</div>
-                        </div>
+        <div>
+            <ul class="list-none p-0">
+                {#each applications as app}
+                    <li
+                        class="p-4 mb-[20rem] bg-white border border-gray-300 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]"
+                        on:click={() => handleClick(app.id)}
+                    >
+                        <div class="flex justify-between items-center">
+                            <div class="flex flex-col gap-[12rem]">
+                                <div>
+                                    <span class="font-bold">ФИО:</span>
+                                    {app.fullName}
+                                </div>
+                                <div>
+                                    <span class="font-bold">Контакт:</span>
+                                    {app.mobileNumber}
+                                </div>
+                                <div>
+                                    <span class="font-bold">Категория:</span>
+                                    {app.catPas}
+                                </div>
+                                <div>
+                                    <span class="font-bold">Статус:</span>
+                                    {app.status}
+                                </div>
+                            </div>
                             <div class="text-right">
-                                {#if app.status.includes('Отмена')}
+                                {#if app.status.includes("Отмена")}
                                     <span class="text-red-500">Отменена</span>
-                                {:else if app.status.includes('Не подтверждена')}
-                                    <span class="text-[#00bfff]">Ожидает {calculateMinutesSince(app.tpz)} мин.</span>
+                                {:else if app.status.includes("Не подтверждена")}
+                                    <span class="text-[#00bfff]"
+                                        >Ожидает {calculateMinutesSince(
+                                            app.tpz,
+                                        )} мин.</span
+                                    >
                                 {:else}
                                     {app.time3} ➜ {app.time4}
                                 {/if}
+                            </div>
                         </div>
-                    </div>
-                </li>
-            {/each}
-        </ul>
-    </div>
-{/if}
+                    </li>
+                {/each}
+            </ul>
+        </div>
+    {/if}
 </main>
