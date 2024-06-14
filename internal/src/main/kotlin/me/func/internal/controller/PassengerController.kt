@@ -26,14 +26,14 @@ class PassengerController(private val service: PassengerService) {
     fun getPassenger(@PathVariable id: Long): ResponseEntity<PassengerDetailsResponse> {
         val passenger = service.getPassengerById(id) ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
         val response = PassengerDetailsResponse(
-            passenger.fullName,
-            passenger.contactNumbers,
-            passenger.gender,
-            passenger.category.categoryCode,
-            passenger.additionalInfo,
-            passenger.hasPacemaker
+            fullName = passenger.fullName,
+            contactNumbers = passenger.contactNumbers,
+            gender = passenger.gender,
+            category = passenger.category.categoryCode,
+            additionalInfo = passenger.additionalInfo,
+            hasPacemaker = passenger.hasPacemaker
         )
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response)
     }
 
     @PutMapping("/{id}")

@@ -9,5 +9,6 @@ data class ApplicationResponse(
     val catPas: String,
     val datetime: String,
     val fullName: String,
-    val mobileNumber: String
+    val mobileNumber: String,
+    val tpz: String,
 )

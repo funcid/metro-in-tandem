@@ -7,6 +7,7 @@ import me.func.internal.dto.ApplicationResponse
 import me.func.internal.dto.ApplicationUpdateRequest
 import me.func.internal.dto.CreateApplicationRequest
 import me.func.internal.model.Application
+import me.func.internal.model.PassengerCategory
 import java.sql.Timestamp
 import me.func.internal.repository.ApplicationRepository
 import me.func.internal.repository.MetroStationRepository
@@ -24,20 +25,22 @@ class ApplicationService(
     private val stationRepository: MetroStationRepository
 ) {
 
-    fun createApplication(application: CreateApplicationRequest): Application {
+    fun createApplication(application: CreateApplicationRequest): Application? {
+        val passenger = passengerRepository.findByIdOrNull(application.idPas.toLong()) ?: return null
+
         val newApplication = Application(
             idPas = application.idPas,
-            datetime = application.dateTime,
-            status = application.status,
-            catPas = application.catPas,
+            datetime = application.datetime,
+            status = ApplicationStatus.NOT_APPROVED,
             inspSexF = application.inspSexF,
             inspSexM = application.inspSexM,
-            idSt1 =  application.idSt1,
-            idSt2 = application.idSt2,
-            time4 = Time(System.currentTimeMillis()), // подставишь тут то что нужно
-            time3 = Time(System.currentTimeMillis()), // подставишь тут то что нужно
-            timeOver = Time(System.currentTimeMillis()), // подставишь тут то что нужно
-            tpz = Timestamp(System.currentTimeMillis()), // подставишь тут то что нужно
+            idSt1 =  application.idSt1.toString(),
+            idSt2 = application.idSt2.toString(),
+            time4 = Time.valueOf(application.datetime.toLocalDateTime().toLocalTime()),
+            time3 = Time.valueOf(application.datetime.toLocalDateTime().toLocalTime()),
+            timeOver = Time(System.currentTimeMillis()),
+            tpz = Timestamp(System.currentTimeMillis()),
+            catPas = passenger.category
         )
         return applicationRepository.save(newApplication)
     }
@@ -53,7 +56,7 @@ class ApplicationService(
                 time3 = application.time3,
                 time4 = application.time4,
                 timeOver = application.timeOver,
-                status = application.status!!.statusCode,
+                status = application.status.statusCode,
                 catPas = passenger.category.categoryCode,
                 datetime = application.datetime,
                 fio = passenger.fullName,
@@ -108,6 +111,7 @@ class ApplicationService(
                 info.datetime.toString(),
                 info.fullName,
                 info.number ?: "Мобильный номер отсутствует",
+                info.tpz.toString()
             )
         }
     }

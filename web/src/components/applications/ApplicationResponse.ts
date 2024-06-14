@@ -7,5 +7,6 @@ type ApplicationResponse = {
     catPas: string,
     datetime: string,
     fullName: string, 
-    mobileNumber: string 
+    mobileNumber: string,
+    tpz: string
 };

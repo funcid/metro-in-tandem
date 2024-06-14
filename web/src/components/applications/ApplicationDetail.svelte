@@ -142,8 +142,9 @@
                         <label class="block text-gray-700">Отправление</label>
                         <input 
                             type="text" 
-                            bind:value={application.datetime} 
+                            bind:value={application.datetime}
                             class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700" 
+                            required
                         />
                     </div>
                     <div class="flex flex-col mb-4">
@@ -166,13 +167,17 @@
                         <div class="flex justify-between">
                             <input 
                                 type="number" 
-                                bind:value={application.inspSexM} 
+                                min="0"
+                                bind:value={application.inspSexM}
                                 class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700" 
+                                required
                             />
                             <input 
                                 type="number" 
-                                bind:value={application.inspSexF} 
+                                min="0"
+                                bind:value={application.inspSexF}
                                 class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700" 
+                                required
                             />
                         </div>
                     </div>
@@ -181,13 +186,15 @@
                         <div class="flex justify-between">
                             <input 
                                 type="text" 
-                                bind:value={application.idSt1} 
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700" 
+                                bind:value={application.idSt1}
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
+                                required 
                             />
                                 <input 
                                 type="text" 
-                                bind:value={application.idSt2} 
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700" 
+                                bind:value={application.idSt2}
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
+                                required 
                             />
                         </div>
                     </div>

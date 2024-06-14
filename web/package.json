@@ -25,6 +25,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"flatpickr": "^4.6.13",
+		"svelte-datepicker": "^1.0.0",
+		"svelte-flatpickr": "^3.3.4",
 		"svelte-spa-router": "^4.0.1"
 	}
 }

@@ -1,15 +1,19 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { JWT } from '../login/Login.svelte';
+    import Flatpickr from 'svelte-flatpickr';
+    import 'flatpickr/dist/flatpickr.css';
 
     let passenger: PassengerDetailResponse | null = null;
-    let errorMessage: string = '';
+
     let datetime = '';
     let inspSexM = '';
-    let loading: boolean = true;
     let inspSexF = '';
     let idSt1 = '';
     let idSt2 = '';
+
+    let loading: boolean = true;
+    let errorMessage: string = '';
 
     const getIdFromUrl = () => {
         const url = window.location.hash;
@@ -37,13 +41,9 @@
                 },
                 body: JSON.stringify({ 
                     idPas: id,
-                    dateTime: datetime,
-                    catPas: passenger?.category,
-                    status: 'Не подтверждена',
-                    // tpz: , и чё тут передавать
+                    datetime: datetime,
                     inspSexM: inspSexM,
                     inspSexF: inspSexF,
-                    // timeOver: , а тут
                     idSt1: idSt1,
                     idSt2: idSt2
                 })
@@ -51,7 +51,7 @@
             if (!response.ok) {
                 throw new Error('Failed to create escort request');
             }
-            alert('Escort request created successfully.');
+            window.location.hash = `/applications/${id}`
         } catch (err) {
             errorMessage = 'Failed to create escort request. Please try again later.';
             console.error(err);
@@ -79,11 +79,26 @@
             loading = false;
         }
     };
+
+    function handleDateChange(event: any) {
+		const [selectedDates, dateStr] = event.detail;
+		// Format the date as dd.MM.yyyy HH:mm:ss
+        if (selectedDates.length > 0) {
+            const date = selectedDates[0];
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            datetime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+	}
 </script>
 
 <main class="flex flex-col justify-center items-center">
     <p class="font-bold text-[40rem] mb-[20rem]">Создать новую заявку на сопровождение</p>
-    <div class="flex justify-center bg-white border border-gray-300 shadow-md w-3/4 rounded-[30rem]">
+    <div class="flex justify-center bg-white border border-gray-300 shadow-md w-1/2 rounded-[30rem]">
         {#if loading}
             <p class="text-gray-500">Loading passenger...</p>
         {:else if errorMessage}
@@ -92,17 +107,20 @@
             <div class="flex justify-between p-[40rem] w-full gap-[40rem]">
                 <div class="w-1/2 flex flex-col justify-between">
                     <p class="font-bold">Информация:</p>
-                    <div class="flex flex-col justify-between h-full py-[40rem]">
-                        <div>
-                            <p>ID: {id}<br/></p>
-                            <p>ФИО: {passenger.fullName}</p>
-                            <p>Категория: {passenger.category}</p>
-                            <p>Пол: {passenger.gender}</p>
-                            <p>Мобильный номер: {passenger.contactNumbers}</p>
-                        </div>
-                        <div>
-                            <p>Статус: {status}</p> 
-                        </div>
+                    <div class="flex flex-col h-full py-[40rem]">
+                        <p>ID: {id}<br/></p>
+                        <p>ФИО: {passenger.fullName}</p>
+                        <p>Категория: {passenger.category}</p>
+                        <p>Пол: {passenger.gender}</p>
+
+
+                        <br/>
+                        <p>Мобильный номера:</p>
+                        {#each passenger.contactNumbers as contact, index}
+                            <div class="flex flex-col">
+                                {contact.number} 
+                            </div>
+                        {/each}
                     </div>
                     <button type="button" on:click={navigateToPassengerDetail} class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full">
                         Отменить
@@ -110,11 +128,16 @@
                 </div>
                 <form class="flex flex-col gap-[12rem] w-1/2" on:submit|preventDefault={createEscortRequest}>
                     <div class="mb-4">
-                        <label class="block text-gray-700">Отправление</label>
-                        <input 
-                            type="text" 
-                            bind:value={datetime} 
-                            class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700" 
+                        <label class="block text-gray-700">Отправление в</label>
+                        <Flatpickr
+                            on:change={handleDateChange}
+                            options={{ 
+                                enableTime: true, 
+                                dateFormat: "d.m.Y H:i:S",
+                                noCalendar: false, 
+                                time_24hr: true,
+                            }}
+                            class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
                         />
                     </div>
                     <div class="flex flex-col mb-4">
@@ -122,13 +145,17 @@
                         <div class="flex justify-between">
                             <input 
                                 type="number" 
+                                min="0"
                                 bind:value={inspSexM} 
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700" 
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
+                                required 
                             />
                             <input 
                                 type="number" 
+                                min="0"
                                 bind:value={inspSexF} 
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700" 
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
+                                required 
                             />
                         </div>
                     </div>
@@ -136,24 +163,28 @@
                         <label class="block text-gray-700">Код станции отправления/прибытия</label>
                         <div class="flex justify-between">
                             <input 
-                                type="text" 
+                                type="number" 
+                                min="0"
                                 bind:value={idSt1} 
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700" 
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
+                                required 
                             />
-                                <input 
-                                type="text" 
+                            <input 
+                                type="number" 
+                                min="0"
                                 bind:value={idSt2} 
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700" 
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
+                                required 
                             />
                         </div>
                     </div>
                     <div class="flex space-x-4 mt-[30rem]">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full">
-                            Создать заявку на сопровождение
+                            Создать
                         </button>
                     </div>
                 </form>
             </div>
-            {/if}
-        </div>
-    </main>
+        {/if}
+    </div>
+</main>

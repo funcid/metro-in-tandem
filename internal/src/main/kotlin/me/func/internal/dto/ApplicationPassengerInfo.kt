@@ -13,4 +13,5 @@ interface ApplicationPassengerInfo {
     val datetime: Timestamp
     val fullName: String
     val number: String?
+    val tpz: Timestamp
 }

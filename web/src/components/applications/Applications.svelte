@@ -37,9 +37,9 @@
         window.location.hash = `/applications/${id}`;
     };
 
-    const calculateMinutesSince = (datetime: string): number => {
+    const calculateMinutesSince = (tpz: string): number => {
         const now = new Date();
-        const date = new Date(datetime);
+        const date = new Date(tpz);
         const diffMs = now.getTime() - date.getTime();
         return Math.floor(diffMs / 60000); // Переводим из миллисекунд в минуты
     };
@@ -67,7 +67,7 @@
                                 {#if app.status.includes('Отмена')}
                                     <span class="text-red-500">Отменена</span>
                                 {:else if app.status.includes('Не подтверждена')}
-                                    <span class="text-[#00bfff]">Ожидает {calculateMinutesSince(app.datetime)} мин.</span>
+                                    <span class="text-[#00bfff]">Ожидает {calculateMinutesSince(app.tpz)} мин.</span>
                                 {:else}
                                     {app.time3} ➜ {app.time4}
                                 {/if}
