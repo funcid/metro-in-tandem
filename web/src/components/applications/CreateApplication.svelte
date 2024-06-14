@@ -4,6 +4,7 @@
     import { JWT } from '../login/Login.svelte';
     import Flatpickr from 'svelte-flatpickr';
     import 'flatpickr/dist/flatpickr.css';
+    import { PUBLIC_API_HOST } from '$env/static/public';
 
     let passenger: PassengerDetailResponse | null = null;
 
@@ -34,7 +35,7 @@
 
     const createEscortRequest = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/applications`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/applications`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,
@@ -63,7 +64,7 @@
     const fetchPassenger = async () => {
         loading = true;
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/passengers/${id}`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/passengers/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,

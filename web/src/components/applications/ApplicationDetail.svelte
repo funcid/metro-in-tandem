@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { JWT } from '../login/Login.svelte';
+    import { PUBLIC_API_HOST } from '$env/static/public';
 
     let application: ApplicationDetailResponse | null = null;
     let status: string = '';
@@ -35,7 +36,7 @@
     const fetchApplication = async () => {
         loading = true;
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/applications/${id}`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/applications/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,
@@ -57,7 +58,7 @@
 
     const updateApplication = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/applications/${id}`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/applications/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,
@@ -77,7 +78,7 @@
 
     const deleteApplication = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/applications/${id}`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/applications/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,

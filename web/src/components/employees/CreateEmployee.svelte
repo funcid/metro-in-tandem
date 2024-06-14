@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { PUBLIC_API_HOST } from '$env/static/public';
+    import validateRussianPhoneNumber from '../../utils/validatePhoneNumber';
     import { JWT } from '../login/Login.svelte'; 
     
     const sections = ["ЦУ-1", "ЦУ-2", "ЦУ-3", "ЦУ-3 (Н)", "ЦУ-4", "ЦУ-4 (Н)", "ЦУ-5", "ЦУ-8"];
@@ -20,7 +22,17 @@
     
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
+        
+        if (!validateRussianPhoneNumber(workPhone)) {
+            errorMessage = 'Неверный формат рабочего телефона';
+            return;
+        }
 
+        if (!validateRussianPhoneNumber(personalPhone)) {
+            errorMessage = 'Неверный формат личного телефона';
+            return;
+        }
+        
         let fio = fullName.split(' ')
         const newEmployee = {
             fullName,
@@ -37,7 +49,7 @@
         };
 
         try {
-            const response = await fetch('http://localhost:8080/api/v1/employees', {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/employees`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`, // Используем JWT из store

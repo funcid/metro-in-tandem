@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { JWT } from '../login/Login.svelte';
+    import { PUBLIC_API_HOST } from '$env/static/public';
 
     let passengers: PassengerResponse[] = [];
     let filteredPassengers: PassengerResponse[] = [];
@@ -15,7 +16,7 @@
     const fetchPassengers = async () => {
         loading = true;
         try {
-            const response = await fetch('http://localhost:8080/api/v1/passengers/all', {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/passengers/all`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,  // fixed concatenation issue

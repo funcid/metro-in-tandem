@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { PUBLIC_API_HOST } from '$env/static/public';
     import { JWT } from '../login/Login.svelte';
 
     let sections = ["ЦУ-1", "ЦУ-2", "ЦУ-3", "ЦУ-3 (Н)", "ЦУ-4", "ЦУ-4 (Н)", "ЦУ-5", "ЦУ-8"];
@@ -13,7 +14,7 @@
         loading = true;
         noContent = false;
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/employees?region=${section}`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/employees?region=${section}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,

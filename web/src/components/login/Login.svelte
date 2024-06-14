@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
     import { writable, derived } from "svelte/store";
+    import { PUBLIC_API_HOST } from "$env/static/public";
 
     // Читаем значение из localStorage при загрузке
     let initialJWT = localStorage.getItem("JWT") || null;
@@ -24,7 +25,7 @@
 
         return JSON.parse(jsonPayload);
     }
-    // Подписываемся на изменения JWT и сохраняем в localStorage
+
     JWT.subscribe((value) => {
         if (value) {
             localStorage.setItem("JWT", value);
@@ -32,7 +33,7 @@
             if (payload) {
                 username.set(payload.sub);
             } else {
-                username.set(null); // если не удалось распарсить JWT, то сбрасываем имя пользователя
+                username.set(null);
             }
         } else {
             username.set(null);
@@ -43,8 +44,8 @@
     export let isAuthenticated = derived(JWT, ($JWT) => !!$JWT);
 
     isAuthenticated.subscribe((auth) => {
-        if (auth) {
-            window.location.href = "/#/"; // Перенаправление на корневой путь
+        if (auth && window.location.hash === "#/login") {
+            window.location.href = "/";
         }
     });
 
@@ -54,7 +55,7 @@
 
     async function login() {
         try {
-            const response = await fetch("http://localhost:8080/auth/login", {
+            const response = await fetch(PUBLIC_API_HOST + "auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

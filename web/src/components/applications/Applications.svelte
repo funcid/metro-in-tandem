@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { JWT } from '../login/Login.svelte';
+    import { PUBLIC_API_HOST } from '$env/static/public';
 
     let applications: ApplicationResponse[] = [];
     let loading: boolean = true;
@@ -13,7 +14,7 @@
     const fetchApplications = async () => {
         loading = true;
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/applications`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/applications`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,

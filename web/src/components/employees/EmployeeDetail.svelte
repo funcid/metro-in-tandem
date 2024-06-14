@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { JWT } from '../login/Login.svelte';
+    import { PUBLIC_API_HOST } from '$env/static/public';
 
     let employee: EmployeeDetailResponse | null = null;
     let loading: boolean = true;
@@ -26,7 +27,7 @@
     const fetchEmployee = async () => {
         loading = true;
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/employees/${id}`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/employees/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,
@@ -47,7 +48,7 @@
 
     const updateEmployee = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/employees/${id}`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/employees/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,
@@ -67,7 +68,7 @@
 
     const deleteEmployee = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/employees/${id}`, {
+            const response = await fetch(PUBLIC_API_HOST + `api/v1/employees/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${$JWT}`,
