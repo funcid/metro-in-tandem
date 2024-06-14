@@ -1,18 +1,18 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { JWT } from "../login/Login.svelte";
+    import { PUBLIC_API_HOST } from "$env/static/public";
+    import { metroStations, findMetroStationByName } from "../Variables.svelte";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
-    import { PUBLIC_API_HOST } from "$env/static/public";
 
     let passenger: PassengerDetailResponse | null = null;
-    let metroStations: MetroStationResponse[] = [];
 
     let datetime = "";
-    let inspSexM = "";
-    let inspSexF = "";
-    let idSt1 = "";
-    let idSt2 = "";
+    let inspSexM = 0;
+    let inspSexF = 0;
+    let stationStart = "";
+    let stationEnd = "";
 
     let loading: boolean = true;
     let errorMessage: string = "";
@@ -48,8 +48,8 @@
                         datetime: datetime,
                         inspSexM: inspSexM,
                         inspSexF: inspSexF,
-                        idSt1: idSt1,
-                        idSt2: idSt2,
+                        idSt1: findMetroStationByName(stationStart)?.id,
+                        idSt2: findMetroStationByName(stationEnd)?.id,
                     }),
                 },
             );
@@ -57,30 +57,7 @@
                 throw new Error("Failed to create escort request");
             }
             let created = await response.json();
-            metroStations = created;
-        } catch (err) {
-            errorMessage =
-                "Failed to create escort request. Please try again later.";
-            console.error(err);
-        }
-    };
-
-    const fetchMetroStations = async () => {
-        try {
-            const response = await fetch(
-                PUBLIC_API_HOST + `api/v1/metro`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${$JWT}`,
-                        "Content-Type": "application/json",
-                    }
-                },
-            );
-            if (!response.ok) {
-                throw new Error("Failed to create escort request");
-            }
-            let created = await response.json();
+            window.location.hash = `/applications/${created.id}`
         } catch (err) {
             errorMessage =
                 "Failed to create escort request. Please try again later.";
@@ -204,37 +181,35 @@
                             />
                         </div>
                     </div>
-                    <div class="flex flex-col mb-4">
-                        <label class="block text-gray-700"
-                            >Код станции отправления/прибытия</label
+                    <div class="flex flex-col gap-[16rem] mb-4">
+                        <label class="block text-gray-700">
+                            Станция отправления
+                        </label>
+                        <select
+                            id="category"
+                            bind:value={stationStart}
+                            class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required
                         >
-                            <select
-                                id="category"
-                                bind:value={idSt1}
-                                class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                required
-                            >
-                                <option value="" disabled selected>⏵ Станции</option>
-                                {#each metroStations as { nameStation }}
-                                    <option>{nameStation}</option>
-                                {/each}
-                            </select>
-                        <div class="flex justify-between">
-                            <input
-                                type="text"
-                                bind:value={idSt1}
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] text-gray-700"
-                                required
-                            />
-                        </div>
-                        <div class="flex justify-between flex space-x-4 mt-[10rem]">
-                            <input
-                                type="text"
-                                bind:value={idSt2}
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] text-gray-700"
-                                required
-                            />
-                        </div>
+                            <option value="" disabled selected>⏵ Выберите</option>
+                            {#each metroStations as { nameStation }}
+                                <option>{nameStation}</option>
+                            {/each}
+                        </select>
+                        <label class="block text-gray-700">
+                            Станция прибытия
+                        </label>
+                        <select
+                            id="category"
+                            bind:value={stationEnd}
+                            class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required
+                        >
+                            <option value="" disabled selected>⏵ Выберите</option>
+                            {#each metroStations as { nameStation }}
+                                <option>{nameStation}</option>
+                            {/each}
+                        </select>
                     </div>
                     <div class="flex space-x-4 mt-[30rem]">
                         <button

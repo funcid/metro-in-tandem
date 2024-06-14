@@ -50,6 +50,7 @@ class SecurityConfiguration(
 					"/actuator/**",
 					"/swagger-ui/**",
 					"/api-docs/**",
+					"/api/v1/metro"
 				).permitAll()
 				auth.anyRequest().authenticated()
 			}

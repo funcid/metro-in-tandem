@@ -1,4 +1,8 @@
 <script context="module" lang="ts">
+    import { onMount } from "svelte";
+    import { JWT } from "./login/Login.svelte";
+    import { PUBLIC_API_HOST } from "$env/static/public";
+
     export const sections = [
         "ЦУ-1",
         "ЦУ-2",
@@ -49,4 +53,36 @@
         { value: "PASSENGER_DELAYED", label: "Пассажир опаздывает" },
         { value: "INSPECTOR_DELAYED", label: "Инспектор опаздывает" },
     ];
+
+    export let metroStations: MetroStationResponse[] = [];
+    export let findMetroStationByName = (name: string) => {
+        return metroStations.find((station) => station.nameStation == name)
+    }
+    export let findMetroStationById = (id: number) => {
+        return metroStations.find((station) => station.id == id)
+    }
+
+    const fetchMetroStations = async () => {
+        try {
+            const response = await fetch(
+                PUBLIC_API_HOST + `api/v1/metro`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${JWT}`,
+                        "Content-Type": "application/json",
+                    }
+                },
+            );
+            if (!response.ok) {
+                throw new Error("Failed to create escort request");
+            }
+            metroStations = await response.json();
+            metroStations.sort((station1, station2) => station2.nameStation.localeCompare(station1.nameStation))
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    await fetchMetroStations();
 </script>

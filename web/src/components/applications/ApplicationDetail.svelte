@@ -2,12 +2,14 @@
     import { onMount } from "svelte";
     import { JWT } from "../login/Login.svelte";
     import { PUBLIC_API_HOST } from "$env/static/public";
-    import { statusOptions } from "../Variables.svelte";
+    import { statusOptions, metroStations, findMetroStationByName, findMetroStationById } from "../Variables.svelte";
 
     let application: ApplicationDetailResponse | null = null;
     let status: string = "";
     let loading: boolean = true;
     let errorMessage: string = "";
+    let stationStart: string = "";
+    let stationEnd: string = "";
 
     const getIdFromUrl = () => {
         const url = window.location.hash;
@@ -38,7 +40,9 @@
                 throw new Error("Failed to fetch application");
             }
             application = await response.json();
-            status = application?.status || "";
+            status = application!.status || "";
+            stationStart = findMetroStationById(application!.idSt1)?.nameStation!
+            stationEnd = findMetroStationById(application!.idSt2)?.nameStation!
         } catch (err) {
             errorMessage =
                 "Failed to load application. Please try again later.";
@@ -50,6 +54,8 @@
 
     const updateApplication = async () => {
         try {
+            application!.idSt1 = findMetroStationByName(stationStart)!.id
+            application!.idSt2 = findMetroStationByName(stationEnd)!.id
             const response = await fetch(
                 PUBLIC_API_HOST + `api/v1/applications/${id}`,
                 {
@@ -201,24 +207,35 @@
                             />
                         </div>
                     </div>
-                    <div class="flex flex-col mb-4">
-                        <label class="block text-gray-700"
-                            >Код станции отправления/прибытия</label
+                    <div class="flex flex-col gap-[16rem] mb-4">
+                        <label class="block text-gray-700">
+                            Станция отправления
+                        </label>
+                        <select
+                            id="category"
+                            bind:value={stationStart}
+                            class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required
                         >
-                        <div class="flex justify-between">
-                            <input
-                                type="text"
-                                bind:value={application.idSt1}
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
-                                required
-                            />
-                            <input
-                                type="text"
-                                bind:value={application.idSt2}
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
-                                required
-                            />
-                        </div>
+                            <option value="" disabled selected>⏵ Выберите</option>
+                            {#each metroStations as { nameStation }}
+                                <option>{nameStation}</option>
+                            {/each}
+                        </select>
+                        <label class="block text-gray-700">
+                            Станция прибытия
+                        </label>
+                        <select
+                            id="category"
+                            bind:value={stationEnd}
+                            class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required
+                        >
+                            <option value="" disabled selected>⏵ Выберите</option>
+                            {#each metroStations as { nameStation }}
+                                <option>{nameStation}</option>
+                            {/each}
+                        </select>
                     </div>
                     <div class="flex space-x-4 mt-[30rem]">
                         <button

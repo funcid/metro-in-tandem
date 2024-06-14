@@ -10,9 +10,9 @@ type ApplicationDetailResponse = {
     inspSexM: number;
     inspSexF: number;
     timeOver: string; // Формат HH:mm:ss
-    idSt1: string;
+    idSt1: number;
     station1Name: string;
-    idSt2: string;
+    idSt2: number;
     station2Name: string;
     duration: string;
 }
