@@ -6,6 +6,7 @@
     import { PUBLIC_API_HOST } from "$env/static/public";
 
     let passenger: PassengerDetailResponse | null = null;
+    let metroStations: MetroStationResponse[] = [];
 
     let datetime = "";
     let inspSexM = "";
@@ -56,7 +57,30 @@
                 throw new Error("Failed to create escort request");
             }
             let created = await response.json();
-            window.location.hash = `/applications/${created.id}`;
+            metroStations = created;
+        } catch (err) {
+            errorMessage =
+                "Failed to create escort request. Please try again later.";
+            console.error(err);
+        }
+    };
+
+    const fetchMetroStations = async () => {
+        try {
+            const response = await fetch(
+                PUBLIC_API_HOST + `api/v1/metro`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${$JWT}`,
+                        "Content-Type": "application/json",
+                    }
+                },
+            );
+            if (!response.ok) {
+                throw new Error("Failed to create escort request");
+            }
+            let created = await response.json();
         } catch (err) {
             errorMessage =
                 "Failed to create escort request. Please try again later.";
@@ -184,19 +208,30 @@
                         <label class="block text-gray-700"
                             >Код станции отправления/прибытия</label
                         >
+                            <select
+                                id="category"
+                                bind:value={idSt1}
+                                class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            >
+                                <option value="" disabled selected>⏵ Станции</option>
+                                {#each metroStations as { nameStation }}
+                                    <option>{nameStation}</option>
+                                {/each}
+                            </select>
                         <div class="flex justify-between">
                             <input
-                                type="number"
-                                min="0"
+                                type="text"
                                 bind:value={idSt1}
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] text-gray-700"
                                 required
                             />
+                        </div>
+                        <div class="flex justify-between flex space-x-4 mt-[10rem]">
                             <input
-                                type="number"
-                                min="0"
+                                type="text"
                                 bind:value={idSt2}
-                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-2/5 text-gray-700"
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] text-gray-700"
                                 required
                             />
                         </div>
