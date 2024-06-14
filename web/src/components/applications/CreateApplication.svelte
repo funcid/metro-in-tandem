@@ -1,4 +1,3 @@
-@ -0,0 +1,191 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { JWT } from '../login/Login.svelte';

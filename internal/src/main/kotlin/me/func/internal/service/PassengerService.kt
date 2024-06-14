@@ -2,6 +2,7 @@ package me.func.internal.service
 
 import me.func.internal.model.Passenger
 import me.func.internal.repository.PassengerRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,12 +19,15 @@ class PassengerService(private val repository: PassengerRepository) {
     }
 
     fun updatePassenger(id: Long, updatedPassenger: Passenger): Passenger? {
-        return if (repository.existsById(id)) {
-            updatedPassenger.copy(id = id)
-            repository.save(updatedPassenger)
-        } else {
-            null
-        }
+        val passenger = repository.findByIdOrNull(id)?.apply {
+            this.fullName = updatedPassenger.fullName
+            this.category  = updatedPassenger.category
+            this.gender = updatedPassenger.gender
+            this.hasPacemaker = updatedPassenger.hasPacemaker
+            this.additionalInfo = updatedPassenger.additionalInfo
+            this.contactNumbers = updatedPassenger.contactNumbers
+        } ?: return null
+        return repository.save(passenger)
     }
 
     fun deletePassenger(id: Long): Boolean {
@@ -35,7 +39,7 @@ class PassengerService(private val repository: PassengerRepository) {
         return repository.searchByFullNameOrCategory(query)
     }
 
-    fun getAllPassengers(): List<Passenger>  {
+    fun getAllPassengers(): List<Passenger> {
         return repository.findAll()
     }
 }

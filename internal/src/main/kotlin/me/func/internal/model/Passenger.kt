@@ -8,27 +8,27 @@ import me.func.internal.converter.PassengerCategoryConverter
 data class Passenger(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L,
+    var id: Long = 0L,
 
     @Column(nullable = false)
-    val fullName: String,
+    var fullName: String,
 
     @ElementCollection
     @CollectionTable(name = "contact_numbers", joinColumns = [JoinColumn(name = "passenger_id")])
-    val contactNumbers: Set<ContactNumber> = emptySet(),
+    var contactNumbers: Set<ContactNumber> = emptySet(),
 
     @Column(nullable = false)
-    val gender: String,
+    var gender: String,
 
     @Column(name = "category")
     @Convert(converter = PassengerCategoryConverter::class)
-    val category: PassengerCategory,
+    var category: PassengerCategory,
 
     @Column
-    val additionalInfo: String? = null,
+    var additionalInfo: String? = null,
 
     @Column(nullable = false)
-    val hasPacemaker: Boolean = false
+    var hasPacemaker: Boolean = false
 )
 
 @Embeddable
