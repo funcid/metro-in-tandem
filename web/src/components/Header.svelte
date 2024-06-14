@@ -17,7 +17,9 @@
 
 <div class="flex flex-col gap-[40rem]">
     <div class="flex justify-between items-center">
-        <img src="https://apps3proxy.mosmetro.tech/webapp-mosmetro/mm-logo-red.svg" alt="#" width="221rem" height="56.61rem" />
+        <a href="#/">
+            <img src="https://apps3proxy.mosmetro.tech/webapp-mosmetro/mm-logo-red.svg" alt="#" width="221rem" height="56.61rem"/>
+        </a>
         <div class="flex gap-[60rem] items-center">
             {#if $isAuthenticated}
                 <div class="flex items-center gap-[10rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]" on:click={toggleLogoutModal}>

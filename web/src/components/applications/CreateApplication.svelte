@@ -1,3 +1,4 @@
+@ -0,0 +1,191 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { JWT } from '../login/Login.svelte';
@@ -51,7 +52,8 @@
             if (!response.ok) {
                 throw new Error('Failed to create escort request');
             }
-            window.location.hash = `/applications/${id}`
+            let created = await response.json();
+            window.location.hash = `/applications/${created.id}`
         } catch (err) {
             errorMessage = 'Failed to create escort request. Please try again later.';
             console.error(err);
@@ -98,7 +100,7 @@
 
 <main class="flex flex-col justify-center items-center">
     <p class="font-bold text-[40rem] mb-[20rem]">Создать новую заявку на сопровождение</p>
-    <div class="flex justify-center bg-white border border-gray-300 shadow-md w-1/2 rounded-[30rem]">
+    <div class="flex justify-center bg-white border border-gray-300 shadow-md w-2/3 rounded-[30rem]">
         {#if loading}
             <p class="text-gray-500">Loading passenger...</p>
         {:else if errorMessage}
