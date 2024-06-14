@@ -4,16 +4,42 @@
     // Читаем значение из localStorage при загрузке
     let initialJWT = localStorage.getItem("JWT") || null;
     export let JWT = writable<string | null>(initialJWT);
+    export let username = writable<string | null>(null);
 
+    function parseJwt(token: string) {
+        if (!token) return null;
+        var base64Url = token.split(".")[1];
+        var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        var jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split("")
+                .map(function (c) {
+                    return (
+                        "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                    );
+                })
+                .join(""),
+        );
+
+        return JSON.parse(jsonPayload);
+    }
     // Подписываемся на изменения JWT и сохраняем в localStorage
     JWT.subscribe((value) => {
         if (value) {
             localStorage.setItem("JWT", value);
+            const payload = parseJwt(value);
+            if (payload) {
+                username.set(payload.sub);
+            } else {
+                username.set(null); // если не удалось распарсить JWT, то сбрасываем имя пользователя
+            }
         } else {
+            username.set(null);
             localStorage.removeItem("JWT");
         }
     });
-    export let username = writable<string | null>(null);
+
     export let isAuthenticated = derived(JWT, ($JWT) => !!$JWT);
 
     isAuthenticated.subscribe((auth) => {
