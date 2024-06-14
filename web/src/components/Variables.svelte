@@ -54,14 +54,6 @@
         { value: "INSPECTOR_DELAYED", label: "Инспектор опаздывает" },
     ];
 
-    export let metroStations: MetroStationResponse[] = [];
-    export let findMetroStationByName = (name: string) => {
-        return metroStations.find((station) => station.nameStation == name)
-    }
-    export let findMetroStationById = (id: number) => {
-        return metroStations.find((station) => station.id == id)
-    }
-
     const fetchMetroStations = async () => {
         try {
             const response = await fetch(
@@ -77,12 +69,19 @@
             if (!response.ok) {
                 throw new Error("Failed to create escort request");
             }
-            metroStations = await response.json();
-            metroStations.sort((station1, station2) => station2.nameStation.localeCompare(station1.nameStation))
+            return await response.json()
         } catch (err) {
             console.error(err);
         }
     };
 
-    await fetchMetroStations();
+    export let metroStations: MetroStationResponse[] = await fetchMetroStations();
+    metroStations.sort((station1, station2) => station2.nameStation.localeCompare(station1.nameStation))
+
+    export let findMetroStationByName = (name: string) => {
+        return metroStations.find((station) => station.nameStation === name)
+    }
+    export let findMetroStationById = (id: number) => {
+        return metroStations.find((station) => station.id === id)
+    }
 </script>
