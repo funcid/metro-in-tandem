@@ -16,4 +16,6 @@ enum class ApplicationStatus(val statusCode: String) {
         private val map = entries.associateBy(ApplicationStatus::statusCode)
         fun fromCode(code: String) = map[code]
     }
+
+    fun isCancelled() = statusCode == NOT_VISITED_BY_PASSENGER.statusCode || statusCode == CANCELLED_BY_PASSENGER.statusCode
 }
