@@ -14,11 +14,23 @@
         id: number;
         idPas: string;
         datetime: string;
-        // other fields as needed
+        time3: string;
+        time4: string;
     }
 
-    let ganttInstance: SvelteGantt | null = null; // To hold the instance of SvelteGantt
-    let applications: ApplicationResponse[] = [];
+    interface Employee {
+        id: number;
+        fio: string;
+        timeWork: string;
+    }
+
+    interface Allocation {
+        employee: Employee;
+        applications: Application[];
+    }
+
+    let ganttInstance: SvelteGantt | null = null;
+    let allocations: Allocation[] = [];
 
     let options = {
         rows: [] as { id: number; label: string }[],
@@ -31,8 +43,8 @@
             classes: string;
         }[],
         dependencies: [],
-        from: Date.now(),
-        to: Date.now() + 1000 * 60 * 60 * 24,
+        from: Date.now() - 1000 * 60 * 60 * 24 * 53,
+        to: Date.now() - 1000 * 60 * 60 * 24 * 51.5,
         headers: [
             { unit: "day", format: "MMMM Do" },
             { unit: "hour", format: "H:mm" },
@@ -63,8 +75,8 @@
         ],
     };
 
-    async function fetchApplications(): Promise<ApplicationResponse[]> {
-        const response = await fetch(PUBLIC_API_HOST + `api/v1/applications`, {
+    async function fetchAllocations(): Promise<Allocation[]> {
+        const response = await fetch(PUBLIC_API_HOST + `api/v1/allocations`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${$JWT}`,
@@ -72,47 +84,74 @@
             },
         });
         if (!response.ok) {
-            throw new Error("Failed to fetch applications data");
+            throw new Error("Failed to fetch allocations data");
         }
         return await response.json();
     }
 
-    // Update or insert tasks
-    function handleUpdateTasks(models: any[] /* replace with Array<Task> */) {
+    function handleUpdateTasks(models: any[]) {
         ganttInstance.updateTasks(models);
     }
 
-    // Update or insert rows
-    function handleUpdateRows(models: any[] /* replace with Array<Row> */) {
+    function handleUpdateRows(models: any[]) {
         ganttInstance.updateRows(models);
     }
 
-    function mapApplicationsToOptions(applications: ApplicationResponse[]) {
-        options.rows = applications.map((app) => ({
-            id: app.id,
-            label: app.fullName,
+    function mapAllocationsToOptions(allocations: Allocation[]) {
+        if (!Array.isArray(allocations)) {
+            console.error("Expected an array of allocations, but got:", allocations);
+            return;
+        }
+
+        options.rows = allocations.map((alloc) => ({
+            id: alloc.employee.id,
+            label: alloc.employee.fio,
         }));
         handleUpdateRows(options.rows);
 
-        options.tasks = applications.map((app) => ({
-            id: app.id,
-            resourceId: app.id,
-            label: ' ',
-            from: moment(app.time3, "HH:mm:ss"),
-            to: moment(app.time4, "HH:mm:ss"),
-            classes: "orange text-black",
-            buttonClasses: "text-black",
-            amountDone: 100
-        }));
+        options.tasks = allocations.flatMap((alloc) => {
+            const tasks = alloc.applications.map((app) => ({
+                id: app.id,
+                resourceId: alloc.employee.id,
+                label: `Заявка ${app.idPas}`,
+                from: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(moment.duration(app.time3)),
+                to: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(moment.duration(app.time4)),
+                classes: "orange text-black",
+                buttonClasses: "text-black",
+                amountDone: 100,
+            }));
+
+            // Добавляем обеденные перерывы
+            const startWork = moment(alloc.employee.timeWork.split("-")[0], "HH:mm");
+            const endWork = moment(alloc.employee.timeWork.split("-")[1], "HH:mm");
+            const lunchStart = startWork.clone().add(3, "hours").add(30, "minutes");
+            const lunchEnd = endWork.clone().subtract(1, "hour");
+
+            const lunchTasks = [];
+            let lunchTime = lunchStart.clone();
+            while (lunchTime.isBefore(lunchEnd)) {
+                lunchTasks.push({
+                    id: `${alloc.employee.id}-lunch-${lunchTime.format("HH:mm")}`,
+                    resourceId: alloc.employee.id,
+                    label: "Обед",
+                    from: lunchTime,
+                    to: lunchTime.clone().add(1, "hour"),
+                    classes: "green text-black",
+                });
+                lunchTime.add(4, "hours").add(30, "minutes");
+            }
+
+            return tasks.concat(lunchTasks);
+        });
         handleUpdateTasks(options.tasks);
     }
 
     onMount(async () => {
         try {
-            applications = await fetchApplications();
-            mapApplicationsToOptions(applications);
+            allocations = await fetchAllocations();
+            mapAllocationsToOptions(allocations);
         } catch (error) {
-            console.error("Error fetching applications:", error);
+            console.error("Error fetching allocations:", error);
         }
     });
 </script>
