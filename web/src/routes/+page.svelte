@@ -56,7 +56,7 @@
 	</div>
   </div>
   
-  <style>
+  <style global>
 	@font-face {
 	  font-family: "MoscowSans";
 	  src: url("/public/fonts/moscowsans-regular.ttf") format("truetype");

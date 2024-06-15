@@ -29,36 +29,6 @@ html {
   color: #D4212D;
 }
 
-.project-item {
-  transition: 0.1s cubic-bezier(1,-.27,0,1.58);
-  box-shadow: 0rem 0rem 0rem 0rem;
-}
-
-.project-item:hover {
-  box-shadow: 0rem 0rem 0rem 22rem;
-}
-
-.project-item:active {
-  box-shadow: 0rem 0rem 0rem 28rem;
-}
-
-.link-item {
-  transition: 0.1s cubic-bezier(1,-.27,0,1.58);
-  box-shadow: 0rem 0rem 0rem 0rem;
-}
-
-.link-item:hover {
-  box-shadow: 0rem 0rem 0rem 4rem;
-}
-
-.link-item:active {
-  box-shadow: 0rem 0rem 0rem 8rem;
-}
-
-.bg-avatar {
-  background-image: url('./lib/images/avatar.png');
-}
-
 html {
   overflow-y:scroll;
 }

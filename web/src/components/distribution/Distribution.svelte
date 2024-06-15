@@ -9,16 +9,11 @@
         MomentSvelteGanttDateAdapter,
     } from "svelte-gantt/svelte";
     import moment from "moment";
+    import Flatpickr from "svelte-flatpickr";
+    import "flatpickr/dist/flatpickr.css";
 
-    interface Application {
-        id: number;
-        idPas: string;
-        datetime: string;
-        // other fields as needed
-    }
-
-    let ganttInstance: SvelteGantt | null = null; // To hold the instance of SvelteGantt
-    let applications: ApplicationResponse[] = [];
+    let ganttInstance: SvelteGantt | null = null;
+    let allocations: Allocation[] = [];
 
     let options = {
         rows: [] as { id: number; label: string }[],
@@ -41,30 +36,25 @@
         ganttTableModules: [SvelteGanttTable],
         ganttBodyModules: [SvelteGanttDependencies],
         dateAdapter: new MomentSvelteGanttDateAdapter(moment),
-        tableWidth: 170,
+        tableWidth: 130,
         tableHeaders: [{ title: "Сотрудники", property: "label" }],
         rowHeight: 40,
-        rowPadding: 6,
-        timeRanges: [
-            {
-                id: "1",
-                from: moment("01:00", "HH:mm"),
-                to: moment("5:30", "HH:mm"),
-                resizable: false,
-                label: "Закрыто на ночь",
-            },
-            {
-                id: "2",
-                from: moment("01:00", "HH:mm").add(1, "day"),
-                to: moment("5:30", "HH:mm").add(1, "day"),
-                resizable: false,
-                label: "Закрыто на ночь",
-            },
-        ],
     };
 
-    async function fetchApplications(): Promise<ApplicationResponse[]> {
-        const response = await fetch(PUBLIC_API_HOST + `api/v1/applications`, {
+    function handleDateChange(event: any) {
+        const [selectedDates, dateStr] = event.detail;
+        if (selectedDates.length > 0) {
+            options.from = Number(selectedDates[0]);
+            options.to = Number(selectedDates[0]) + 1000 * 60 * 60 * 24;
+            //async () => {
+            //    allocations = await fetchAllocations();
+            //    mapAllocationsToOptions(allocations);
+            //}
+        }
+    }
+
+    async function fetchAllocations(): Promise<Allocation[]> {
+        const response = await fetch(PUBLIC_API_HOST + `api/v1/allocations`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${$JWT}`,
@@ -72,51 +62,70 @@
             },
         });
         if (!response.ok) {
-            throw new Error("Failed to fetch applications data");
+            throw new Error("Failed to fetch allocations data");
         }
         return await response.json();
     }
 
-    // Update or insert tasks
-    function handleUpdateTasks(models: any[] /* replace with Array<Task> */) {
-        ganttInstance.updateTasks(models);
-    }
+    function mapAllocationsToOptions(allocations: Allocation[]) {
+        if (!Array.isArray(allocations)) {
+            console.error(
+                "Expected an array of allocations, but got:",
+                allocations,
+            );
+            return;
+        }
 
-    // Update or insert rows
-    function handleUpdateRows(models: any[] /* replace with Array<Row> */) {
-        ganttInstance.updateRows(models);
-    }
-
-    function mapApplicationsToOptions(applications: ApplicationResponse[]) {
-        options.rows = applications.map((app) => ({
-            id: app.id,
-            label: app.fullName,
+        options.rows = allocations.map((alloc) => ({
+            id: alloc.employee.id,
+            label: alloc.employee.fio,
         }));
-        handleUpdateRows(options.rows);
+        ganttInstance.updateRows(options.rows);
 
-        options.tasks = applications.map((app) => ({
-            id: app.id,
-            resourceId: app.id,
-            label: ' ',
-            from: moment(app.time3, "HH:mm:ss"),
-            to: moment(app.time4, "HH:mm:ss"),
-            classes: "orange text-black",
-            buttonClasses: "text-black",
-            amountDone: 100
-        }));
-        handleUpdateTasks(options.tasks);
+        options.tasks = allocations.flatMap((alloc) => {
+            const tasks = alloc.applications.map((app) => ({
+                id: app.id,
+                resourceId: alloc.employee.id,
+                label:
+                    moment
+                        .duration(app.time4)
+                        .subtract(moment.duration(app.time3))
+                        .asMinutes()
+                        .toFixed(0) + " мин.",
+                from: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(
+                    moment.duration(app.time3),
+                ),
+                to: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(
+                    moment.duration(app.time4),
+                ),
+                showButton: true, // Assuming you don't need buttons on tasks
+                enableDragging: false,
+                enableResize: false,
+            }));
+            return tasks;
+        });
+        ganttInstance.updateTasks(options.tasks);
     }
 
     onMount(async () => {
         try {
-            applications = await fetchApplications();
-            mapApplicationsToOptions(applications);
+            allocations = await fetchAllocations();
+            mapAllocationsToOptions(allocations);
         } catch (error) {
-            console.error("Error fetching applications:", error);
+            console.error("Error fetching allocations:", error);
         }
     });
 </script>
 
 <div>
+    <Flatpickr
+        options={{
+            dateFormat: "d.m.Y",
+            noCalendar: false,
+            time_24hr: true,
+        }}
+        on:change={handleDateChange}
+        class="flex shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
+    />
     <SvelteGantt {...options} bind:this={ganttInstance} />
 </div>
