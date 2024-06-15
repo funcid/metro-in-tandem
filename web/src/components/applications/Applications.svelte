@@ -38,7 +38,7 @@
     };
 
     // Функция для обработки клика по заявке
-    const handleClick = (id: string) => {
+    const handleClick = (id: number) => {
         window.location.hash = `/applications/${id}`;
     };
 

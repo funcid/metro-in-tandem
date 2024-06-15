@@ -14,6 +14,7 @@
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@types/frappe-gantt": "^0.6.4",
 		"autoprefixer": "^10.4.19",
 		"postcss": "^8.4.38",
 		"svelte": "^4.2.7",
@@ -28,6 +29,7 @@
 		"flatpickr": "^4.6.13",
 		"svelte-datepicker": "^1.0.0",
 		"svelte-flatpickr": "^3.3.4",
+		"svelte-gantt": "^4.3.2",
 		"svelte-spa-router": "^4.0.1"
 	}
 }

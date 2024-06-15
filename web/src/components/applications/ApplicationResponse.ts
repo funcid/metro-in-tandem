@@ -1,5 +1,5 @@
 type ApplicationResponse = {
-    id: string,
+    id: number,
     time3: string,
     time4: string,
     timeOver: string,

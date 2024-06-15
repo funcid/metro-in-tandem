@@ -2,19 +2,24 @@
 	import Router, { push } from "svelte-spa-router";
 	import { isAuthenticated } from "../components/login/Login.svelte"
 
-	import Header from '../components/Header.svelte';
-	import Home from '../components/home/Home.svelte';
 	import Applications from '../components/applications/Applications.svelte';
 	import ApplicationDetail from '../components/applications/ApplicationDetail.svelte';
+    import CreateApplication from "../components/applications/CreateApplication.svelte";
+
 	import Passengers from '../components/passengers/Passengers.svelte';
 	import PassengerDetail from '../components/passengers/PassengerDetail.svelte';
 	import CreatePassenger from '../components/passengers/CreatePassenger.svelte';
+
 	import Employees from '../components/employees/Employees.svelte';
-	import CreateEmployee from '../components/employees/CreateEmployee.svelte';
 	import EmployeeDetail from '../components/employees/EmployeeDetail.svelte';
+	import CreateEmployee from '../components/employees/CreateEmployee.svelte';
+
+	import Distribution from '../components/distribution/Distribution.svelte';
+
 	import Login from '../components/login/Login.svelte';
+	import Home from '../components/home/Home.svelte';
+	import Header from '../components/Header.svelte';
 	import Footer from '../components/Footer.svelte';
-    import CreateApplication from "../components/applications/CreateApplication.svelte";
   
 	const routes = {
 	  '/': Home,
@@ -23,7 +28,7 @@
 	  '/passengers': Passengers,
 	  '/passengers/:id': PassengerDetail,
 	  '/create-passenger': CreatePassenger,
-	  '/distribution': CreatePassenger,
+	  '/distribution': Distribution,
 	  '/employees': Employees,
 	  '/employees/:id': EmployeeDetail,
 	  '/create-employee': CreateEmployee,
