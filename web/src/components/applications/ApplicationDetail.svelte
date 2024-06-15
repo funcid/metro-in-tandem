@@ -3,6 +3,8 @@
     import { JWT } from "../login/Login.svelte";
     import { PUBLIC_API_HOST } from "$env/static/public";
     import { statusOptions, metroStations, findMetroStationByName, findMetroStationById } from "../Variables.svelte";
+    import Flatpickr from "svelte-flatpickr";
+    import "flatpickr/dist/flatpickr.css";
 
     let application: ApplicationDetailResponse | null = null;
     let status: string = "";
@@ -10,12 +12,28 @@
     let errorMessage: string = "";
     let stationStart: string = "";
     let stationEnd: string = "";
+    let datetime: string = "";
 
     const getIdFromUrl = () => {
         const url = window.location.hash;
         const parts = url.split("/");
         return parts[2]; // Третья часть URL содержит id
     };
+
+    function handleDateChange(event: any) {
+        const [selectedDates, dateStr] = event.detail;
+        // Format the date as dd.MM.yyyy HH:mm:ss
+        if (selectedDates.length > 0) {
+            const date = selectedDates[0];
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const seconds = String(date.getSeconds()).padStart(2, "0");
+            datetime = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+        }
+    }
 
     const id = getIdFromUrl();
 
@@ -54,8 +72,10 @@
 
     const updateApplication = async () => {
         try {
-            application!.idSt1 = findMetroStationByName(stationStart)!.id
-            application!.idSt2 = findMetroStationByName(stationEnd)!.id
+            application!.idSt1 = findMetroStationByName(stationStart)!.id;
+            application!.idSt2 = findMetroStationByName(stationEnd)!.id;
+            application!.datetime = datetime;
+            
             const response = await fetch(
                 PUBLIC_API_HOST + `api/v1/applications/${id}`,
                 {
@@ -161,12 +181,17 @@
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700">Отправление</label>
-                        <input
-                            type="text"
+                        <label class="block text-gray-700">Отправление в</label>
+                        <Flatpickr
+                            on:change={handleDateChange}
+                            options={{
+                                enableTime: true,
+                                dateFormat: "d.m.Y H:i:S",
+                                noCalendar: false,
+                                time_24hr: true,
+                            }}
                             bind:value={application.datetime}
                             class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
-                            required
                         />
                     </div>
                     <div class="flex flex-col mb-4">
