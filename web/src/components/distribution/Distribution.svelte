@@ -39,7 +39,6 @@
         tableWidth: 130,
         tableHeaders: [{ title: "Сотрудники", property: "label" }],
         rowHeight: 40,
-        rowPadding: 6,
     };
 
     function handleDateChange(event: any) {
@@ -70,7 +69,10 @@
 
     function mapAllocationsToOptions(allocations: Allocation[]) {
         if (!Array.isArray(allocations)) {
-            console.error("Expected an array of allocations, but got:", allocations);
+            console.error(
+                "Expected an array of allocations, but got:",
+                allocations,
+            );
             return;
         }
 
@@ -84,12 +86,21 @@
             const tasks = alloc.applications.map((app) => ({
                 id: app.id,
                 resourceId: alloc.employee.id,
-                label: `Заявка ${app.idPas}`,
-                from: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(moment.duration(app.time3)),
-                to: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(moment.duration(app.time4)),
-                classes: "orange text-black",
-                buttonClasses: "text-black",
-                amountDone: 100,
+                label:
+                    moment
+                        .duration(app.time4)
+                        .subtract(moment.duration(app.time3))
+                        .asMinutes()
+                        .toFixed(0) + " мин.",
+                from: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(
+                    moment.duration(app.time3),
+                ),
+                to: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(
+                    moment.duration(app.time4),
+                ),
+                showButton: true, // Assuming you don't need buttons on tasks
+                enableDragging: false,
+                enableResize: false,
             }));
             return tasks;
         });

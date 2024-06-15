@@ -16,7 +16,6 @@ data class Application(
     var id: Long = 0L,
 
     @Column(name = "id_pas")
-    @JsonProperty("id_pas")
     val idPas: String,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
@@ -29,7 +28,6 @@ data class Application(
     val time4: Time,
 
     @Column(name = "cat_pas")
-    @JsonProperty("cat_pas")
     @Convert(converter = PassengerCategoryConverter::class)
     val catPas: PassengerCategory,
 
@@ -40,16 +38,13 @@ data class Application(
     val tpz: Timestamp,
 
     @Column(name = "insp_sex_m")
-    @JsonProperty("INSP_SEX_M")
     val inspSexM: Int,
 
     @Column(name = "insp_sex_f")
-    @JsonProperty("INSP_SEX_F")
     val inspSexF: Int,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     @Column(name = "time_over")
-    @JsonProperty("TIME_OVER")
     val timeOver: Time,
 
     @Column(name = "id_st1")
