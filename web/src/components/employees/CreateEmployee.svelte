@@ -77,7 +77,7 @@
 <main class="flex flex-col justify-center items-center">
     <p class="font-bold text-[40rem] mb-[20rem]">Создать нового сотрудника</p>
     <div
-        class="flex justify-center bg-white border border-gray-300 shadow-md w-3/5 rounded-[30rem]"
+        class="flex w-full lg:w-[auto] justify-center bg-white border border-gray-300 shadow-md w-3/5 rounded-[30rem]"
     >
         <form on:submit={handleSubmit}>
             <div

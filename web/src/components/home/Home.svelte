@@ -5,9 +5,9 @@
     import Topic from "./Topic.svelte";
 </script>
 
-<div class="flex flex-col gap-[100rem]">
+<div class="flex flex-col gap-[100rem] h-full">
     <div
-        class="max-w-[1720rem] lg:max-w-[1720rem] flex flex-wrap gap-x-[80rem] gap-y-[60rem]"
+        class="max-w-[1720rem] h-full justify-between flex flex-wrap gap-x-[80rem] gap-y-[60rem]"
     >
         <Topic
             jobName="Заявки"

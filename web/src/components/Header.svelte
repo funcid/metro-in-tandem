@@ -1,6 +1,11 @@
 <script lang="ts">
     import { JWT, isAuthenticated, username } from "./login/Login.svelte";
     import Login from "$lib/images/login.svg";
+    import Hamburger from "./Hamburger.svelte";
+    import ApplicationImage from "$lib/images/home/advice.png";
+    import PassengerImage from "$lib/images/home/question.png";
+    import EmployeeImage from "$lib/images/home/team.png";
+    import AimIcon from "$lib/images/icon/black_aim.svg?raw";
 
     let showLogoutModal = false;
 
@@ -13,6 +18,18 @@
         showLogoutModal = false;
         window.location.href = "/";
     }
+
+    let open = false;
+    function toggleMenu() {
+        window.scrollTo(0, 0);
+        if (open) {
+            document.documentElement.style.overflowY = "scroll";
+            open = false;
+            return;
+        }
+        document.documentElement.style.overflowY = "hidden";
+        open = true;
+    }
 </script>
 
 <div class="flex flex-col gap-[40rem]">
@@ -21,35 +38,47 @@
             <img
                 src="https://apps3proxy.mosmetro.tech/webapp-mosmetro/mm-logo-red.svg"
                 alt="#"
-                width="221rem"
-                height="56.61rem"
+                class="w-[500rem] lg:w-[325rem]"
             />
         </a>
         <div class="flex gap-[60rem] items-center">
-            {#if $isAuthenticated}
-                <div
-                    class="flex items-center gap-[10rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]"
-                    on:click={toggleLogoutModal}
-                >
-                    <p>{$username}</p>
+            <div
+                class={`lg:hidden scale-[2.6] absolute top-[133rem] left-[895rem]`}
+            >
+                <Hamburger on:click={toggleMenu} />
+            </div>
+
+            <div class="hidden lg:block">
+                {#if $isAuthenticated}
                     <div
-                        class="w-[60rem] h-[60rem] ml-[10rem] rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
-                    ></div>
-                    <!-- Gradient circle -->
-                </div>
-            {:else}
-                <a class="text-white text-[27rem]" href="#/login">
-                    <button
-                        class="flex gap-[20rem] bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center"
+                        class="flex items-center gap-[10rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]"
+                        on:click={toggleLogoutModal}
                     >
-                        Войти
-                        <img src={Login} alt="#" width="27rem" height="27rem" />
-                    </button>
-                </a>
-            {/if}
+                        <p>{$username}</p>
+                        <div
+                            class="w-[60rem] h-[60rem] ml-[10rem] rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                        ></div>
+                        <!-- Gradient circle -->
+                    </div>
+                {:else}
+                    <a class="text-white text-[27rem]" href="#/login">
+                        <button
+                            class="flex gap-[20rem] bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center"
+                        >
+                            Войти
+                            <img
+                                src={Login}
+                                alt="#"
+                                width="27rem"
+                                height="27rem"
+                            />
+                        </button>
+                    </a>
+                {/if}
+            </div>
         </div>
     </div>
-    <div class="flex justify-between">
+    <div class="justify-between hidden lg:flex">
         {#if $isAuthenticated}
             <a href="#/" class="topic">Главная</a>
             <a href="#/applications" class="topic">Заявки</a>
@@ -83,3 +112,91 @@
         </div>
     {/if}
 </div>
+
+{#if open}
+<div
+    class={`fixed mt-[150rem] ml-[-100rem] w-screen h-[calc(100vh-240rem)] bg-white flex flex-col items-center pt-[200rem] z-50`}
+>
+    <nav
+        class="flex flex-col h-[65%] gap-[48rem] justify-between"
+        on:click={toggleMenu}
+    >
+        {#if $isAuthenticated}
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={ApplicationImage} alt={"заявки"} />
+                <a href="#/applications" class="text-[96rem]">Заявки</a>
+            </div>
+
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={PassengerImage} alt={"заявки"} />
+                <a href="#/passengers" class="text-[96rem]">Пассажиры</a>
+            </div>
+
+            <div class="flex gap-[80rem] items-center">
+                <div class="flex w-[120rem] h-[120rem] justify-between h-full">
+                    <div class="flex flex-col justify-between h-full">
+                        {@html AimIcon}
+                        {@html AimIcon}
+                    </div>
+                    <div class="flex flex-col justify-center h-full">
+                        {@html AimIcon}
+                    </div>
+                    <div class="flex flex-col justify-between h-full">
+                        {@html AimIcon}
+                        {@html AimIcon}
+                    </div>
+                </div>
+
+                <a href="#/distribution" class="text-[96rem]">Распределение</a>
+            </div>
+
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={EmployeeImage} alt={"заявки"} />
+                <a href="#/employees" class="text-[96rem]">Команда</a>
+            </div>
+        {:else}
+            <a class="text-white text-[96rem] w-full" href="#/login">
+                <button
+                    class="flex gap-[20rem] bg-[#D4212D] justify-center w-full py-[32rem] px-[26rem] rounded-[32rem] items-center"
+                >
+                    Войти
+                    <img src={Login} alt="#" class="w-[96rem]" />
+                </button>
+            </a>
+
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={ApplicationImage} alt={"заявки"} />
+                <a href="#/login" class="text-[96rem]">Заявки</a>
+            </div>
+
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={PassengerImage} alt={"заявки"} />
+                <a href="#/login" class="text-[96rem]">Пассажиры</a>
+            </div>
+
+            <div class="flex gap-[80rem] items-center">
+                <div class="flex w-[120rem] h-[120rem] justify-between h-full">
+                    <div class="flex flex-col justify-between h-full">
+                        {@html AimIcon}
+                        {@html AimIcon}
+                    </div>
+                    <div class="flex flex-col justify-center h-full">
+                        {@html AimIcon}
+                    </div>
+                    <div class="flex flex-col justify-between h-full">
+                        {@html AimIcon}
+                        {@html AimIcon}
+                    </div>
+                </div>
+
+                <a href="#/login" class="text-[96rem]">Распределение</a>
+            </div>
+
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={EmployeeImage} alt={"заявки"} />
+                <a href="#/login" class="text-[96rem]">Команда</a>
+            </div>
+        {/if}
+    </nav>
+</div>
+{/if}

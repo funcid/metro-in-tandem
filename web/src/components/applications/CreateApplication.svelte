@@ -111,7 +111,7 @@
         Создать новую заявку на сопровождение
     </p>
     <div
-        class="flex justify-center bg-white border border-gray-300 shadow-md w-2/3 rounded-[30rem]"
+        class="flex w-full lg:w-[auto] justify-center bg-white border border-gray-300 shadow-md w-2/3 rounded-[30rem]"
     >
         {#if loading}
             <p class="text-gray-500">Loading passenger...</p>

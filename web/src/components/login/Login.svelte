@@ -77,35 +77,35 @@
     }
 </script>
 
-<div class="flex flex-col gap-[50rem] text-center items-center">
-    <p class="font-extrabold">Аутентификация</p>
+<div class="flex flex-col gap-[50rem] text-center items-center mt-[-48rem] lg:mt-[0]">
+    <p class="font-extrabold text-[54rem] lg:text-[32rem]">Аутентификация</p>
     <form
         on:submit|preventDefault={login}
-        class="flex flex-col gap-[30rem] text-left w-[600rem] *:rounded-[12rem]"
+        class="flex flex-col gap-[30rem] text-left w-[750rem] lg:w-[600rem] *:rounded-[12rem]"
     >
-        <div class="flex flex-col gap-[5rem]">
+        <div class="flex flex-col gap-[5rem] text-[44rem] lg:text-[32rem]">
             <label for="username">Логин</label>
             <input
                 id="username"
                 type="text"
                 bind:value={inputUsername}
                 required
-                class="border-[1rem] border-gray-700 rounded-[12rem] p-[12rem]"
+                class="border-[1rem] border-gray-700 rounded-[12rem] p-[24rem] lg:p-[12rem]"
             />
         </div>
-        <div class="flex flex-col gap-[5rem]">
+        <div class="flex flex-col gap-[5rem]  text-[44rem] lg:text-[32rem]">
             <label for="password">Пароль</label>
             <input
                 id="password"
                 type="password"
                 bind:value={password}
                 required
-                class="border-[1rem] border-gray-700 rounded-[12rem] p-[12rem]"
+                class="border-[1rem] border-gray-700 rounded-[12rem] p-[24rem] lg:p-[12rem]"
             />
         </div>
         <button
             type="submit"
-            class="bg-[#D4212D] text-white border-none p-2 cursor-pointer hover:bg-red-700 py-[15rem] px-[26rem]"
+            class="bg-[#D4212D] text-[48rem] lg:text-[32rem] text-white border-none p-2 cursor-pointer hover:bg-red-700 p-[32rem] lg:py-[15rem] px-[26rem]"
         >
             Войти
         </button>

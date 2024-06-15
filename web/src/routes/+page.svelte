@@ -48,8 +48,8 @@
 	<meta name="description" content="Funcfolio" />
   </svelte:head>
   
-  <div class="w-full flex justify-center py-[60rem] px-[120rem] font-moscowsans">
-	<div class="w-full text-[32rem] flex flex-col gap-[120rem]">
+  <div class="w-full min-h-[calc(100vh-200rem)] flex justify-center p-[100rem] lg:py-[60rem] lg:px-[120rem] font-moscowsans">
+	<div class="w-full justify-between text-[32rem] flex flex-col gap-[120rem]">
 	  <Header />
 	  <Router {routes} on:routeLoaded={handleRoute} />
 	  <Footer />
