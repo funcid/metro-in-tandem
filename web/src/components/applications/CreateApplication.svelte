@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { JWT } from "../login/Login.svelte";
     import { PUBLIC_API_HOST } from "$env/static/public";
-    import { metroStations, findMetroStationByName } from "../Variables.svelte";
+    import { metroStations, findMetroStationByName, dateToTimestamp } from "../Variables.svelte";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
 
@@ -92,16 +92,8 @@
 
     function handleDateChange(event: any) {
         const [selectedDates, dateStr] = event.detail;
-        // Format the date as dd.MM.yyyy HH:mm:ss
         if (selectedDates.length > 0) {
-            const date = selectedDates[0];
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
-            const day = String(date.getDate()).padStart(2, "0");
-            const hours = String(date.getHours()).padStart(2, "0");
-            const minutes = String(date.getMinutes()).padStart(2, "0");
-            const seconds = String(date.getSeconds()).padStart(2, "0");
-            datetime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            datetime = dateToTimestamp(selectedDates[0])
         }
     }
 </script>

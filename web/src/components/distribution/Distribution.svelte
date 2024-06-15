@@ -9,25 +9,8 @@
         MomentSvelteGanttDateAdapter,
     } from "svelte-gantt/svelte";
     import moment from "moment";
-
-    interface Application {
-        id: number;
-        idPas: string;
-        datetime: string;
-        time3: string;
-        time4: string;
-    }
-
-    interface Employee {
-        id: number;
-        fio: string;
-        timeWork: string;
-    }
-
-    interface Allocation {
-        employee: Employee;
-        applications: Application[];
-    }
+    import Flatpickr from "svelte-flatpickr";
+    import "flatpickr/dist/flatpickr.css";
 
     let ganttInstance: SvelteGantt | null = null;
     let allocations: Allocation[] = [];
@@ -43,8 +26,8 @@
             classes: string;
         }[],
         dependencies: [],
-        from: Date.now() - 1000 * 60 * 60 * 24 * 53,
-        to: Date.now() - 1000 * 60 * 60 * 24 * 51.5,
+        from: Date.now(),
+        to: Date.now() + 1000 * 60 * 60 * 24,
         headers: [
             { unit: "day", format: "MMMM Do" },
             { unit: "hour", format: "H:mm" },
@@ -53,27 +36,23 @@
         ganttTableModules: [SvelteGanttTable],
         ganttBodyModules: [SvelteGanttDependencies],
         dateAdapter: new MomentSvelteGanttDateAdapter(moment),
-        tableWidth: 170,
+        tableWidth: 130,
         tableHeaders: [{ title: "Сотрудники", property: "label" }],
         rowHeight: 40,
         rowPadding: 6,
-        timeRanges: [
-            {
-                id: "1",
-                from: moment("01:00", "HH:mm"),
-                to: moment("5:30", "HH:mm"),
-                resizable: false,
-                label: "Закрыто на ночь",
-            },
-            {
-                id: "2",
-                from: moment("01:00", "HH:mm").add(1, "day"),
-                to: moment("5:30", "HH:mm").add(1, "day"),
-                resizable: false,
-                label: "Закрыто на ночь",
-            },
-        ],
     };
+
+    function handleDateChange(event: any) {
+        const [selectedDates, dateStr] = event.detail;
+        if (selectedDates.length > 0) {
+            options.from = Number(selectedDates[0]);
+            options.to = Number(selectedDates[0]) + 1000 * 60 * 60 * 24;
+            //async () => {
+            //    allocations = await fetchAllocations();
+            //    mapAllocationsToOptions(allocations);
+            //}
+        }
+    }
 
     async function fetchAllocations(): Promise<Allocation[]> {
         const response = await fetch(PUBLIC_API_HOST + `api/v1/allocations`, {
@@ -89,14 +68,6 @@
         return await response.json();
     }
 
-    function handleUpdateTasks(models: any[]) {
-        ganttInstance.updateTasks(models);
-    }
-
-    function handleUpdateRows(models: any[]) {
-        ganttInstance.updateRows(models);
-    }
-
     function mapAllocationsToOptions(allocations: Allocation[]) {
         if (!Array.isArray(allocations)) {
             console.error("Expected an array of allocations, but got:", allocations);
@@ -107,7 +78,7 @@
             id: alloc.employee.id,
             label: alloc.employee.fio,
         }));
-        handleUpdateRows(options.rows);
+        ganttInstance.updateRows(options.rows);
 
         options.tasks = allocations.flatMap((alloc) => {
             const tasks = alloc.applications.map((app) => ({
@@ -120,30 +91,9 @@
                 buttonClasses: "text-black",
                 amountDone: 100,
             }));
-
-            // Добавляем обеденные перерывы
-            const startWork = moment(alloc.employee.timeWork.split("-")[0], "HH:mm");
-            const endWork = moment(alloc.employee.timeWork.split("-")[1], "HH:mm");
-            const lunchStart = startWork.clone().add(3, "hours").add(30, "minutes");
-            const lunchEnd = endWork.clone().subtract(1, "hour");
-
-            const lunchTasks = [];
-            let lunchTime = lunchStart.clone();
-            while (lunchTime.isBefore(lunchEnd)) {
-                lunchTasks.push({
-                    id: `${alloc.employee.id}-lunch-${lunchTime.format("HH:mm")}`,
-                    resourceId: alloc.employee.id,
-                    label: "Обед",
-                    from: lunchTime,
-                    to: lunchTime.clone().add(1, "hour"),
-                    classes: "green text-black",
-                });
-                lunchTime.add(4, "hours").add(30, "minutes");
-            }
-
-            return tasks.concat(lunchTasks);
+            return tasks;
         });
-        handleUpdateTasks(options.tasks);
+        ganttInstance.updateTasks(options.tasks);
     }
 
     onMount(async () => {
@@ -157,5 +107,14 @@
 </script>
 
 <div>
+    <Flatpickr
+        options={{
+            dateFormat: "d.m.Y",
+            noCalendar: false,
+            time_24hr: true,
+        }}
+        on:change={handleDateChange}
+        class="flex shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
+    />
     <SvelteGantt {...options} bind:this={ganttInstance} />
 </div>
