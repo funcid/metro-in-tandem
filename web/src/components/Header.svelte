@@ -50,11 +50,19 @@
         </div>
     </div>
     <div class="flex justify-between">
-        <a href="#/" class="topic">Главная</a>
-        <a href="#/applications" class="topic">Заявки</a>
-        <a href="#/passengers" class="topic">Пассажиры</a>
-        <a href="#/distribution" class="topic">Распределение</a>
-        <a href="#/employees" class="topic">Команда</a>
+        {#if $isAuthenticated}
+            <a href="#/" class="topic">Главная</a>
+            <a href="#/applications" class="topic">Заявки</a>
+            <a href="#/passengers" class="topic">Пассажиры</a>
+            <a href="#/distribution" class="topic">Распределение</a>
+            <a href="#/employees" class="topic">Команда</a>
+        {:else}
+            <a href="#/" class="topic">Главная</a>
+            <a href="#/login" class="topic">Заявки</a>
+            <a href="#/login" class="topic">Пассажиры</a>
+            <a href="#/login" class="topic">Распределение</a>
+            <a href="#/login" class="topic">Команда</a>
+        {/if}
     </div>
 
     {#if showLogoutModal}
