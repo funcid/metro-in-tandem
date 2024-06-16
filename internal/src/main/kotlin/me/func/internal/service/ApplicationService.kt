@@ -41,7 +41,7 @@ class ApplicationService(
             time3 = Time.valueOf(application.datetime.toLocalDateTime().toLocalTime()),
             timeOver = Time(System.currentTimeMillis()),
             tpz = Timestamp(System.currentTimeMillis()),
-            catPas = passenger.category
+            catPas = passenger.category,
         )
         return applicationRepository.save(newApplication)
     }
@@ -57,7 +57,7 @@ class ApplicationService(
             additionalInfo = "Пассажир не привязан к заявке, удалите и создайте заново",
             hasPacemaker = false
         )
-        val calculatedDuration = pathfinderService.findPath(application.idSt1.toInt(), application.idSt2.toInt()).second
+        val (path, duration) = pathfinderService.findPath(application.idSt1.toInt(), application.idSt2.toInt())
 
         return applicationRepository.findByIdOrNull(id).run {
             ApplicationDetailsResponse(
@@ -73,10 +73,11 @@ class ApplicationService(
                 station1Name = stationRepository.findByIdOrNull(application.idSt1)?.nameStation ?: "null",
                 idSt2 = application.idSt2,
                 station2Name = stationRepository.findByIdOrNull(application.idSt2)?.nameStation ?: "null",
-                duration = "$calculatedDuration мин.",
+                duration = "$duration мин.",
                 inspSexF = application.inspSexF,
                 inspSexM = application.inspSexM,
-                tpz = application.tpz
+                tpz = application.tpz,
+                transplants = path.distinctBy { it.idLine }.count() - 1,
             )
         }
     }

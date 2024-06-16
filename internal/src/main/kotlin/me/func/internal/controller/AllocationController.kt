@@ -17,8 +17,7 @@ class AllocationController(
         @RequestParam("from") from: Long,
         @RequestParam("to") to: Long,
     ): List<AllocationResponse> {
-        val allocations = allocationService.allocateApplications(from, to)
-        return allocations.map { (employee, applications) ->
+        return allocationService.allocateApplications(from, to).map { (employee, applications) ->
             AllocationResponse(employee, applications)
         }
     }
