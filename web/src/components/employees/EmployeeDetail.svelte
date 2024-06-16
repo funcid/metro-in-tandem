@@ -121,7 +121,7 @@
                     <button
                         type="button"
                         on:click={deleteEmployee}
-                        class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                        class="bg-[#D4212D] min-h-[88rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                     >
                         Удалить заявку
                     </button>
@@ -189,7 +189,7 @@
                     <div class="flex space-x-4 mt-[30rem]">
                         <button
                             type="submit"
-                            class="bg-blue-500 hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                            class="bg-blue-500 h-[88rem] hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                         >
                             Сохранить изменения
                         </button>

@@ -185,25 +185,30 @@
                             class="ml-[12rem] leading-tight w-[32rem] h-[32rem]"
                         />
                     </div>
-                    <button
-                        type="button"
-                        on:click={deletePassenger}
-                        class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+
+                    <div
+                        class="flex flex-col lg:flex-row gap-[24rem] mt-[24rem]"
                     >
-                        Удалить пассажира
-                    </button>
+                        <button
+                            type="button"
+                            on:click={deletePassenger}
+                            class="bg-[#D4212D] h-[88rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                        >
+                            Удалить пассажира
+                        </button>
+                        <button
+                            type="button"
+                            on:click={() => handleClick()}
+                            class="bg-green-600 h-[88rem] hover:bg-green-800 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full mt-4"
+                        >
+                            Создать заявку на сопровождение
+                        </button>
+                    </div>
                     <button
                         type="submit"
-                        class="bg-blue-500 hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                        class="bg-blue-500 h-[88rem] hover:bg-blue-700 mt-[6rem] py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                     >
                         Сохранить изменения
-                    </button>
-                    <button
-                        type="button"
-                        on:click={() => handleClick()}
-                        class="bg-green-500 hover:bg-green-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full mt-4"
-                    >
-                        Создать заявку на сопровождение
                     </button>
                 </form>
             </div>

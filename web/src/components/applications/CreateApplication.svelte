@@ -206,7 +206,7 @@
                     <div class="flex space-x-4 mt-[30rem]">
                         <button
                             type="submit"
-                            class="bg-blue-500 hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                            class="bg-blue-500 h-[88rem] hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                         >
                             Создать
                         </button>

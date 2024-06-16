@@ -66,7 +66,7 @@
             {/each}
         </select>
         <button
-            class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
+            class="bg-[#D4212D] w-[310rem] h-[82rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
             on:click={handleCreateEmployee}
         >
             Новый работник
