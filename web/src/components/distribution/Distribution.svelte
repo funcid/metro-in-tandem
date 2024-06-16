@@ -125,7 +125,7 @@
             }}
             bind:value={time}
             on:change={handleDateChange}
-            class="flex shadow appearance-none border rounded-[12rem] p-[12rem] w-1/2 text-gray-700"
+            class="flex shadow appearance-none border w-fit text-gray-700 border border-gray-400 p-[20rem] rounded-[20rem]"
         />
         <hr />
         <div>
