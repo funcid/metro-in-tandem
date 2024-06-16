@@ -6,6 +6,7 @@ import me.func.internal.model.Application
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
+import java.sql.Timestamp
 
 @RepositoryRestResource(collectionResourceRel = "applications", path = "applications")
 interface ApplicationRepository : CrudRepository<Application, Long> {
@@ -21,5 +22,7 @@ interface ApplicationRepository : CrudRepository<Application, Long> {
         ORDER BY a.datetime DESC;
     """, nativeQuery = true)
     fun findAllApplicationsWithPassengerInfo(): List<ApplicationPassengerInfo>
+
+    fun findAllByDatetimeBetween(from: Timestamp, to: Timestamp): List<Application>
 
 }

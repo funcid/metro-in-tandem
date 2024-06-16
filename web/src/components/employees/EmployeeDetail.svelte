@@ -123,7 +123,7 @@
                         on:click={deleteEmployee}
                         class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                     >
-                        Удалить заявку
+                        Удалить сотрудника
                     </button>
                 </div>
                 <form
