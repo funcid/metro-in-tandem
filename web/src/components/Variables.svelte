@@ -54,7 +54,9 @@
         { value: "INSPECTOR_DELAYED", label: "Инспектор опаздывает" },
     ];
 
-    const fetchMetroStations = async () => {
+    export let metroStations: MetroStationResponse[];
+
+    async function fetchMetroStations() {
         try {
             const response = await fetch(
                 PUBLIC_API_HOST + `api/v1/metro`,
@@ -69,14 +71,12 @@
             if (!response.ok) {
                 throw new Error("Failed to create escort request");
             }
-            return await response.json()
+            metroStations = await response.json()
+            metroStations.sort((station1, station2) => station2.nameStation.localeCompare(station1.nameStation))
         } catch (err) {
             console.error(err);
         }
     };
-
-    export let metroStations: MetroStationResponse[] = await fetchMetroStations();
-    metroStations.sort((station1, station2) => station2.nameStation.localeCompare(station1.nameStation))
 
     export const findMetroStationByName = (name: string) => {
         return metroStations.find((station) => station.nameStation === name)
@@ -94,4 +94,8 @@
         const seconds = String(date.getSeconds()).padStart(2, "0");
         return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
     }
+
+    onMount(async () => {
+        await fetchMetroStations();
+    });
 </script>
