@@ -4,6 +4,7 @@
     import ApplicationImage from "$lib/images/home/advice.png";
     import PassengerImage from "$lib/images/home/question.png";
     import EmployeeImage from "$lib/images/home/team.png";
+    import DistributionImage from "$lib/images/home/distribution.png";
     import AimIcon from "$lib/images/icon/black_aim.svg?raw";
     import BurgerIcon from "$lib/images/icon/burger.png";
     import Cross from "$lib/images/icon/cross.png";
@@ -165,25 +166,12 @@
                 </div>
 
                 <div class="flex gap-[80rem] items-center">
-                    <div
-                        class="flex w-[120rem] h-[120rem] justify-between h-full"
-                    >
-                        <div class="flex flex-col justify-between h-full">
-                            {@html AimIcon}
-                            {@html AimIcon}
-                        </div>
-                        <div class="flex flex-col justify-center h-full">
-                            {@html AimIcon}
-                        </div>
-                        <div class="flex flex-col justify-between h-full">
-                            {@html AimIcon}
-                            {@html AimIcon}
-                        </div>
-                    </div>
-
-                    <a href="#/distribution" class="text-[96rem]"
-                        >Распределение</a
-                    >
+                    <img
+                        class="w-[120rem]"
+                        src={DistributionImage}
+                        alt={"Распределение"}
+                    />
+                    <a href="#/distribution" class="text-[96rem]">Распределение</a>
                 </div>
 
                 <div class="flex gap-[80rem] items-center">

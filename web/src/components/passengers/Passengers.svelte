@@ -88,7 +88,7 @@
                 </button>
             </div>
             <hr />
-            <div class="grid grid-cols-2">
+            <div class="grid lg:grid-cols-2 grid-cols-1">
                 {#each filteredPassengers as pas}
                     <div class="flex">
                         <div 

@@ -1,9 +1,13 @@
 <script>
+    // Author: Freepik - https://www.flaticon.com/packs/podcast-43
     import ApplicationImage from "$lib/images/home/advice.png";
     import PassengerImage from "$lib/images/home/question.png";
     import EmployeeImage from "$lib/images/home/team.png";
+    import DistributionImage from "$lib/images/home/distribution.png";
     import Topic from "./Topic.svelte";
 </script>
+
+
 
 <div class="flex flex-col gap-[100rem] h-full">
     <div
@@ -30,6 +34,13 @@
             date="Отображение сотрудников по участку,"
             position="настройка прав"
             route="employees"
+        />
+        <Topic
+            jobName="Распределение"
+            icon={DistributionImage}
+            date="Распределяет все заявки на"
+            position="сопровождение по работникам"
+            route="distribution"
         />
     </div>
 </div>
