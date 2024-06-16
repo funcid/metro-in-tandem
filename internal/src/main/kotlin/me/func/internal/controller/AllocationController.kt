@@ -1,10 +1,10 @@
 package me.func.internal.controller
 
-import me.func.internal.model.Application
-import me.func.internal.model.Employee
+import me.func.internal.dto.AllocationResponse
 import me.func.internal.service.AllocationService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -13,15 +13,13 @@ class AllocationController(
     private val allocationService: AllocationService
 ) {
     @GetMapping("/allocations")
-    fun getAllocations(): List<AllocationDTO> {
-        val allocations = allocationService.allocateApplications()
+    fun getAllocations(
+        @RequestParam("from") from: Long,
+        @RequestParam("to") to: Long,
+    ): List<AllocationResponse> {
+        val allocations = allocationService.allocateApplications(from, to)
         return allocations.map { (employee, applications) ->
-            AllocationDTO(employee, applications)
+            AllocationResponse(employee, applications)
         }
     }
 }
-
-data class AllocationDTO(
-    val employee: Employee,
-    val applications: List<Application>
-)

@@ -16,7 +16,7 @@
     let allocations: Allocation[] = [];
 
     let options = {
-        rows: [] as { id: number; label: string }[],
+        rows: [] as { id: number; label: string; timeWork: string }[],
         tasks: [] as {
             id: number;
             resourceId: number;
@@ -41,25 +41,24 @@
         rowHeight: 40,
     };
 
-    function handleDateChange(event: any) {
+    async function handleDateChange(event: any) {
         const [selectedDates, dateStr] = event.detail;
         if (selectedDates.length > 0) {
             options.from = Number(selectedDates[0]);
             options.to = Number(selectedDates[0]) + 1000 * 60 * 60 * 24;
-            //async () => {
-            //    allocations = await fetchAllocations();
-            //    mapAllocationsToOptions(allocations);
-            //}
+            allocations = await fetchAllocations();
+            mapAllocationsToOptions(allocations);
         }
     }
 
     async function fetchAllocations(): Promise<Allocation[]> {
-        const response = await fetch(PUBLIC_API_HOST + `api/v1/allocations`, {
+        const response = await fetch(PUBLIC_API_HOST + `api/v1/allocations?&from=${options.from}&to=${options.to}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${$JWT}`,
                 "Content-Type": "application/json",
             },
+            
         });
         if (!response.ok) {
             throw new Error("Failed to fetch allocations data");
@@ -78,7 +77,8 @@
 
         options.rows = allocations.map((alloc) => ({
             id: alloc.employee.id,
-            label: alloc.employee.fio,
+            label: `${alloc.employee.fio} <${alloc.employee.rank}>`,
+            timeWork: alloc.employee.timeWork, // Adding timeWork to the rows
         }));
         ganttInstance.updateRows(options.rows);
 
@@ -92,17 +92,20 @@
                         .subtract(moment.duration(app.time3))
                         .asMinutes()
                         .toFixed(0) + " мин.",
-                from: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(
-                    moment.duration(app.time3),
+                from: moment.max(
+                    moment(app.datetime, "DD.MM.YYYY").add(moment.duration(app.time3)),
+                    moment(options.from - 1)
                 ),
-                to: moment(app.datetime, "DD.MM.YYYY HH:mm:ss").add(
-                    moment.duration(app.time4),
+                to: moment.min(
+                    moment(app.datetime, "DD.MM.YYYY").add(moment.duration(app.time4)),
+                    moment(options.to + 1)
                 ),
                 showButton: true, // Assuming you don't need buttons on tasks
                 enableDragging: false,
                 enableResize: false,
             }));
-            return tasks;
+
+            return [...tasks];
         });
         ganttInstance.updateTasks(options.tasks);
     }
