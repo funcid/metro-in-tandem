@@ -130,7 +130,7 @@
                     <button
                         type="button"
                         on:click={navigateToPassengerDetail}
-                        class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                        class="bg-[#D4212D] min-h-[88rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                     >
                         Отменить
                     </button>

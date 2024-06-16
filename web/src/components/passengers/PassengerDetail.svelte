@@ -20,10 +20,6 @@
         await fetchPassenger();
     });
 
-    const handleClick = () => {
-        window.location.hash = `/create-application/${id}`;
-    };
-
     const fetchPassenger = async () => {
         loading = true;
         try {
@@ -102,116 +98,112 @@
         Просмотр/редактирование пассажира
     </p>
     <div
-        class="flex w-full lg:w-[auto] justify-center bg-white border border-gray-300 shadow-md w-2/5 rounded-[30rem]"
+        class="flex flex-col w-full lg:w-[auto] gap-[20rem]"
     >
-        {#if loading}
-            <p class="text-gray-500">Loading passenger...</p>
-        {:else if errorMessage}
-            <p class="text-red-500">{errorMessage}</p>
-        {:else if passenger}
-            <div class="flex justify-between p-[40rem] gap-[40rem] w-full">
-                <form
-                    class="flex flex-col gap-[12rem] w-full"
-                    on:submit|preventDefault={updatePassenger}
-                >
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Полное имя</label>
-                        <input
-                            type="text"
-                            bind:value={passenger.fullName}
-                            class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
-                        />
-                    </div>
-                    <div class="mb-4">
-                        <select
-                            bind:value={passenger.gender}
-                            class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
-                        >
-                            <option value="Мужчина">Мужчина</option>
-                            <option value="Женщина">Женщина</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <select
-                            id="category"
-                            bind:value={passenger.category}
-                            class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        >
-                            <option value="" disabled selected
-                                >⏵ Категория</option
+        <div class="justify-center bg-white border border-gray-300 shadow-md rounded-[30rem]">
+            {#if loading}
+                <p class="text-gray-500">Loading passenger...</p>
+            {:else if errorMessage}
+                <p class="text-red-500">{errorMessage}</p>
+            {:else if passenger}
+                <div class="flex justify-between p-[40rem] gap-[40rem] w-full">
+                    <form
+                        class="flex flex-col gap-[12rem] w-full"
+                        on:submit|preventDefault={updatePassenger}
+                    >
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Полное имя</label
                             >
-                            {#each categories as { value, label }}
-                                <option {value}>{label}</option>
-                            {/each}
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700"
-                            >Дополнительная информация</label
-                        >
-                        <textarea
-                            bind:value={passenger.additionalInfo}
-                            class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-gray-700"
-                            >Контактные номера:</label
-                        >
-                        <div class="flex flex-col gap-[12rem]">
-                            {#each passenger.contactNumbers as contact, index}
-                                <div class="flex flex-col">
-                                    <div class="text-gray-700">
-                                        {index + 1}:
-                                        <input
-                                            type="text"
-                                            bind:value={contact.number}
-                                            class="mb-[20rem] shadow appearance-none border rounded-[12rem] p-[12rem] text-gray-700"
-                                        />
-                                    </div>
-                                </div>
-                            {/each}
+                            <input
+                                type="text"
+                                bind:value={passenger.fullName}
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
+                            />
                         </div>
-                    </div>
-                    <div class="flex">
-                        <label class="block text-gray-700"
-                            >Имеет кардиостимулятор</label
-                        >
-                        <input
-                            type="checkbox"
-                            id="hasPacemaker"
-                            bind:checked={passenger.hasPacemaker}
-                            class="ml-[12rem] leading-tight w-[32rem] h-[32rem]"
-                        />
-                    </div>
+                        <div class="mb-4">
+                            <select
+                                bind:value={passenger.gender}
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
+                            >
+                                <option value="Мужчина">Мужчина</option>
+                                <option value="Женщина">Женщина</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <select
+                                id="category"
+                                bind:value={passenger.category}
+                                class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            >
+                                <option value="" disabled selected
+                                    >⏵ Категория</option
+                                >
+                                {#each categories as { value, label }}
+                                    <option {value}>{label}</option>
+                                {/each}
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700"
+                                >Дополнительная информация</label
+                            >
+                            <textarea
+                                bind:value={passenger.additionalInfo}
+                                class="shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700"
+                                >Контактные номера:</label
+                            >
+                            <div class="flex flex-col gap-[12rem]">
+                                {#each passenger.contactNumbers as contact, index}
+                                    <div class="flex flex-col">
+                                        <div class="text-gray-700">
+                                            {index + 1}:
+                                            <input
+                                                type="text"
+                                                bind:value={contact.number}
+                                                class="mb-[20rem] shadow appearance-none border rounded-[12rem] p-[12rem] text-gray-700"
+                                            />
+                                        </div>
+                                    </div>
+                                {/each}
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <label class="block text-gray-700"
+                                >Имеет кардиостимулятор</label
+                            >
+                            <input
+                                type="checkbox"
+                                id="hasPacemaker"
+                                bind:checked={passenger.hasPacemaker}
+                                class="ml-[12rem] leading-tight w-[32rem] h-[32rem]"
+                            />
+                        </div>
 
-                    <div
-                        class="flex flex-col lg:flex-row gap-[24rem] mt-[24rem]"
-                    >
-                        <button
-                            type="button"
-                            on:click={deletePassenger}
-                            class="bg-[#D4212D] h-[88rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                        <div
+                            class="flex flex-col lg:flex-row gap-[24rem] mt-[24rem]"
                         >
-                            Удалить пассажира
-                        </button>
-                        <button
-                            type="button"
-                            on:click={() => handleClick()}
-                            class="bg-green-600 h-[88rem] hover:bg-green-800 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full mt-4"
-                        >
-                            Создать заявку на сопровождение
-                        </button>
-                    </div>
-                    <button
-                        type="submit"
-                        class="bg-blue-500 h-[88rem] hover:bg-blue-700 mt-[6rem] py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
-                    >
-                        Сохранить изменения
-                    </button>
-                </form>
-            </div>
-        {/if}
+                            <button
+                                type="button"
+                                on:click={deletePassenger}
+                                class="bg-[#D4212D] h-[88rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                            >
+                                Удалить пассажира
+                            </button>
+                            <button
+                                type="submit"
+                                class="bg-blue-500 h-[88rem] hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                            >
+                                Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            {/if}
+        </div>
     </div>
 </main>
