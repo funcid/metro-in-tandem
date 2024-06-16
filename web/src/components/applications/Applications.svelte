@@ -50,8 +50,9 @@
     };
 </script>
 
-<main>
-    <p class="font-bold text-[40rem] mb-[20rem]">Заявки на сопровождение</p>
+<main class="flex flex-col gap-[20rem]">
+    <p class="font-bold text-[40rem]">Заявки на сопровождение</p>
+    <hr/>
     {#if loading}
         <p class="text-gray-500">Загрузка заявок...</p>
     {:else if errorMessage}

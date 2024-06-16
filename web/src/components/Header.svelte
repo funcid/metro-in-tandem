@@ -1,11 +1,13 @@
 <script lang="ts">
     import { JWT, isAuthenticated, username } from "./login/Login.svelte";
     import Login from "$lib/images/login.svg";
-    import Hamburger from "./Hamburger.svelte";
     import ApplicationImage from "$lib/images/home/advice.png";
     import PassengerImage from "$lib/images/home/question.png";
     import EmployeeImage from "$lib/images/home/team.png";
+    import DistributionImage from "$lib/images/home/distribution.png";
     import AimIcon from "$lib/images/icon/black_aim.svg?raw";
+    import BurgerIcon from "$lib/images/icon/burger.png";
+    import Cross from "$lib/images/icon/cross.png";
 
     let showLogoutModal = false;
 
@@ -43,9 +45,23 @@
         </a>
         <div class="flex gap-[60rem] items-center">
             <div
-                class={`lg:hidden scale-[2.6] absolute top-[133rem] left-[895rem]`}
+                class={`lg:hidden w-[100rem] h-[100rem] absolute top-[103rem] left-[865rem]`}
             >
-                <Hamburger on:click={toggleMenu} />
+                {#if open}
+                    <img
+                        class="scale-[2]"
+                        src={Cross}
+                        alt="cross"
+                        on:click={toggleMenu}
+                    />
+                {:else}
+                    <img
+                        class="w-[100rem]"
+                        src={BurgerIcon}
+                        alt="burger"
+                        on:click={toggleMenu}
+                    />
+                {/if}
             </div>
 
             <div class="hidden lg:block">
@@ -100,12 +116,12 @@
             on:click={toggleLogoutModal}
         >
             <div
-                class="flex flex-col bg-white p-5 rounded-[24rem] p-[24rem] gap-[12rem]"
+                class="flex flex-col bg-white p-[48rem] lg:p-[32rem] w-full lg:w-[auto] text-center lg:text-left text-[54rem] lg:text-[32rem] rounded-[24rem] p-[24rem] gap-[36rem] lg:gap-[24rem]"
                 on:click|stopPropagation
             >
                 <p>Вы уверены, что хотите выйти?</p>
                 <button
-                    class="bg-[#D4212D] hover:bg-red-700 text-white p-[12rem] rounded-[12rem]"
+                    class="bg-[#D4212D] hover:bg-red-700 text-white p-[48rem] lg:p-[24rem] rounded-[12rem]"
                     on:click={logout}>Выйти</button
                 >
             </div>
@@ -114,89 +130,115 @@
 </div>
 
 {#if open}
-<div
-    class={`fixed mt-[150rem] ml-[-100rem] w-screen h-[calc(100vh-240rem)] bg-white flex flex-col items-center pt-[200rem] z-50`}
->
-    <nav
-        class="flex flex-col h-[65%] gap-[48rem] justify-between"
-        on:click={toggleMenu}
+    <div
+        class={`fixed mt-[150rem] ml-[-100rem] w-screen h-[calc(100vh-240rem)] bg-white flex flex-col items-center pt-[200rem] z-50`}
     >
-        {#if $isAuthenticated}
-            <div class="flex gap-[80rem] items-center">
-                <img class="w-[120rem]" src={ApplicationImage} alt={"заявки"} />
-                <a href="#/applications" class="text-[96rem]">Заявки</a>
-            </div>
-
-            <div class="flex gap-[80rem] items-center">
-                <img class="w-[120rem]" src={PassengerImage} alt={"заявки"} />
-                <a href="#/passengers" class="text-[96rem]">Пассажиры</a>
-            </div>
-
-            <div class="flex gap-[80rem] items-center">
-                <div class="flex w-[120rem] h-[120rem] justify-between h-full">
-                    <div class="flex flex-col justify-between h-full">
-                        {@html AimIcon}
-                        {@html AimIcon}
-                    </div>
-                    <div class="flex flex-col justify-center h-full">
-                        {@html AimIcon}
-                    </div>
-                    <div class="flex flex-col justify-between h-full">
-                        {@html AimIcon}
-                        {@html AimIcon}
-                    </div>
-                </div>
-
-                <a href="#/distribution" class="text-[96rem]">Распределение</a>
-            </div>
-
-            <div class="flex gap-[80rem] items-center">
-                <img class="w-[120rem]" src={EmployeeImage} alt={"заявки"} />
-                <a href="#/employees" class="text-[96rem]">Команда</a>
-            </div>
-        {:else}
-            <a class="text-white text-[96rem] w-full" href="#/login">
-                <button
-                    class="flex gap-[20rem] bg-[#D4212D] justify-center w-full py-[32rem] px-[26rem] rounded-[32rem] items-center"
+        <nav
+            class="flex flex-col h-[65%] gap-[48rem] justify-between"
+            on:click={toggleMenu}
+        >
+            {#if $isAuthenticated}
+                <div
+                    class="flex items-center gap-[80rem]"
+                    on:click={toggleLogoutModal}
                 >
-                    Войти
-                    <img src={Login} alt="#" class="w-[96rem]" />
-                </button>
-            </a>
-
-            <div class="flex gap-[80rem] items-center">
-                <img class="w-[120rem]" src={ApplicationImage} alt={"заявки"} />
-                <a href="#/login" class="text-[96rem]">Заявки</a>
-            </div>
-
-            <div class="flex gap-[80rem] items-center">
-                <img class="w-[120rem]" src={PassengerImage} alt={"заявки"} />
-                <a href="#/login" class="text-[96rem]">Пассажиры</a>
-            </div>
-
-            <div class="flex gap-[80rem] items-center">
-                <div class="flex w-[120rem] h-[120rem] justify-between h-full">
-                    <div class="flex flex-col justify-between h-full">
-                        {@html AimIcon}
-                        {@html AimIcon}
-                    </div>
-                    <div class="flex flex-col justify-center h-full">
-                        {@html AimIcon}
-                    </div>
-                    <div class="flex flex-col justify-between h-full">
-                        {@html AimIcon}
-                        {@html AimIcon}
-                    </div>
+                    <div
+                        class="w-[120rem] h-[120rem] rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                    ></div>
+                    <p class="text-[96rem]">{$username}</p>
+                </div>
+                <div class="flex gap-[80rem] items-center">
+                    <img
+                        class="w-[120rem]"
+                        src={ApplicationImage}
+                        alt={"заявки"}
+                    />
+                    <a href="#/applications" class="text-[96rem]">Заявки</a>
                 </div>
 
-                <a href="#/login" class="text-[96rem]">Распределение</a>
-            </div>
+                <div class="flex gap-[80rem] items-center">
+                    <img
+                        class="w-[120rem]"
+                        src={PassengerImage}
+                        alt={"заявки"}
+                    />
+                    <a href="#/passengers" class="text-[96rem]">Пассажиры</a>
+                </div>
 
-            <div class="flex gap-[80rem] items-center">
-                <img class="w-[120rem]" src={EmployeeImage} alt={"заявки"} />
-                <a href="#/login" class="text-[96rem]">Команда</a>
-            </div>
-        {/if}
-    </nav>
-</div>
+                <div class="flex gap-[80rem] items-center">
+                    <img
+                        class="w-[120rem]"
+                        src={DistributionImage}
+                        alt={"Распределение"}
+                    />
+                    <a href="#/distribution" class="text-[96rem]">Распределение</a>
+                </div>
+
+                <div class="flex gap-[80rem] items-center">
+                    <img
+                        class="w-[120rem]"
+                        src={EmployeeImage}
+                        alt={"заявки"}
+                    />
+                    <a href="#/employees" class="text-[96rem]">Команда</a>
+                </div>
+            {:else}
+                <a class="text-white text-[96rem] w-full" href="#/login">
+                    <button
+                        class="flex gap-[20rem] bg-[#D4212D] justify-center w-full py-[32rem] px-[26rem] rounded-[32rem] items-center"
+                    >
+                        Войти
+                        <img src={Login} alt="#" class="w-[96rem]" />
+                    </button>
+                </a>
+
+                <div class="flex gap-[80rem] items-center">
+                    <img
+                        class="w-[120rem]"
+                        src={ApplicationImage}
+                        alt={"заявки"}
+                    />
+                    <a href="#/login" class="text-[96rem]">Заявки</a>
+                </div>
+
+                <div class="flex gap-[80rem] items-center">
+                    <img
+                        class="w-[120rem]"
+                        src={PassengerImage}
+                        alt={"заявки"}
+                    />
+                    <a href="#/login" class="text-[96rem]">Пассажиры</a>
+                </div>
+
+                <div class="flex gap-[80rem] items-center">
+                    <div
+                        class="flex w-[120rem] h-[120rem] justify-between h-full"
+                    >
+                        <div class="flex flex-col justify-between h-full">
+                            {@html AimIcon}
+                            {@html AimIcon}
+                        </div>
+                        <div class="flex flex-col justify-center h-full">
+                            {@html AimIcon}
+                        </div>
+                        <div class="flex flex-col justify-between h-full">
+                            {@html AimIcon}
+                            {@html AimIcon}
+                        </div>
+                    </div>
+
+                    <a href="#/login" class="text-[96rem]">Распределение</a>
+                </div>
+
+                <div class="flex gap-[80rem] items-center">
+                    <img
+                        class="w-[120rem]"
+                        src={EmployeeImage}
+                        alt={"заявки"}
+                    />
+                    <a href="#/login" class="text-[96rem]">Команда</a>
+                </div>
+            {/if}
+        </nav>
+    </div>
 {/if}

@@ -2,7 +2,13 @@
     import { onMount } from "svelte";
     import { JWT } from "../login/Login.svelte";
     import { PUBLIC_API_HOST } from "$env/static/public";
-    import { statusOptions, metroStations, findMetroStationByName, findMetroStationById, dateToTimestamp } from "../Variables.svelte";
+    import {
+        statusOptions,
+        metroStations,
+        findMetroStationByName,
+        findMetroStationById,
+        dateToTimestamp,
+    } from "../Variables.svelte";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
 
@@ -23,7 +29,7 @@
     function handleDateChange(event: any) {
         const [selectedDates, dateStr] = event.detail;
         if (selectedDates.length > 0) {
-            datetime = dateToTimestamp(selectedDates[0])
+            datetime = dateToTimestamp(selectedDates[0]);
         }
     }
 
@@ -51,8 +57,10 @@
             }
             application = await response.json();
             status = application!.status || "";
-            stationStart = findMetroStationById(application!.idSt1)?.nameStation!
-            stationEnd = findMetroStationById(application!.idSt2)?.nameStation!
+            stationStart = findMetroStationById(
+                application!.idSt1,
+            )?.nameStation!;
+            stationEnd = findMetroStationById(application!.idSt2)?.nameStation!;
         } catch (err) {
             errorMessage =
                 "Failed to load application. Please try again later.";
@@ -153,7 +161,7 @@
                     <button
                         type="button"
                         on:click={deleteApplication}
-                        class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                        class="bg-[#D4212D] min-h-[88rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                     >
                         Удалить заявку
                     </button>
@@ -235,7 +243,9 @@
                             class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required
                         >
-                            <option value="" disabled selected>⏵ Выберите</option>
+                            <option value="" disabled selected
+                                >⏵ Выберите</option
+                            >
                             {#each metroStations as { nameStation }}
                                 <option>{nameStation}</option>
                             {/each}
@@ -249,7 +259,9 @@
                             class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required
                         >
-                            <option value="" disabled selected>⏵ Выберите</option>
+                            <option value="" disabled selected
+                                >⏵ Выберите</option
+                            >
                             {#each metroStations as { nameStation }}
                                 <option>{nameStation}</option>
                             {/each}
@@ -258,7 +270,7 @@
                     <div class="flex space-x-4 mt-[30rem]">
                         <button
                             type="submit"
-                            class="bg-blue-500 hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                            class="bg-blue-500 h-[88rem] hover:bg-blue-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                         >
                             Сохранить изменения
                         </button>

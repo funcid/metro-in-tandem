@@ -81,41 +81,53 @@
                     on:input={handleSearch}
                 />
                 <button
-                    class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
+                    class="bg-[#D4212D] w-[310rem] h-[82rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
                     on:click={handleCreatePassenger}
                 >
                     Новый пассажир
                 </button>
             </div>
             <hr />
-            <div class="grid grid-cols-2">
+            <div class="grid lg:grid-cols-2 grid-cols-1">
                 {#each filteredPassengers as pas}
-                    <div
-                        class="bg-white ml-[12rem] mb-[12rem] border border-gray-300 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]"
-                        on:click={() => handleClick(pas.id)}
-                    >
-                        <div class="flex justify-between items-center">
-                            <div class="flex flex-col gap-[10rem]">
-                                <div class="flex items-center">
-                                    {pas.fullName}
-                                    <span class="ml-[10rem]"
-                                        >{pas.category}</span
-                                    >
-                                    {#if pas.hasPacemaker}
-                                        <span class="text-red-500 ml-[10rem]"
-                                            >❤️</span
+                    <div class="flex">
+                        <div 
+                            class="w-full bg-white ml-[12rem] mb-[12rem] border border-gray-300 shadow-md cursor-pointer hover:bg-gray-100 rounded-[20rem] rounded-r-none border-r-0"
+                            on:click={() => handleClick(pas.id)}
+                        >
+                            <div class="flex justify-between items-center p-[20rem]">
+                                <div class="flex flex-col gap-[10rem]">
+                                    <div class="flex items-center">
+                                        {pas.fullName}
+                                        <span class="ml-[10rem]"
+                                            >{pas.category}</span
                                         >
-                                    {/if}
-                                </div>
-                                <div>
-                                    <ul>
-                                        {#each pas.contactNumbers as contact}
-                                            <li>{contact.number}</li>
-                                        {/each}
-                                    </ul>
+                                        {#if pas.hasPacemaker}
+                                            <span
+                                                class="text-red-500 ml-[10rem]"
+                                                >❤️</span
+                                            >
+                                        {/if}
+                                    </div>
+                                    <div>
+                                        <ul>
+                                            {#each pas.contactNumbers as contact}
+                                                <li>{contact.number}</li>
+                                            {/each}
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <a class="
+                            flex bg-gray-500 hover:bg-gray-400 border border-gray-300 shadow-md cursor-pointer mb-[12rem] 
+                            min-w-[120rem] min-h-[120rem] rounded-[20rem] rounded-l-none border-l-0
+                            text-center items-center text-white text-[20rem] uppercase"
+                            href={`/#/create-application/${pas.id}`}
+                        >
+                                Новая
+                                Заявка
+                        </a>
                     </div>
                 {/each}
             </div>

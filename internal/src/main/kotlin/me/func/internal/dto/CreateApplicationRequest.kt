@@ -5,7 +5,7 @@ import java.sql.Timestamp
 
 data class CreateApplicationRequest(
     val idPas: String,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     val datetime: Timestamp,
     val inspSexM: Int = 0,
     val inspSexF: Int = 0,

@@ -165,7 +165,7 @@
                 <div class="mb-6">
                     <button
                         type="submit"
-                        class="bg-[#D4212D] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
+                        class="bg-[#D4212D] h-[88rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[12rem] items-center text-white w-full"
                         >Создать пассажира</button
                     >
                 </div>
