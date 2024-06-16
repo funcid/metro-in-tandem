@@ -7,6 +7,7 @@ import me.func.internal.dto.ApplicationResponse
 import me.func.internal.dto.ApplicationUpdateRequest
 import me.func.internal.dto.CreateApplicationRequest
 import me.func.internal.model.Application
+import me.func.internal.model.Passenger
 import me.func.internal.model.PassengerCategory
 import java.sql.Timestamp
 import me.func.internal.repository.ApplicationRepository
@@ -47,7 +48,15 @@ class ApplicationService(
 
     fun getApplication(id: Long): ApplicationDetailsResponse? {
         val application = applicationRepository.findByIdOrNull(id) ?: return null
-        val passenger = passengerRepository.findByIdOrNull(application.idPas.toLong()) ?: return null
+        val passenger = passengerRepository.findByIdOrNull(application.idPas.toLong()) ?: Passenger(
+            id = -1,
+            fullName = "Пассажир не привязан",
+            contactNumbers = emptySet(),
+            gender = "Мужской",
+            category = PassengerCategory.NO,
+            additionalInfo = "Пассажир не привязан к заявке, удалите и создайте заново",
+            hasPacemaker = false
+        )
         val calculatedDuration = pathfinderService.findPath(application.idSt1.toInt(), application.idSt2.toInt()).second
 
         return applicationRepository.findByIdOrNull(id).run {
