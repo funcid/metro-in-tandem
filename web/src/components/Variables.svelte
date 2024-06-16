@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-    import { onMount } from "svelte";
     import { JWT } from "./login/Login.svelte";
     import { PUBLIC_API_HOST } from "$env/static/public";
 
@@ -95,7 +94,5 @@
         return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
     }
 
-    onMount(async () => {
-        await fetchMetroStations();
-    });
+    await fetchMetroStations();
 </script>
