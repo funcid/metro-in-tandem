@@ -14,6 +14,7 @@
 
     let ganttInstance: SvelteGantt | null = null;
     let allocations: Allocation[] = [];
+    let time: string = "24.4.2024"
 
     let options = {
         rows: [] as { id: number; label: string; timeWork: string }[],
@@ -38,7 +39,7 @@
         const [selectedDates, dateStr] = event.detail;
         if (selectedDates.length > 0) {
             options.from = Number(selectedDates[0]) + 1000 * 60 * 60 * 5.5;
-            options.to = Number(selectedDates[0]) + 1000 * 60 * 60 * 24;
+            options.to = Number(selectedDates[0]) + 1000 * 60 * 60 * 25;
             allocations = await fetchAllocations();
             mapAllocationsToOptions(allocations);
         }
@@ -87,14 +88,8 @@
                         .toFixed(0)
                     return Number(time) >= 35 ? (time + "м") : " "
                 })(),
-                from: moment.max(
-                    moment(app.datetime, "DD.MM.YYYY").add(moment.duration(app.time3)),
-                    moment(options.from - 1)
-                ),
-                to: moment.min(
-                    moment(app.datetime, "DD.MM.YYYY").add(moment.duration(app.time4)),
-                    moment(options.to + 1)
-                ),
+                from: moment(app.datetime, "DD.MM.YYYY").add(moment.duration(app.time3)),
+                to: moment(app.datetime, "DD.MM.YYYY").add(moment.duration(app.time4)),
                 showButton: true, // Assuming you don't need buttons on tasks
                 enableDragging: false,
                 enableResize: false,
@@ -119,15 +114,23 @@
     });
 </script>
 
-<div>
-    <Flatpickr
-        options={{
-            dateFormat: "d.m.Y",
-            noCalendar: false,
-            time_24hr: true,
-        }}
-        on:change={handleDateChange}
-        class="flex shadow appearance-none border rounded-[12rem] p-[12rem] w-full text-gray-700"
-    />
-    <SvelteGantt {...options} bind:this={ganttInstance} />
-</div>
+<main>
+    <p class="font-bold text-[40rem] mb-[20rem]">Распределение заявок</p>
+    <div class="flex flex-col gap-[20rem]">
+        <Flatpickr
+            options={{
+                dateFormat: "d.m.Y",
+                noCalendar: false,
+                time_24hr: true,
+            }}
+            bind:value={time}
+            on:change={handleDateChange}
+            class="flex shadow appearance-none border rounded-[12rem] p-[12rem] w-1/2 text-gray-700"
+        />
+        <hr />
+        <div>
+            <hr />
+            <SvelteGantt {...options} bind:this={ganttInstance} />
+        </div>
+    </div>
+</main>
