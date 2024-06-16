@@ -32,3 +32,11 @@ html {
 html {
   overflow-y:scroll;
 }
+
+.sg-task-content {
+  color: white;
+  justify-content: center !important;
+  padding-left: 0 !important;
+  width: 100%;
+}
+
