@@ -25,5 +25,6 @@ data class ApplicationDetailsResponse(
     val station1Name: String,
     val idSt2: String,
     val station2Name: String,
-    val duration: String
+    val duration: String,
+    val transplants: Int,
 )

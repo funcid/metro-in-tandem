@@ -17,9 +17,7 @@ class PassengerController(private val service: PassengerService) {
     @PostMapping
     fun createPassenger(@RequestBody passenger: Passenger): ResponseEntity<Passenger> {
         val createdPassenger = service.createPassenger(passenger)
-        val headers = HttpHeaders()
-        headers.location = URI.create("/api/v1/passengers/${createdPassenger.id}")
-        return ResponseEntity(createdPassenger, headers, HttpStatus.CREATED)
+        return ResponseEntity(createdPassenger, HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
