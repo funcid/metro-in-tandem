@@ -150,6 +150,7 @@
                             <p>
                                 {application.station1Name} ➜ {application.station2Name}
                             </p>
+                            <p>Пересадок: {application.transplants == 0 ? 'нет' : application.transplants}</p>
                             <p>Время прибытия: {application.timeOver}</p>
                             <p>Оценка: {application.duration}</p>
                         </div>

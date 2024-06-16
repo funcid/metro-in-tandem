@@ -5,6 +5,8 @@ import me.func.internal.model.Employee
 import me.func.internal.repository.ApplicationRepository
 import me.func.internal.repository.EmployeeRepository
 import org.springframework.stereotype.Service
+import java.sql.Timestamp
+import java.time.Instant
 import java.time.LocalTime
 
 @Service
@@ -15,9 +17,12 @@ class AllocationService(
 ) {
     private val allocation = mutableMapOf<Employee, MutableList<Application>>()
 
-    fun allocateApplications(): Map<Employee, List<Application>> {
+    fun allocateApplications(from: Long, to: Long): Map<Employee, List<Application>> {
         val employees = employeeRepository.findAll()
-        val applications = applicationRepository.findAll().filter { !it.status.isCancelled() }
+        val applications = applicationRepository.findAllByDatetimeBetween(
+            Timestamp.from(Instant.ofEpochMilli(from - 1000 * 60 * 60 * 24)),
+            Timestamp.from(Instant.ofEpochMilli(to + 1000 * 60 * 60 * 24)),
+        ).filter { !it.status.isCancelled() }
 
         // Сортируем сотрудников по приоритету ЦИ и ЦСИ
         val ciEmployees = employees.filter { it.rank == "ЦИ" }
@@ -57,10 +62,27 @@ class AllocationService(
         val applicationEnd = application.time4.toLocalTime().plusMinutes(10)
         val employeeApplications = allocation[employee] ?: emptyList()
 
+        val (workStart, workEnd) = parseWorkTime(employee.timeWork)
+
         return employeeApplications.none { existingApplication ->
             val existingStart = existingApplication.time3.toLocalTime()
             val existingEnd = existingApplication.time4.toLocalTime()
             !(applicationEnd.isBefore(existingStart) || applicationStart.isAfter(existingEnd))
+        } && isWithinWorkHours(applicationStart, applicationEnd, workStart, workEnd)
+    }
+
+    private fun parseWorkTime(timeWork: String): Pair<LocalTime, LocalTime> {
+        val times = timeWork.split("-")
+        val startWork = LocalTime.parse(times[0])
+        val endWork = LocalTime.parse(times[1])
+        return Pair(startWork, endWork)
+    }
+
+    private fun isWithinWorkHours(start: LocalTime, end: LocalTime, workStart: LocalTime, workEnd: LocalTime): Boolean {
+        return if (workEnd.isAfter(workStart)) {
+            start.isAfter(workStart) && end.isBefore(workEnd)
+        } else {
+            start.isAfter(workStart) || end.isBefore(workEnd)
         }
     }
 
@@ -73,27 +95,26 @@ class AllocationService(
     }
 
     private fun isLunchTimeValid(employee: Employee, application: Application): Boolean {
-        val startWork = LocalTime.parse(employee.timeWork.split("-")[0])
-        val endWork = LocalTime.parse(employee.timeWork.split("-")[1])
+        val (startWork, endWork) = parseWorkTime(employee.timeWork)
         val applicationEnd = application.time4.toLocalTime()
         val lunchStart = startWork.plusHours(3).plusMinutes(30)
         val lunchEnd = endWork.minusHours(1)
 
         if (allocation[employee]?.any {
-                it.time4.toLocalTime().isAfter(lunchStart) && it.time3.toLocalTime().isBefore(lunchEnd)
+                isWithinWorkHours(it.time4.toLocalTime(), it.time3.toLocalTime(), lunchStart, lunchEnd)
             } == true) {
             return true
         }
 
-        val potentialLunchStart = applicationEnd.plusMinutes(10)
-        return potentialLunchStart.isAfter(lunchStart) && potentialLunchStart.isBefore(lunchEnd)
+        val potentialLunchStart = applicationEnd!!.plusMinutes(10)
+        return isWithinWorkHours(potentialLunchStart, potentialLunchStart, lunchStart, lunchEnd)
     }
 
     private fun estimateTravelTime(lastApplication: Application?, newApplication: Application): Double {
         return if (lastApplication == null) {
             0.0
         } else {
-            val path = pathfinderService.findPath(lastApplication.idSt1.toInt(), newApplication.idSt2.toInt())
+            val path = pathfinderService.findPath(lastApplication.idSt2.toInt(), newApplication.idSt1.toInt())
             path.second
         }
     }

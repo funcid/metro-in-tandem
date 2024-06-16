@@ -15,4 +15,5 @@ type ApplicationDetailResponse = {
     idSt2: number;
     station2Name: string;
     duration: string;
+    transplants: number
 }

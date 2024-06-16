@@ -7,6 +7,7 @@ import me.func.internal.dto.ApplicationResponse
 import me.func.internal.dto.ApplicationUpdateRequest
 import me.func.internal.dto.CreateApplicationRequest
 import me.func.internal.model.Application
+import me.func.internal.model.Passenger
 import me.func.internal.model.PassengerCategory
 import java.sql.Timestamp
 import me.func.internal.repository.ApplicationRepository
@@ -40,15 +41,23 @@ class ApplicationService(
             time3 = Time.valueOf(application.datetime.toLocalDateTime().toLocalTime()),
             timeOver = Time(System.currentTimeMillis()),
             tpz = Timestamp(System.currentTimeMillis()),
-            catPas = passenger.category
+            catPas = passenger.category,
         )
         return applicationRepository.save(newApplication)
     }
 
     fun getApplication(id: Long): ApplicationDetailsResponse? {
         val application = applicationRepository.findByIdOrNull(id) ?: return null
-        val passenger = passengerRepository.findByIdOrNull(application.idPas.toLong()) ?: return null
-        val calculatedDuration = pathfinderService.findPath(application.idSt1.toInt(), application.idSt2.toInt()).second
+        val passenger = passengerRepository.findByIdOrNull(application.idPas.toLong()) ?: Passenger(
+            id = -1,
+            fullName = "Пассажир не привязан",
+            contactNumbers = emptySet(),
+            gender = "Мужской",
+            category = PassengerCategory.NO,
+            additionalInfo = "Пассажир не привязан к заявке, удалите и создайте заново",
+            hasPacemaker = false
+        )
+        val (path, duration) = pathfinderService.findPath(application.idSt1.toInt(), application.idSt2.toInt())
 
         return applicationRepository.findByIdOrNull(id).run {
             ApplicationDetailsResponse(
@@ -64,10 +73,11 @@ class ApplicationService(
                 station1Name = stationRepository.findByIdOrNull(application.idSt1)?.nameStation ?: "null",
                 idSt2 = application.idSt2,
                 station2Name = stationRepository.findByIdOrNull(application.idSt2)?.nameStation ?: "null",
-                duration = "$calculatedDuration мин.",
+                duration = "$duration мин.",
                 inspSexF = application.inspSexF,
                 inspSexM = application.inspSexM,
-                tpz = application.tpz
+                tpz = application.tpz,
+                transplants = path.distinctBy { it.idLine }.count() - 1,
             )
         }
     }
