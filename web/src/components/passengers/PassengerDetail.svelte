@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { JWT } from "../login/Login.svelte";
     import { PUBLIC_API_HOST } from "$env/static/public";
-    import { categories } from "../Variables.svelte";
+    import { categories } from "../Variables";
 
     let passenger: PassengerDetailResponse | null = null;
     let loading: boolean = true;

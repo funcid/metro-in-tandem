@@ -2,7 +2,8 @@
     import { onMount } from "svelte";
     import { JWT } from "../login/Login.svelte";
     import { PUBLIC_API_HOST } from "$env/static/public";
-    import { metroStations, findMetroStationByName, dateToTimestamp } from "../Variables.svelte";
+    import { metroStations, findMetroStationByName } from "../../utils/metro"
+    import { dateToTimestamp } from "../Variables";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
 

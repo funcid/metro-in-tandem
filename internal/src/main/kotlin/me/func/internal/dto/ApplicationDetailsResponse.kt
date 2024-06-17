@@ -1,6 +1,7 @@
 package me.func.internal.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import me.func.internal.model.MetroStation
 import java.sql.Time
 import java.sql.Timestamp
 
@@ -21,10 +22,8 @@ data class ApplicationDetailsResponse(
     val inspSexF: Int,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     val timeOver: Time,
-    val idSt1: String,
-    val station1Name: String,
-    val idSt2: String,
-    val station2Name: String,
+    val stationFrom: MetroStation?,
+    val stationTo: MetroStation?,
     val duration: String,
     val transplants: Int,
 )

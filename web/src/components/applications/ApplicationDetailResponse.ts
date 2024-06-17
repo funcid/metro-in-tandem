@@ -10,10 +10,8 @@ type ApplicationDetailResponse = {
     inspSexM: number;
     inspSexF: number;
     timeOver: string; // Формат HH:mm:ss
-    idSt1: number;
-    station1Name: string;
-    idSt2: number;
-    station2Name: string;
+    stationFrom: MetroStationData;
+    stationTo: MetroStationData;
     duration: string;
     transplants: number
 }
