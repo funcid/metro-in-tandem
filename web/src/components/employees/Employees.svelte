@@ -1,7 +1,7 @@
 <script lang="ts">
     import { PUBLIC_API_HOST } from "$env/static/public";
     import { JWT } from "../login/Login.svelte";
-    import { sections } from "../Variables.svelte";
+    import { sections } from "../Variables";
 
     let selectedSection = sections[0];
     let employees: EmployeeResponse[] = []; // Типизация массива сотрудников

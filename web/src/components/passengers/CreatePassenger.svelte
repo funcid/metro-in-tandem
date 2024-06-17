@@ -2,7 +2,7 @@
     import { PUBLIC_API_HOST } from "$env/static/public";
     import validateRussianPhoneNumber from "../../utils/validatePhoneNumber";
     import { JWT } from "../login/Login.svelte";
-    import { categories } from "../Variables.svelte";
+    import { categories } from "../Variables";
 
     let fullName = "";
     let contactNumber = "";

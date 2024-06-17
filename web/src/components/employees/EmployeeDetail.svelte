@@ -7,7 +7,7 @@
         sections,
         shifts,
         positions,
-    } from "../Variables.svelte";
+    } from "../Variables";
 
     let employee: EmployeeDetailResponse | null = null;
     let loading: boolean = true;

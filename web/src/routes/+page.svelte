@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Router, { push } from "svelte-spa-router";
 	import { isAuthenticated } from "../components/login/Login.svelte"
+	import { fetchMetroStations } from "../utils/metro"
 
 	import Applications from '../components/applications/Applications.svelte';
 	import ApplicationDetail from '../components/applications/ApplicationDetail.svelte';
@@ -25,6 +27,7 @@
 	  '/': Home,
 	  '/applications': Applications,
 	  '/applications/:id': ApplicationDetail,
+	  '/create-application/:id': CreateApplication,
 	  '/passengers': Passengers,
 	  '/passengers/:id': PassengerDetail,
 	  '/create-passenger': CreatePassenger,
@@ -33,7 +36,6 @@
 	  '/employees/:id': EmployeeDetail,
 	  '/create-employee': CreateEmployee,
 	  '/login': Login,
-	  '/create-application/:id': CreateApplication,
 	};
   
 	const handleRoute = (event: any) => {
@@ -41,6 +43,10 @@
 			push('/login');
 	  	}
 	};
+
+    onMount(async () => {
+		await fetchMetroStations();
+	})
   </script>
   
   <svelte:head>
