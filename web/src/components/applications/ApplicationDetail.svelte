@@ -141,8 +141,8 @@
                         class="flex flex-col justify-between h-full py-[40rem]"
                     >
                         <div>
-                            <p>ID: {id}<br /></p>
-                            <p>ФИО: {application.fio}</p>
+                            <p>ID: <a class="text-[#0000EE]" href="/#/passengers/{application.idPas}">{id}</a><br /></p>
+                            <p>ФИО: <a class="text-[#0000EE]" href="/#/passengers/{application.idPas}">{application.fio}</a></p>
                             <p>Категория: {application.catPas}</p>
                             <p>Дата создания: {application.tpz}</p>
                         </div>
@@ -151,7 +151,7 @@
                                 <div class="flex gap-[6rem]">
                                     {@html stationFrom.iconHtml} {stationFrom.nameStation} 
                                 </div>
-                                <div class="ml-[10rem]">🠗 {application.duration}</div>
+                                <div class="flex ml-[10rem] gap-[16rem]">🠗 <p class="text-[black]/60">{application.duration}</p></div>
                                 <div class="flex gap-[6rem]">
                                     {@html stationTo.iconHtml} {stationTo.nameStation}
                                 </div>
