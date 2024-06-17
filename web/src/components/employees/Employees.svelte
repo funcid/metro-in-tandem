@@ -4,7 +4,7 @@
     import { sections } from "../Variables";
 
     let selectedSection = sections[0];
-    let employees: EmployeeResponse[] = []; // Типизация массива сотрудников
+    let employees: EmployeeResponse[] = [];
     let loading = false;
     let errorMessage = "";
     let noContent = false;
@@ -24,7 +24,6 @@
                 },
             );
             if (response.status === 204) {
-                // No Content
                 employees = [];
                 noContent = true;
             } else if (!response.ok) {
@@ -48,13 +47,12 @@
         window.location.hash = "/create-employee";
     };
 
-    // Функция для обработки клика по заявке
     const handleClick = (id: string) => {
         window.location.hash = `/employees/${id}`;
     };
 </script>
 
-<main class="flex flex-col gap-[20rem]">
+<main class="flex flex-col gap-[40rem]">
     <p class="font-bold text-[40rem]">Сотрудники</p>
     <div class="flex justify-between">
         <select
@@ -80,20 +78,31 @@
     {:else if noContent || employees.length === 0}
         <p class="text-gray-500 text-center">Сотрудников не найдено</p>
     {:else}
-        <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-2">
-            {#each employees as employee}
-                <div
-                    on:click={() => handleClick(employee.id)}
-                    class="bg-white border border-gray-300 shadow-md overflow-hidden cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem] ml-[12rem] mb-[12rem]"
-                >
-                    <p>
-                        {employee.fio} ({employee.rank})
-                    </p>
-                    <br />
-                    <p>Время работы: {employee.timeWork}</p>
-                    <p>Смена: {employee.smena}</p>
-                </div>
-            {/each}
+        <div>
+            <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] text-gray-600 mb-[30rem]">
+                <div>ID</div>
+                <div>ФИО сотрудника</div>
+                <div>Время работы</div>
+                <div>Должность</div>
+                <div>Смена</div>
+                <div>Легкий труд</div>
+            </div>
+            <hr />
+            <ul class="list-none p-0">
+                {#each employees as employee}
+                    <li
+                    class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] gap-[4rem] py-[26rem] hover:bg-gray-100 cursor-pointer text-[16rem] md:text-[26rem] items-center"
+                        on:click={() => handleClick(employee.id)}
+                    >
+                        <div class="text-blue-600 underline hover:text-blue-800">{employee.id}</div>
+                        <div class="text-blue-600 underline hover:text-blue-800">{employee.fio}</div>
+                        <div>{employee.timeWork}</div>
+                        <div>{employee.rank}</div>
+                        <div>{employee.smena}</div>
+                        <div>Нет</div>
+                    </li>
+                {/each}
+            </ul>
         </div>
     {/if}
 </main>
