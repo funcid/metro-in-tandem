@@ -81,7 +81,7 @@
         <div>
             <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] text-gray-600 mb-[30rem]">
                 <div>ID</div>
-                <div>ФИО сотрудника</div>
+                <div>ФИО</div>
                 <div>Время работы</div>
                 <div>Должность</div>
                 <div>Смена</div>
