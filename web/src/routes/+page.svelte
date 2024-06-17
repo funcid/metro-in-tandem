@@ -50,8 +50,8 @@
   </script>
   
   <svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Funcfolio" />
+	<title>Метро в тандеме</title>
+	<meta name="description" content="Метро в тандеме" />
   </svelte:head>
   
   <div class="w-full min-h-[calc(100vh-200rem)] flex justify-center p-[100rem] lg:py-[60rem] lg:px-[120rem] font-moscowsans">
