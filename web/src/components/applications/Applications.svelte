@@ -83,7 +83,7 @@
             <div
                 class="grid grid-cols-[1fr,2fr,2fr,2fr,2fr,1fr] text-gray-600 mb-[30rem]"
             >
-                <div>ID</div>
+                <div class="hidden md:block">ID</div>
                 <div>ФИО пассажира</div>
                 <div>Откуда</div>
                 <div>Куда</div>
@@ -94,7 +94,7 @@
             <ul class="list-none p-0">
                 {#each applications as app}
                     <li
-                        class="grid grid-cols-[1fr,2fr,2fr,2fr,2fr,1fr] gap-[4rem] py-[26rem] hover:bg-gray-100 cursor-pointer text-[26rem] items-center"
+                        class="grid grid-cols-[1fr,2fr,2fr,2fr,2fr,1fr] gap-[4rem] py-[26rem] hover:bg-gray-100 cursor-pointer text-[16rem] md:text-[26rem] items-center"
                     >
                         <div
                             on:click={() => handleClick(`/applications/${app.id}`)}
@@ -107,7 +107,7 @@
                             on:click={() => handleClick(`/passengers/${app.idPas}`)}
                         >
                             {app.fullName}
-                        </div>
+                    </div>
                         <div class="flex gap-[12rem] h-full items-center">
                             {@html createMetroStation(app.stationFrom).iconHtml}
                             {app.stationFrom?.nameStation}
