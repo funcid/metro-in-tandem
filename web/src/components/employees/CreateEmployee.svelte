@@ -7,7 +7,7 @@
         sections,
         shifts,
         positions,
-    } from "../Variables.svelte";
+    } from "../Variables";
 
     let fullName = "";
     let uchastok = "";

@@ -2,22 +2,20 @@
     import { onMount } from "svelte";
     import { JWT } from "../login/Login.svelte";
     import { PUBLIC_API_HOST } from "$env/static/public";
-    import {
-        statusOptions,
-        metroStations,
-        findMetroStationByName,
-        findMetroStationById,
-        dateToTimestamp,
-    } from "../Variables.svelte";
+    import { createMetroStation, findMetroStationByName } from '../../utils/metro';
+    import { statusOptions, dateToTimestamp } from "../Variables";
+    import { metroStations } from "../../utils/metro";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
 
     let application: ApplicationDetailResponse | null = null;
+
+    let stationFrom: MetroStation;
+    let stationTo: MetroStation;
+
     let status: string = "";
     let loading: boolean = true;
     let errorMessage: string = "";
-    let stationStart: string = "";
-    let stationEnd: string = "";
     let datetime: string = "";
 
     const getIdFromUrl = () => {
@@ -56,11 +54,11 @@
                 throw new Error("Failed to fetch application");
             }
             application = await response.json();
+
             status = application!.status || "";
-            stationStart = findMetroStationById(
-                application!.idSt1,
-            )?.nameStation!;
-            stationEnd = findMetroStationById(application!.idSt2)?.nameStation!;
+
+            stationFrom = createMetroStation(application!.stationFrom);
+            stationTo = createMetroStation(application!.stationTo);
         } catch (err) {
             errorMessage =
                 "Failed to load application. Please try again later.";
@@ -72,8 +70,6 @@
 
     const updateApplication = async () => {
         try {
-            application!.idSt1 = findMetroStationByName(stationStart)!.id;
-            application!.idSt2 = findMetroStationByName(stationEnd)!.id;
             application!.datetime = datetime;
 
             const response = await fetch(
@@ -84,7 +80,11 @@
                         Authorization: `Bearer ${$JWT}`,
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(application),
+                    body: JSON.stringify({
+                        ...application, 
+                        idSt1: findMetroStationByName(application!.stationFrom.nameStation)!.id,
+                        idSt2: findMetroStationByName(application!.stationTo.nameStation)!.id,
+                    }),
                 },
             );
             if (!response.ok) {
@@ -147,12 +147,17 @@
                             <p>Дата создания: {application.tpz}</p>
                         </div>
                         <div>
-                            <p>
-                                {application.station1Name} ➜ {application.station2Name}
-                            </p>
+                            <div class="flex flex-col gap-[12rem]">
+                                <div class="flex gap-[6rem]">
+                                    {@html stationFrom.iconHtml} {stationFrom.nameStation} 
+                                </div>
+                                <div class="ml-[10rem]">🠗 {application.duration}</div>
+                                <div class="flex gap-[6rem]">
+                                    {@html stationTo.iconHtml} {stationTo.nameStation}
+                                </div>
+                            </div><br />
                             <p>Пересадок: {application.transplants == 0 ? 'нет' : application.transplants}</p>
                             <p>Время прибытия: {application.timeOver}</p>
-                            <p>Оценка: {application.duration}</p>
                         </div>
                         <div>
                             <p>Статус: {status}</p>
@@ -239,7 +244,7 @@
                         </label>
                         <select
                             id="category"
-                            bind:value={stationStart}
+                            bind:value={application.stationFrom.nameStation}
                             class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required
                         >
@@ -255,7 +260,7 @@
                         </label>
                         <select
                             id="category"
-                            bind:value={stationEnd}
+                            bind:value={application.stationTo.nameStation}
                             class="shadow appearance-none border rounded-[12rem] w-full p-[12rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required
                         >
