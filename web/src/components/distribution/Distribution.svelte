@@ -136,7 +136,6 @@
         />
         <hr/>
         <div>
-            <hr />
             <SvelteGantt {...options} bind:this={ganttInstance} />
         </div>
     </div>

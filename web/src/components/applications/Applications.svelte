@@ -84,7 +84,7 @@
                 class="grid grid-cols-[1fr,2fr,2fr,2fr,2fr,1fr] text-gray-600 mb-[30rem]"
             >
                 <div class="hidden md:block">ID</div>
-                <div>ФИО пассажира</div>
+                <div>ФИО</div>
                 <div>Откуда</div>
                 <div>Куда</div>
                 <div>Дата и время</div>
