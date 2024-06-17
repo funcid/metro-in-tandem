@@ -14,7 +14,7 @@
 
     let ganttInstance: SvelteGantt | null = null;
     let allocations: Allocation[] = [];
-    let time: string = "24.4.2024"
+    let time: string = "24.4.2024";
 
     let options = {
         rows: [] as { id: number; label: string; timeWork: string }[],
@@ -46,14 +46,17 @@
     }
 
     async function fetchAllocations(): Promise<Allocation[]> {
-        const response = await fetch(PUBLIC_API_HOST + `api/v1/allocations?&from=${options.from}&to=${options.to}`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${$JWT}`,
-                "Content-Type": "application/json",
+        const response = await fetch(
+            PUBLIC_API_HOST +
+                `api/v1/allocations?&from=${options.from}&to=${options.to}`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${$JWT}`,
+                    "Content-Type": "application/json",
+                },
             },
-            
-        });
+        );
         if (!response.ok) {
             throw new Error("Failed to fetch allocations data");
         }
@@ -85,11 +88,15 @@
                         .duration(app.time4)
                         .subtract(moment.duration(app.time3))
                         .asMinutes()
-                        .toFixed(0)
-                    return Number(time) >= 35 ? (time + "м") : " "
+                        .toFixed(0);
+                    return Number(time) >= 35 ? time + "м" : " ";
                 })(),
-                from: moment(app.datetime, "DD.MM.YYYY").add(moment.duration(app.time3)),
-                to: moment(app.datetime, "DD.MM.YYYY").add(moment.duration(app.time4)),
+                from: moment(app.datetime, "DD.MM.YYYY").add(
+                    moment.duration(app.time3),
+                ),
+                to: moment(app.datetime, "DD.MM.YYYY").add(
+                    moment.duration(app.time4),
+                ),
                 showButton: true, // Assuming you don't need buttons on tasks
                 enableDragging: false,
                 enableResize: false,
@@ -114,9 +121,9 @@
     });
 </script>
 
-<main>
-    <p class="font-bold text-[40rem] mb-[20rem]">Распределение заявок</p>
-    <div class="flex flex-col gap-[20rem]">
+<main class="flex flex-col gap-[40rem]">
+    <p class="font-bold text-[40rem]">Распределение заявок</p>
+    <div class="flex flex-col mb-[30rem]">
         <Flatpickr
             options={{
                 dateFormat: "d.m.Y",
@@ -125,9 +132,9 @@
             }}
             bind:value={time}
             on:change={handleDateChange}
-            class="flex shadow appearance-none border w-fit text-gray-700 border border-gray-400 p-[20rem] rounded-[20rem]"
+            class="flex w-fit border w-fit text-gray-700 border border-gray-400 p-[20rem] rounded-[20rem] p-[20rem] mb-[30rem]"
         />
-        <hr />
+        <hr/>
         <div>
             <hr />
             <SvelteGantt {...options} bind:this={ganttInstance} />
