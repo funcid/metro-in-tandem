@@ -111,6 +111,7 @@ class ApplicationService(
         return applicationRepository.findAllApplicationsWithPassengerInfo().map { info ->
             ApplicationResponse(
                 info.id,
+                info.idPas,
                 info.time3.toString(),
                 info.time4.toString(),
                 info.timeOver.toString(),
@@ -119,7 +120,9 @@ class ApplicationService(
                 info.datetime.toString(),
                 info.fullName,
                 info.number ?: "Мобильный номер отсутствует",
-                info.tpz.toString()
+                info.tpz.toString(),
+                stationRepository.findByIdOrNull(info.idSt1),
+                stationRepository.findByIdOrNull(info.idSt2),
             )
         }
     }

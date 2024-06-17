@@ -7,6 +7,7 @@
     import { metroStations } from "../../utils/metro";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
+    import ArrowDown from "$lib/images/arrowdown.svg?raw";
 
     let application: ApplicationDetailResponse | null = null;
 
@@ -141,8 +142,8 @@
                         class="flex flex-col justify-between h-full py-[40rem]"
                     >
                         <div>
-                            <p>ID: <a class="text-[#0000EE]" href="/#/passengers/{application.idPas}">{id}</a><br /></p>
-                            <p>ФИО: <a class="text-[#0000EE]" href="/#/passengers/{application.idPas}">{application.fio}</a></p>
+                            <p>ID: <a class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" href="/#/passengers/{application.idPas}">{id}</a><br /></p>
+                            <p>ФИО: <a class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" href="/#/passengers/{application.idPas}">{application.fio}</a></p>
                             <p>Категория: {application.catPas}</p>
                             <p>Дата создания: {application.tpz}</p>
                         </div>
@@ -151,7 +152,7 @@
                                 <div class="flex gap-[6rem]">
                                     {@html stationFrom.iconHtml} {stationFrom.nameStation} 
                                 </div>
-                                <div class="flex ml-[10rem] gap-[16rem]">🠗 <p class="text-[black]/60">{application.duration}</p></div>
+                                <div class="flex ml-[10rem] gap-[16rem]">{@html ArrowDown} <p class="text-[black]/60">{application.duration}</p></div>
                                 <div class="flex gap-[6rem]">
                                     {@html stationTo.iconHtml} {stationTo.nameStation}
                                 </div>

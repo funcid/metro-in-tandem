@@ -38,13 +38,23 @@ export function getMetroLineIconUrl(lineId: number): string {
     }
 }
 
-export function createMetroStation(station: MetroStationData): MetroStation {
+export function createMetroStation(station: MetroStationData | undefined): MetroStation {
+    if (!station) return {
+        id: 0,
+        nameStation: 'Не указано',
+        nameLine: 'Не указана',
+        idLine: 0,
+        iconUrl: '',
+        iconHtml: ''
+    }
+
     let url = getMetroLineIconUrl(station.idLine);
     let old = isOld(station.idLine);
+    
     return {
         ...station,
         iconUrl: url,
-        iconHtml: `<img width="${old ? 22 : 38}rem" height="22rem" style='transform: translateY(-2rem);' src=${url} alt=${station.nameStation}/>`,
+        iconHtml: `<img width="${old ? 20 : 32}rem" style='max-height: 26rem; transform: translateY(-2rem);' src=${url} alt=${station.nameStation}/>`,
     };
 }
 
