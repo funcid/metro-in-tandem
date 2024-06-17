@@ -68,8 +68,8 @@
     };
 </script>
 
-<main>
-    <p class="font-bold text-[40rem] mb-[20rem]">Пассажиры</p>
+<main class="flex flex-col gap-[40rem]">
+    <p class="font-bold text-[40rem]">Пассажиры</p>
     {#if loading}
         <p class="text-gray-500">Загрузка пассажиров...</p>
     {:else if errorMessage}

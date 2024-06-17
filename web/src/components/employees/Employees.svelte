@@ -91,7 +91,7 @@
             <ul class="list-none p-0">
                 {#each employees as employee}
                     <li
-                    class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] gap-[4rem] py-[26rem] hover:bg-gray-100 cursor-pointer text-[16rem] md:text-[26rem] items-center"
+                        class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] gap-[4rem] py-[32rem] hover:bg-gray-100 cursor-pointer text-[16rem] md:text-[26rem] items-center"
                         on:click={() => handleClick(employee.id)}
                     >
                         <div class="text-blue-600 underline hover:text-blue-800">{employee.id}</div>
