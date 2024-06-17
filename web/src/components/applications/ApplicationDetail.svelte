@@ -7,7 +7,7 @@
     import { metroStations } from "../../utils/metro";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
-    import ArrowDown from "$lib/images/arrowdown.svg?raw";
+    import ArrowDown from "$lib/images/icon/arrowdown.svg?raw";
 
     let application: ApplicationDetailResponse | null = null;
 
@@ -152,7 +152,7 @@
                                 <div class="flex gap-[6rem]">
                                     {@html stationFrom.iconHtml} {stationFrom.nameStation} 
                                 </div>
-                                <div class="flex ml-[10rem] gap-[16rem]">{@html ArrowDown} <p class="text-[black]/60">{application.duration}</p></div>
+                                <div class="flex ml-[2rem] gap-6rem]">{@html ArrowDown} <p class="text-[black]/60">{application.duration.replace(".0", "")}</p></div>
                                 <div class="flex gap-[6rem]">
                                     {@html stationTo.iconHtml} {stationTo.nameStation}
                                 </div>
