@@ -1,5 +1,6 @@
 type ApplicationResponse = {
     id: number,
+    idPas: string,
     time3: string,
     time4: string,
     timeOver: string,
@@ -8,5 +9,7 @@ type ApplicationResponse = {
     datetime: string,
     fullName: string,
     mobileNumber: string,
-    tpz: string
+    tpz: string,
+    stationFrom: MetroStationData | undefined,
+    stationTo: MetroStationData | undefined,
 };
