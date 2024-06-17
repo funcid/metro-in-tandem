@@ -75,8 +75,8 @@
     {:else if errorMessage}
         <p class="text-red-500">{errorMessage}</p>
     {:else}
-        <div class="flex flex-col gap-[20rem]">
-            <div class="flex justify-between mb-[30rem]">
+        <div class="flex flex-col gap-[40rem]">
+            <div class="flex justify-between">
                 <input
                     type="text"
                     placeholder="Поиск по ФИО/номеру телефона"
@@ -91,6 +91,7 @@
                     Новый пассажир
                 </button>
             </div>
+            <hr/>
             <div>
                 <div class="grid grid-cols-[1fr,2fr,2fr,1fr,1fr,1fr] text-gray-600 mb-[30rem]">
                     <div>ID</div>
