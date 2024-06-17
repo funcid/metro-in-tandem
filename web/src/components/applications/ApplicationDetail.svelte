@@ -152,7 +152,7 @@
                                 <div class="flex gap-[6rem]">
                                     {@html stationFrom.iconHtml} {stationFrom.nameStation} 
                                 </div>
-                                <div class="flex ml-[2rem] gap-6rem]">{@html ArrowDown} <p class="text-[black]/60">{application.duration.replace(".0", "")}</p></div>
+                                <div class="flex gap-6rem]">{@html ArrowDown} <p class="text-[black]/60">{application.duration.replace(".0", "")}</p></div>
                                 <div class="flex gap-[6rem]">
                                     {@html stationTo.iconHtml} {stationTo.nameStation}
                                 </div>

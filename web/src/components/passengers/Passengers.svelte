@@ -62,6 +62,10 @@
     const handleCreatePassenger = () => {
         window.location.hash = "/create-passenger";
     };
+
+    const handleCreateApplication = (id: string) => {
+        window.location.hash = `/create-application/${id}`;
+    };
 </script>
 
 <main>
@@ -88,24 +92,28 @@
                 </button>
             </div>
             <div>
-                <div class="grid grid-cols-[1fr,2fr,2fr,1fr,1fr] text-gray-600 mb-[30rem]">
+                <div class="grid grid-cols-[1fr,2fr,2fr,1fr,1fr,1fr] text-gray-600 mb-[30rem]">
                     <div>ID</div>
                     <div>ФИО</div>
                     <div>Телефон</div>
                     <div>Пол</div>
                     <div>Категория</div>
+                    <div></div>
                 </div>
                 <hr />
                 <ul class="list-none p-0">
                     {#each filteredPassengers as pas}
-                        <li
-                            on:click={() => handleClick(pas.id)}
-                            class="grid grid-cols-[1fr,2fr,2fr,1fr,1fr] gap-[4rem] py-[36rem] hover:bg-gray-100 cursor-pointer text-[26rem] items-center"
-                        >
-                            <div class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
+                        <li class="grid grid-cols-[1fr,2fr,2fr,1fr,1fr,1fr] gap-[4rem] py-[36rem] hover:bg-gray-100 cursor-pointer text-[26rem] items-center">
+                            <div 
+                                on:click={() => handleClick(pas.id)}
+                                class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                            >
                                 {pas.id}
                             </div>
-                            <div class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
+                            <div 
+                                on:click={() => handleClick(pas.id)}
+                                class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                            >
                                 {pas.fullName}
                             </div>
                             <div
@@ -118,6 +126,12 @@
                             </div>
                             <div class="flex gap-[12rem] h-full items-center">
                                 {pas.category}
+                            </div>
+                            <div 
+                                on:click={() => handleCreateApplication(pas.id)}
+                                class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                            >
+                                Новая заявка
                             </div>
                         </li>
                     {/each}
