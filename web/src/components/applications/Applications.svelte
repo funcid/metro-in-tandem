@@ -98,7 +98,7 @@
                     >
                         <div
                             on:click={() => handleClick(`/applications/${app.id}`)}
-                            class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                            class="hidden md:block underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
                         >
                             {app.id}
                         </div>
