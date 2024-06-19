@@ -23,8 +23,6 @@ class PathfinderService(
         startStationId: Int,
         endStationId: Int
     ): Pair<List<MetroStation>, Double> {
-        println("Исходная станция: ${metroStations.first { it.id == startStationId.toString() }.nameStation}")
-
         val startTime = System.currentTimeMillis()
 
         val shortestPath = findShortestPath(
@@ -38,7 +36,6 @@ class PathfinderService(
         val endTime = System.currentTimeMillis()
         val duration = endTime - startTime
 
-        println("Самый быстрый путь:")
         var previousTime: Double? = null
         shortestPath.stations.forEachIndexed { index, metroStation ->
             val addedTime = if (index == 0) {
@@ -56,10 +53,7 @@ class PathfinderService(
                 previousTime = (previousTime ?: 0.0) + timeBetween
                 timeBetween
             }
-            println("${metroStation.nameStation} ${metroStation.id} на линии ${metroStation.nameLine} | Добавочное время: $addedTime минут")
         }
-        println("Общее время в пути: ${shortestPath.totalTime} минут")
-        println("Время выполнения функции me.func.internal.util.findShortestPath: $duration миллисекунд")
         return shortestPath.stations to String.format("%.1f", shortestPath.totalTime)
             .replace(',', '.')
             .toDouble()
