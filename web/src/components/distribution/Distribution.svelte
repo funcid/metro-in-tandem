@@ -82,7 +82,7 @@
         options.tasks = allocations.flatMap((alloc) => {
             const tasks = alloc.applications
                 .map((app) => {
-                    if (!app.application) return;
+                    if (!app.application) return null;
 
                     const from = moment(
                         app.application.datetime,
@@ -118,7 +118,8 @@
 
             const travel = alloc.applications
                 .map((app) => {
-                    if (!app.application) return;
+                    if (!app.application) return null;
+                    if (app.travelTime == 0) return null;
 
                     const to = moment(
                         app.application.datetime,
@@ -143,7 +144,6 @@
                 })
                 .filter((task) => task !== null); // Filter out null tasks
 
-            console.log(alloc);
             const from = moment(alloc.employee.date + ' ' + alloc.lunchTime, "YYYY-MM-DD HH:mm:ss");
             const to = from.clone().add(moment.duration(1, "hours"));
             const lunch = {
