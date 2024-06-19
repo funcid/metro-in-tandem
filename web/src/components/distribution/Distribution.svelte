@@ -63,7 +63,7 @@
         return await response.json();
     }
 
-    function mapAllocationsToOptions(allocations: Allocation[]) {
+    async function mapAllocationsToOptions(allocations: Allocation[]) {
         if (!Array.isArray(allocations)) {
             console.error(
                 "Expected an array of allocations, but got:",
@@ -75,35 +75,92 @@
         options.rows = allocations.map((alloc) => ({
             id: alloc.employee.id,
             label: `${alloc.employee.fio} | ${alloc.employee.rank}`,
-            timeWork: alloc.employee.timeWork, // Adding timeWork to the rows
+            timeWork: alloc.employee.timeWork,
         }));
         ganttInstance.updateRows(options.rows);
 
         options.tasks = allocations.flatMap((alloc) => {
-            const tasks = alloc.applications.map((app) => ({
-                id: app.id,
+            const tasks = alloc.applications
+                .map((app) => {
+                    if (!app.application) return;
+
+                    const from = moment(
+                        app.application.datetime,
+                        "DD.MM.YYYY",
+                    ).add(moment.duration(app.application.time3));
+                    const to = moment(
+                        app.application.datetime,
+                        "DD.MM.YYYY",
+                    ).add(moment.duration(app.application.time4));
+
+                    return {
+                        id: app.application.id,
+                        resourceId: alloc.employee.id,
+                        label: (() => {
+                            let time = moment
+                                .duration(app.application.time4)
+                                .subtract(
+                                    moment.duration(app.application.time3),
+                                )
+                                .asMinutes()
+                                .toFixed(0);
+                            return Number(time) >= 35 ? time + "м" : " ";
+                        })(),
+                        from: from,
+                        to: to,
+                        showButton: true,
+                        enableDragging: false,
+                        enableResize: false,
+                        classes: "application-task",
+                    };
+                })
+                .filter((task) => task !== null); // Filter out null tasks
+
+            const travel = alloc.applications
+                .map((app) => {
+                    if (!app.application) return;
+
+                    const to = moment(
+                        app.application.datetime,
+                        "DD.MM.YYYY",
+                    ).add(moment.duration(app.application.time3));
+
+                    const from = to
+                        .clone()
+                        .subtract(moment.duration(app.travelTime, "minutes"));
+
+                    return {
+                        id: app.application.id * 1009,
+                        resourceId: alloc.employee.id,
+                        label: " ",
+                        from: from,
+                        to: to,
+                        showButton: true,
+                        enableDragging: false,
+                        enableResize: false,
+                        classes: "application-travel",
+                    };
+                })
+                .filter((task) => task !== null); // Filter out null tasks
+
+            console.log(alloc);
+            const from = moment(alloc.employee.date + ' ' + alloc.lunchTime, "YYYY-MM-DD HH:mm:ss");
+            const to = from.clone().add(moment.duration(1, "hours"));
+            const lunch = {
+                id: alloc.employee.id * 1011,
                 resourceId: alloc.employee.id,
-                label: (() => {
-                    let time = moment
-                        .duration(app.time4)
-                        .subtract(moment.duration(app.time3))
-                        .asMinutes()
-                        .toFixed(0);
-                    return Number(time) >= 35 ? time + "м" : " ";
-                })(),
-                from: moment(app.datetime, "DD.MM.YYYY").add(
-                    moment.duration(app.time3),
-                ),
-                to: moment(app.datetime, "DD.MM.YYYY").add(
-                    moment.duration(app.time4),
-                ),
-                showButton: true, // Assuming you don't need buttons on tasks
+                label: "Обед",
+                from: from,
+                to: to,
+                showButton: true,
                 enableDragging: false,
                 enableResize: false,
-            }));
+                classes: "application-lunch",
+            };
 
-            return [...tasks];
+            return [...tasks, ...travel, lunch];
         });
+
         ganttInstance.updateTasks(options.tasks);
     }
 
@@ -115,6 +172,9 @@
             console.error("Error fetching allocations:", error);
         }
         ganttInstance.api.tasks.on.select((task: any[]) => {
+            if (!task[0].model.classes.includes('application-task')) {
+                return;
+            }
             window.location.hash = `/applications/${task[0].model.id}`;
             window.scrollTo(0, 0);
         });
@@ -134,7 +194,7 @@
             on:change={handleDateChange}
             class="flex w-fit border w-fit text-gray-700 border border-gray-400 p-[20rem] rounded-[20rem] p-[20rem] mb-[30rem]"
         />
-        <hr/>
+        <hr />
         <div>
             <SvelteGantt {...options} bind:this={ganttInstance} />
         </div>

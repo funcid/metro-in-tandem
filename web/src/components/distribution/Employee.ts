@@ -3,4 +3,5 @@ interface Employee {
     fio: string;
     timeWork: string;
     rank: string;
+    date: string;
 }

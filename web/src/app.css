@@ -39,3 +39,19 @@ html {
   padding-left: 0 !important;
   width: 100%;
 }
+
+.sg-task-content {
+  border-radius: 5rem;
+}
+
+.application-task .sg-task-content {
+  background-color: #40BB40;
+}
+
+.application-travel .sg-task-content {
+  background-color: #42AAFF;
+}
+
+.application-lunch .sg-task-content {
+  background-color: #F19CBB;
+}
