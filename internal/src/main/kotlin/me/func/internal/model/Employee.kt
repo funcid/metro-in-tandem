@@ -1,6 +1,7 @@
 package me.func.internal.model
 
 import jakarta.persistence.*
+import me.func.internal.converter.StringListConverter
 import java.time.LocalDate
 
 @Entity
@@ -29,5 +30,29 @@ data class Employee(
     val rank: String,
 
     @Column(name = "sex")
-    val sex: String
+    val sex: String,
+
+    @Column(name = "work_phone")
+    val workPhone: String,
+
+    @Column(name = "personal_phone")
+    val personalPhone: String,
+
+    @Column(name = "employee_id")
+    val employeeID: String,
+
+    @Column(name = "light_duty")
+    val lightDuty: Boolean,
+
+    @Convert(converter = StringListConverter::class)
+    @Column(name = "vacations")
+    val vacations: List<String> = emptyList(),
+
+    @Column(name = "sick_leaves")
+    @Convert(converter = StringListConverter::class)
+    val sickLeaves: List<String> = emptyList(),
+
+    @Column(name = "days_off")
+    @Convert(converter = StringListConverter::class)
+    val daysOff: List<String> = emptyList()
 )

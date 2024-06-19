@@ -7,6 +7,7 @@ import me.func.internal.repository.EmployeeRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.util.*
+import kotlin.NoSuchElementException
 
 @Service
 @Transactional
@@ -35,8 +36,16 @@ class EmployeeService(private val employeeRepository: EmployeeRepository) {
             uchastok = request.uchastok,
             smena = request.shift,
             rank = request.position,
-            sex = request.gender
+            sex = request.gender,
+            workPhone = request.workPhone,
+            personalPhone = request.personalPhone,
+            employeeID = request.employeeID,
+            lightDuty = request.lightDuty,
+            vacations = request.vacations,
+            sickLeaves  = request.sickLeaves,
+            daysOff  = request.daysOff,
         )
+
         return employeeRepository.save(newEmployee)
     }
 

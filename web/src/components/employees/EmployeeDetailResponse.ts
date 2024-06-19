@@ -7,4 +7,7 @@ type EmployeeDetailResponse = {
     smena: string;
     rank: string;
     sex: string;
+    sickLeaves: string[] | null;
+    vacations: string[] | null;
+    daysOff: string[] | null;
 }
