@@ -22,7 +22,7 @@ class AllocationController(
             AllocationResponse(
                 employee = employee,
                 applications = applications,
-                lunchTime = allocationService.calculateLunchTime(employee, applications),
+                lunchTime = applications.find { it.application.idPas == "0" }?.application?.time3?.toLocalTime(),
             )
         }
     }
