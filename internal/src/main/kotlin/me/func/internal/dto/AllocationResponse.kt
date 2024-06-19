@@ -1,9 +1,10 @@
 package me.func.internal.dto
 
-import me.func.internal.model.Application
 import me.func.internal.model.Employee
+import java.time.LocalTime
 
 data class AllocationResponse(
     val employee: Employee,
-    val applications: List<Application>
+    val lunchTime: LocalTime,
+    val applications: List<ExtendedApplication>
 )
