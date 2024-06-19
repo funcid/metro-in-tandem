@@ -65,7 +65,7 @@ html {
 }
 
 :is(.vacation) {
-  background: url("vacations.png") !important;
+  background: url("/vacations.png") !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
@@ -73,7 +73,7 @@ html {
 }
 
 :is(.sick-leave) {
-  background: url("sick.png") !important;
+  background: url("/sick.png") !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
@@ -81,7 +81,7 @@ html {
 }
 
 :is(.day-off) {
-  background: url("day.png") !important;
+  background: url("/day.png") !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
