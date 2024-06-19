@@ -67,7 +67,7 @@ class AllocationService(
         application: Application
     ): List<Employee> {
         val suitableCiEmployees = findSuitableEmployees(ciEmployees, application)
-        return if (suitableCiEmployees.isNotEmpty()) suitableCiEmployees else findSuitableEmployees(csiEmployees, application)
+        return suitableCiEmployees.ifEmpty { findSuitableEmployees(csiEmployees, application) }
     }
 
     private fun findSuitableEmployees(employees: List<Employee>, application: Application): List<Employee> {
