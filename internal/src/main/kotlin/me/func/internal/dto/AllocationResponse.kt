@@ -5,6 +5,6 @@ import java.time.LocalTime
 
 data class AllocationResponse(
     val employee: Employee,
-    val lunchTime: LocalTime,
+    val lunchTime: LocalTime?,
     val applications: List<ExtendedApplication>
 )
