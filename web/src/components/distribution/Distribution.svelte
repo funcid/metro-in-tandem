@@ -175,7 +175,7 @@
 
     onMount(async () => {
         ganttInstance.api.tasks.on.select((task: any[]) => {
-            if (!task[0].model) return;
+            if (!task[0]) return;
             if (!task[0].model.classes.includes('application-task')) {
                 return;
             }
