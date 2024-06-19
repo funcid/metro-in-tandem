@@ -155,7 +155,6 @@
 
             const { segments } = parseTimeWork(alloc.employee.timeWork, alloc.employee.date);
 
-            console.log(segments)
             const workTasks = segments.map((segment, index) => ({
                 id: alloc.employee.id * 1013 + index,
                 resourceId: alloc.employee.id,

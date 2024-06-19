@@ -49,7 +49,7 @@ class AllocationService(
             allocation[employee] = mutableListOf()
         }
 
-        applications.forEach { app ->
+        applications.sortedBy { it.time4 }.forEach { app ->
             val suitableEmployees = findSuitableEmployees(ciEmployees, csiEmployees, app)
 
             if (suitableEmployees.isNotEmpty()) {
