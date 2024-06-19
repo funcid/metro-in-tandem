@@ -1,4 +1,4 @@
-interface Application {
+type Application = {
     id: number;
     idPas: string;
     datetime: string;
