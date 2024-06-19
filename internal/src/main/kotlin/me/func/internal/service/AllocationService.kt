@@ -21,7 +21,7 @@ class AllocationService(
     private val allocation = mutableMapOf<Employee, MutableList<ExtendedApplication>>()
 
     fun allocateApplications(from: Long, to: Long): Map<Employee, List<ExtendedApplication>> {
-        val employees = employeeRepository.findAll().toList()
+        val employees = employeeRepository.findAll().toList().distinctBy { it.id }
         val applications = findValidApplications(from, to).distinctBy { it.id }
 
         allocateToSuitableEmployees(employees, applications)
