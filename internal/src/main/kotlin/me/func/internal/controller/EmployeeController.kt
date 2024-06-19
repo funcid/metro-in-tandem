@@ -6,6 +6,7 @@ import me.func.internal.service.EmployeeService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/employees")
@@ -35,7 +36,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
     }
 
     @DeleteMapping("/{id}")
-    fun deleteEmployee(@PathVariable id: String): ResponseEntity<Any>  {
+    fun deleteEmployee(@PathVariable id: String): ResponseEntity<Any> {
         return try {
             employeeService.deleteEmployee(id)
             ResponseEntity.ok().build()

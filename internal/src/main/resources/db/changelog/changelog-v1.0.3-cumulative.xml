@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="func">
+        <!-- Insert sample data for the new columns -->
+        <addColumn tableName="employees">
+            <column name="vacations" type="text"/>
+            <column name="sick_leaves" type="text"/>
+            <column name="days_off" type="text"/>
+            <column name="light_duty" type="boolean" defaultOnNull="true" defaultValue="false"/>
+            <column name="personal_phone" type="text" defaultOnNull="true" defaultValue="Отсутствует"/>
+            <column name="work_phone" type="text" defaultOnNull="true" defaultValue="Отсутствует"/>
+            <column name="employee_id" type="text" defaultOnNull="true" defaultValue="Отсутствует"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
