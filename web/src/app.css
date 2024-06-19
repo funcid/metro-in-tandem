@@ -49,9 +49,13 @@ html {
 }
 
 .application-travel .sg-task-content {
-  background-color: #42AAFF;
+  background-color: rgb(66, 170, 255, 0.6);
 }
 
 .application-lunch .sg-task-content {
   background-color: #F19CBB;
+}
+
+.sg-task {
+  background-color: rgb(0, 0, 0, 0.0) ip !important;
 }
