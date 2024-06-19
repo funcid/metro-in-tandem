@@ -64,26 +64,26 @@ html {
   background-color: rgb(0, 0, 0, 0.0) !important;
 }
 
-.vacation {
-  background: url("public/vacations.png") !important;
+:is(.vacation) {
+  background: url("vacations.png") !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
-  color: rgb(0, 0, 0, 0.0) !important;
+  color: rgb(0, 0, 0, 0) !important;
 }
 
-.sick-leave {
-  background: url("public/sick.png") !important;
+:is(.sick-leave) {
+  background: url("sick.png") !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
   color: black !important;
 }
 
-.day-off {
-  background: url("public/day.png") !important;
+:is(.day-off) {
+  background: url("day.png") !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
-  color: rgb(0, 0, 0, 0.0) !important;
+  color: rgb(0, 0, 0, 0) !important;
 }
