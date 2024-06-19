@@ -174,12 +174,6 @@
     }
 
     onMount(async () => {
-        try {
-            allocations = await fetchAllocations();
-            mapAllocationsToOptions(allocations);
-        } catch (error) {
-            console.error("Error fetching allocations:", error);
-        }
         ganttInstance.api.tasks.on.select((task: any[]) => {
             if (!task[0].model.classes.includes('application-task')) {
                 return;
