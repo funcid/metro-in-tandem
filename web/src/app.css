@@ -56,6 +56,10 @@ html {
   background-color: #F19CBB;
 }
 
+.application-work .sg-task-content {
+  background-color: rgb(66, 170, 255, 0.1) !important;
+}
+
 .sg-task {
-  background-color: rgb(0, 0, 0, 0.0) ip !important;
+  background-color: rgb(0, 0, 0, 0.0) !important;
 }

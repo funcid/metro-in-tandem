@@ -63,12 +63,25 @@
         return await response.json();
     }
 
+    function parseTimeWork(timeWork: string, date: string) {
+        const [startTime, endTime] = timeWork.split("-").map(time => moment(date + " " + time, "YYYY-MM-DD HH:mm"));
+        if (endTime.isBefore(startTime)) {
+            return {
+                segments: [
+                    { start: options.from, end: endTime.clone().add(moment.duration(1, 'day')) },
+                    { start: startTime.clone().add(moment.duration(1, 'day')), end: options.to }
+                ]
+            };
+        } else {
+            return {
+                segments: [{ start: startTime, end: endTime }]
+            };
+        }
+    }
+
     async function mapAllocationsToOptions(allocations: Allocation[]) {
         if (!Array.isArray(allocations)) {
-            console.error(
-                "Expected an array of allocations, but got:",
-                allocations,
-            );
+            console.error("Expected an array of allocations, but got:", allocations);
             return;
         }
 
@@ -84,26 +97,14 @@
                 .map((app) => {
                     if (!app.application) return null;
 
-                    const from = moment(
-                        app.application.datetime,
-                        "DD.MM.YYYY",
-                    ).add(moment.duration(app.application.time3));
-                    const to = moment(
-                        app.application.datetime,
-                        "DD.MM.YYYY",
-                    ).add(moment.duration(app.application.time4));
+                    const from = moment(app.application.datetime, "DD.MM.YYYY").add(moment.duration(app.application.time3));
+                    const to = moment(app.application.datetime, "DD.MM.YYYY").add(moment.duration(app.application.time4));
 
                     return {
                         id: app.application.id,
                         resourceId: alloc.employee.id,
                         label: (() => {
-                            let time = moment
-                                .duration(app.application.time4)
-                                .subtract(
-                                    moment.duration(app.application.time3),
-                                )
-                                .asMinutes()
-                                .toFixed(0);
+                            let time = moment.duration(app.application.time4).subtract(moment.duration(app.application.time3)).asMinutes().toFixed(0);
                             return Number(time) >= 35 ? time + "м" : " ";
                         })(),
                         from: from,
@@ -114,21 +115,15 @@
                         classes: "application-task",
                     };
                 })
-                .filter((task) => task !== null); // Filter out null tasks
+                .filter((task) => task !== null);
 
             const travel = alloc.applications
                 .map((app) => {
                     if (!app.application) return null;
                     if (app.travelTime == 0) return null;
 
-                    const to = moment(
-                        app.application.datetime,
-                        "DD.MM.YYYY",
-                    ).add(moment.duration(app.application.time3));
-
-                    const from = to
-                        .clone()
-                        .subtract(moment.duration(app.travelTime, "minutes"));
+                    const to = moment(app.application.datetime, "DD.MM.YYYY").add(moment.duration(app.application.time3));
+                    const from = to.clone().subtract(moment.duration(app.travelTime, "minutes"));
 
                     return {
                         id: app.application.id * 1009,
@@ -136,29 +131,44 @@
                         label: " ",
                         from: from,
                         to: to,
-                        showButton: true,
+                        showButton: false,
                         enableDragging: false,
                         enableResize: false,
                         classes: "application-travel",
                     };
                 })
-                .filter((task) => task !== null); // Filter out null tasks
+                .filter((task) => task !== null);
 
-            const from = moment(alloc.employee.date + ' ' + alloc.lunchTime, "YYYY-MM-DD HH:mm:ss");
-            const to = from.clone().add(moment.duration(1, "hours"));
+            const lunchFrom = moment(alloc.employee.date + ' ' + alloc.lunchTime, "YYYY-MM-DD HH:mm:ss");
+            const lunchTo = lunchFrom.clone().add(moment.duration(1, "hours"));
             const lunch = {
                 id: alloc.employee.id * 1011,
                 resourceId: alloc.employee.id,
                 label: "Обед",
-                from: from,
-                to: to,
-                showButton: true,
+                from: lunchFrom,
+                to: lunchTo,
+                showButton: false,
                 enableDragging: false,
                 enableResize: false,
                 classes: "application-lunch",
             };
 
-            return [...tasks, ...travel, lunch];
+            const { segments } = parseTimeWork(alloc.employee.timeWork, alloc.employee.date);
+
+            console.log(segments)
+            const workTasks = segments.map((segment, index) => ({
+                id: alloc.employee.id * 1013 + index,
+                resourceId: alloc.employee.id,
+                label: " ",
+                from: segment.start,
+                to: segment.end,
+                showButton: false,
+                enableDragging: false,
+                enableResize: false,
+                classes: "application-work",
+            }));
+
+            return [...travel, lunch, ...workTasks, ...tasks];
         });
 
         ganttInstance.updateTasks(options.tasks);
