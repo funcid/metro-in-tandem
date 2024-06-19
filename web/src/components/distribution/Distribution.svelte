@@ -126,7 +126,7 @@
                     const from = to.clone().subtract(moment.duration(app.travelTime, "minutes"));
 
                     return {
-                        id: app.application.id * 1009,
+                        id: Math.random(),
                         resourceId: alloc.employee.id,
                         label: " ",
                         from: from,
@@ -142,7 +142,7 @@
             const lunchFrom = moment(alloc.employee.date + ' ' + alloc.lunchTime, "YYYY-MM-DD HH:mm:ss");
             const lunchTo = lunchFrom.clone().add(moment.duration(1, "hours"));
             const lunch = {
-                id: alloc.employee.id * 1011,
+                id: Math.random(),
                 resourceId: alloc.employee.id,
                 label: "Обед",
                 from: lunchFrom,
@@ -156,7 +156,7 @@
             const { segments } = parseTimeWork(alloc.employee.timeWork, alloc.employee.date);
 
             const workTasks = segments.map((segment, index) => ({
-                id: alloc.employee.id * 1013 + index,
+                id: Math.random(),
                 resourceId: alloc.employee.id,
                 label: " ",
                 from: segment.start,
@@ -175,6 +175,7 @@
 
     onMount(async () => {
         ganttInstance.api.tasks.on.select((task: any[]) => {
+            if (!task[0].model) return;
             if (!task[0].model.classes.includes('application-task')) {
                 return;
             }
