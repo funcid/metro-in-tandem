@@ -22,7 +22,7 @@ class AllocationService(
 
     fun allocateApplications(from: Long, to: Long): Map<Employee, List<ExtendedApplication>> {
         val employees = employeeRepository.findAll().toList()
-        val applications = findValidApplications(from, to)
+        val applications = findValidApplications(from, to).distinctBy { it.id }
 
         allocateToSuitableEmployees(employees, applications)
 
