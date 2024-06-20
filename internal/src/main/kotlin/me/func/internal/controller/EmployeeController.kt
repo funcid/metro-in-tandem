@@ -5,6 +5,7 @@ import me.func.internal.model.Employee
 import me.func.internal.service.EmployeeService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -13,6 +14,7 @@ import java.util.*
 class EmployeeController(private val employeeService: EmployeeService) {
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
     fun getEmployeeById(@PathVariable id: String): ResponseEntity<Employee> {
         val employee = employeeService.getEmployeeById(id)
         return if (employee.isPresent) {
@@ -23,6 +25,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
     fun updateEmployee(
         @PathVariable id: String,
         @RequestBody updatedEmployee: Employee
@@ -36,6 +39,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('Администратор')")
     fun deleteEmployee(@PathVariable id: String): ResponseEntity<Any> {
         return try {
             employeeService.deleteEmployee(id)
@@ -46,6 +50,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
     fun getEmployeesByRegion(@RequestParam("region") region: String): ResponseEntity<List<Employee>> {
         val employees = employeeService.getEmployeesByRegion(region)
         return if (employees.isNotEmpty()) {
@@ -56,6 +61,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист')")
     fun createEmployee(@RequestBody request: CreateEmployeeRequest): ResponseEntity<Employee> {
         val createdEmployee = employeeService.createEmployee(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEmployee)
