@@ -33,7 +33,7 @@ class AuthController(
         val user = User(
             username = registerRequest.username,
             password = passwordEncoder.encode(registerRequest.password),
-            role = Role(1, "USER") // предположим, что role_id 1 это "USER"
+            role = Role(1, "Сотрудник")
         )
 
         userService.save(user)
