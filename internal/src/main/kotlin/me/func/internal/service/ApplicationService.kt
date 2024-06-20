@@ -14,6 +14,8 @@ import me.func.internal.repository.ApplicationRepository
 import me.func.internal.repository.MetroStationRepository
 import me.func.internal.repository.PassengerRepository
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.sql.Time
 
@@ -84,17 +86,27 @@ class ApplicationService(
         val existingApplication = applicationRepository.findById(id)
             .orElseThrow { NoSuchElementException("Application not found") }
 
-        // Обновляем свойства заявки значениями из ApplicationUpdateRequest
-        val updatedApplication = existingApplication.copy(
-            status = ApplicationStatus.fromCode(applicationUpdateRequest.status) ?: ApplicationStatus.NOT_APPROVED,
-            datetime = applicationUpdateRequest.datetime,
-            time3 = applicationUpdateRequest.time3,
-            time4 = applicationUpdateRequest.time4,
-            inspSexM = applicationUpdateRequest.inspSexM,
-            inspSexF = applicationUpdateRequest.inspSexF,
-            idSt1 = applicationUpdateRequest.idSt1,
-            idSt2 = applicationUpdateRequest.idSt2
-        )
+        // Получаем роль текущего пользователя
+        val authentication = SecurityContextHolder.getContext().authentication
+        val isEmployee = authentication.authorities.contains(SimpleGrantedAuthority("Сотрудник"))
+
+        // Обновляем только статус, если пользователь является Сотрудником
+        val updatedApplication = if (isEmployee) {
+            existingApplication.copy(
+                status = ApplicationStatus.fromCode(applicationUpdateRequest.status) ?: ApplicationStatus.NOT_APPROVED
+            )
+        } else {
+            existingApplication.copy(
+                status = ApplicationStatus.fromCode(applicationUpdateRequest.status) ?: ApplicationStatus.NOT_APPROVED,
+                datetime = applicationUpdateRequest.datetime,
+                time3 = applicationUpdateRequest.time3,
+                time4 = applicationUpdateRequest.time4,
+                inspSexM = applicationUpdateRequest.inspSexM,
+                inspSexF = applicationUpdateRequest.inspSexF,
+                idSt1 = applicationUpdateRequest.idSt1,
+                idSt2 = applicationUpdateRequest.idSt2
+            )
+        }
 
         // Сохраняем обновленную заявку в репозитории
         return applicationRepository.save(updatedApplication)

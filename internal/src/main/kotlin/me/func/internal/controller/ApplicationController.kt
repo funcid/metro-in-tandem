@@ -9,6 +9,7 @@ import me.func.internal.model.Application
 import me.func.internal.service.ApplicationService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.*
 class ApplicationController(private val applicationService: ApplicationService) {
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
     fun createApplication(@RequestBody application: CreateApplicationRequest): ResponseEntity<Application> {
         val createdApplication = applicationService.createApplication(application)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdApplication)
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор', 'Сотрудник')")
     fun getApplication(@PathVariable id: Long): ResponseEntity<ApplicationDetailsResponse> {
         val application = applicationService.getApplication(id)
         return if (application != null) {
@@ -32,24 +35,29 @@ class ApplicationController(private val applicationService: ApplicationService) 
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор', 'Сотрудник')")
     fun updateApplication(@PathVariable id: Long, @RequestBody application: ApplicationUpdateRequest): ResponseEntity<Application> {
+        // todo: сотрудник может менять только статус
         val updatedApplication = applicationService.updateApplication(id, application)
         return ResponseEntity.ok(updatedApplication)
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('Администратор')")
     fun deleteApplication(@PathVariable id: Long): ResponseEntity<Void> {
         applicationService.deleteApplication(id)
         return ResponseEntity.noContent().build()
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
     fun getAllApplications(): ResponseEntity<List<ApplicationResponse>> {
         val applications = applicationService.getAllApplications()
         return ResponseEntity.ok(applications)
     }
 
     @GetMapping(params = ["status"])
+    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
     fun getApplicationsByStatus(@RequestParam status: ApplicationStatus): ResponseEntity<List<Application>> {
         val applications = applicationService.getApplicationsByStatus(status)
         return ResponseEntity.ok(applications)
