@@ -45,12 +45,14 @@
         }
     }
 
-    async function fetchAllocations(): Promise<Allocation[]> {
+    async function fetchAllocations(
+        endpoint: string = "allocations",
+        method: string = "GET",
+    ): Promise<Allocation[]> {
         const response = await fetch(
-            PUBLIC_API_HOST +
-                `api/v1/allocations?&from=${options.from}&to=${options.to}`,
+            `${PUBLIC_API_HOST}api/v1/${endpoint}?&from=${options.from}&to=${options.to}`,
             {
-                method: "GET",
+                method: method,
                 headers: {
                     Authorization: `Bearer ${$JWT}`,
                     "Content-Type": "application/json",
@@ -64,24 +66,35 @@
     }
 
     function parseTimeWork(timeWork: string, date: string) {
-        const [startTime, endTime] = timeWork.split("-").map(time => moment(date + " " + time, "YYYY-MM-DD HH:mm"));
+        const [startTime, endTime] = timeWork
+            .split("-")
+            .map((time) => moment(date + " " + time, "YYYY-MM-DD HH:mm"));
         if (endTime.isBefore(startTime)) {
             return {
                 segments: [
-                    { start: options.from, end: endTime.clone().add(moment.duration(1, 'day')) },
-                    { start: startTime.clone().add(moment.duration(1, 'day')), end: options.to }
-                ]
+                    {
+                        start: options.from,
+                        end: endTime.clone().add(moment.duration(1, "day")),
+                    },
+                    {
+                        start: startTime.clone().add(moment.duration(1, "day")),
+                        end: options.to,
+                    },
+                ],
             };
         } else {
             return {
-                segments: [{ start: startTime, end: endTime }]
+                segments: [{ start: startTime, end: endTime }],
             };
         }
     }
 
     async function mapAllocationsToOptions(allocations: Allocation[]) {
         if (!Array.isArray(allocations)) {
-            console.error("Expected an array of allocations, but got:", allocations);
+            console.error(
+                "Expected an array of allocations, but got:",
+                allocations,
+            );
             return;
         }
 
@@ -93,19 +106,21 @@
         ganttInstance.updateRows(options.rows);
 
         options.tasks = allocations.flatMap((alloc) => {
-            const tasks = alloc.applications
+            const tasks = alloc.allocations
+                .filter((app) => app.type == "APPLICATION")
                 .map((app) => {
-                    if (!app.application) return null;
-
-                    const from = moment(app.application.datetime, "DD.MM.YYYY").add(moment.duration(app.application.time3));
-                    const to = moment(app.application.datetime, "DD.MM.YYYY").add(moment.duration(app.application.time4));
+                    const from = moment(app.from, "DD.MM.YYYY HH:mm:ss");
+                    const to = moment(app.to, "DD.MM.YYYY HH:mm:ss");
 
                     return {
-                        id: app.application.id,
+                        id: app.applicationId,
                         resourceId: alloc.employee.id,
                         label: (() => {
-                            let time = moment.duration(app.application.time4).subtract(moment.duration(app.application.time3)).asMinutes().toFixed(0);
-                            return Number(time) >= 35 ? time + "м" : " ";
+                            let diffMinutes = to.diff(from, 'minutes');
+                            // let duration = (to.minutes() - from.minutes()).toFixed(0);
+                            // return Number(duration) >= -35 ? duration + "м" : " ";
+                            // return to.minutes() + " " + from.minutes()
+                            return diffMinutes > 35 ? diffMinutes + "м" : " "
                         })(),
                         from: from,
                         to: to,
@@ -117,13 +132,11 @@
                 })
                 .filter((task) => task !== null);
 
-            const travel = alloc.applications
+            const travel = alloc.allocations
+                .filter((app) => app.type == "TRAVEL")
                 .map((app) => {
-                    if (!app.application) return null;
-                    if (app.travelTime == 0) return null;
-
-                    const to = moment(app.application.datetime, "DD.MM.YYYY").add(moment.duration(app.application.time3));
-                    const from = to.clone().subtract(moment.duration(app.travelTime, "minutes"));
+                    const from = moment(app.from, "DD.MM.YYYY HH:mm:ss");
+                    const to = moment(app.to, "DD.MM.YYYY HH:mm:ss");
 
                     return {
                         id: Math.random(),
@@ -139,21 +152,27 @@
                 })
                 .filter((task) => task !== null);
 
-            const lunchFrom = moment(alloc.employee.date + ' ' + alloc.lunchTime, "YYYY-MM-DD HH:mm:ss");
-            const lunchTo = lunchFrom.clone().add(moment.duration(1, "hours"));
+            const lunchBreak = alloc.allocations.find((app) => app.type == "LUNCH_BREAK")
+
+            const from = moment(lunchBreak?.from, "DD.MM.YYYY HH:mm:ss");
+            const to = moment(lunchBreak?.to, "DD.MM.YYYY HH:mm:ss");
+            
             const lunch = {
                 id: Math.random(),
                 resourceId: alloc.employee.id,
                 label: "Обед",
-                from: lunchFrom,
-                to: lunchTo,
+                from: from,
+                to: to,
                 showButton: false,
                 enableDragging: false,
                 enableResize: false,
                 classes: "application-lunch",
             };
 
-            const { segments } = parseTimeWork(alloc.employee.timeWork, alloc.employee.date);
+            const { segments } = parseTimeWork(
+                alloc.employee.timeWork,
+                alloc.employee.date,
+            );
 
             const workTasks = segments.map((segment, index) => ({
                 id: Math.random(),
@@ -176,28 +195,41 @@
     onMount(async () => {
         ganttInstance.api.tasks.on.select((task: any[]) => {
             if (!task[0]) return;
-            if (!task[0].model.classes.includes('application-task')) {
+            if (!task[0].model.classes.includes("application-task")) {
                 return;
             }
             window.location.hash = `/applications/${task[0].model.id}`;
             window.scrollTo(0, 0);
         });
     });
+
+    async function reallocate() {
+        allocations = await fetchAllocations('reallocate', 'POST');
+        mapAllocationsToOptions(allocations);
+    }
 </script>
 
 <main class="flex flex-col gap-[40rem]">
     <p class="font-bold text-[40rem]">Распределение заявок</p>
     <div class="flex flex-col mb-[30rem]">
-        <Flatpickr
-            options={{
-                dateFormat: "d.m.Y",
-                noCalendar: false,
-                time_24hr: true,
-            }}
-            bind:value={time}
-            on:change={handleDateChange}
-            class="flex w-fit border w-fit text-gray-700 border border-gray-400 p-[20rem] rounded-[20rem] p-[20rem] mb-[30rem]"
-        />
+        <div class="flex justify-between">
+            <Flatpickr
+                options={{
+                    dateFormat: "d.m.Y",
+                    noCalendar: false,
+                    time_24hr: true,
+                }}
+                bind:value={time}
+                on:change={handleDateChange}
+                class="flex w-fit text-gray-700 border border-gray-400 p-[20rem] rounded-[20rem] mb-[30rem]"
+            />
+            <button
+                class="bg-[#D4212D] h-[82rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
+                on:click={reallocate}
+            >
+                Перераспределить
+            </button>
+        </div>
         <hr />
         <div>
             <SvelteGantt {...options} bind:this={ganttInstance} />

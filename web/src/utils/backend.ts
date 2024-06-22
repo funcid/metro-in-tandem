@@ -28,7 +28,7 @@ export const post = async <T>(
 
 export const checkAuth = async(): Promise<boolean> => {
     try {
-        await apiRequest("/api/v1/checkLogin", {method: "GET"}, false)
+        await apiRequest("/api/v1/auth/check", {method: "GET"}, false)
     } catch (error: any) {
         if (error.message == "401") return false;
     }

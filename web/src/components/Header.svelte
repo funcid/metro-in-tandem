@@ -66,7 +66,7 @@
             </div>
 
             <div class="hidden lg:block">
-                {#if username}
+                {#if $username}
                     <div
                         class="flex items-center gap-[10rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]"
                         on:click={toggleLogoutModal}

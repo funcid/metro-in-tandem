@@ -24,6 +24,11 @@ class AuthController(
         return ResponseEntity.ok(mapOf("token" to jwt))
     }
 
+    @GetMapping("/check")
+    fun check(): ResponseEntity<Any> {
+        return ResponseEntity.ok(mapOf("ok" to true))
+    }
+
     @PostMapping("/register")
     fun register(@RequestBody registerRequest: RegisterRequest): ResponseEntity<Any> {
         if (userService.existsByUsername(registerRequest.username)) {

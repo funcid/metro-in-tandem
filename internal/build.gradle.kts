@@ -34,6 +34,7 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 	implementation("javax.servlet:servlet-api:2.5")
+	implementation("com.google.ortools:ortools-java:9.10.4067")
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 

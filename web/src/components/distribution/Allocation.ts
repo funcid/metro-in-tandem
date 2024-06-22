@@ -1,5 +1,5 @@
 type Allocation = {
     employee: Employee;
-    applications: ExtendedApplication[];
+    allocations: AllocationDetail[];
     lunchTime: string
 }
