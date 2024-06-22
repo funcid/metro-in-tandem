@@ -11,7 +11,7 @@ import java.time.LocalTime
 
 @RestController
 @RequestMapping("/api/v1")
-@PreAuthorize("hasAnyRole('Администратор', 'Специалист')")
+@PreAuthorize("hasAnyAuthority('Администратор', 'Специалист')")
 class AllocationController(
     private val allocationService: AllocationService
 ) {
