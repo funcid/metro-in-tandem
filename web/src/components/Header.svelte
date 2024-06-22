@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { JWT, isAuthenticated, username } from "../utils/auth";
+    import { JWT, username } from "../utils/auth";
     import Login from "$lib/images/login.svg";
     import ApplicationImage from "$lib/images/home/advice.png";
     import PassengerImage from "$lib/images/home/question.png";
@@ -8,6 +8,7 @@
     import AimIcon from "$lib/images/icon/black_aim.svg?raw";
     import BurgerIcon from "$lib/images/icon/burger.png";
     import Cross from "$lib/images/icon/cross.png";
+
 
     let showLogoutModal = false;
 
@@ -65,7 +66,7 @@
             </div>
 
             <div class="hidden lg:block">
-                {#if $isAuthenticated}
+                {#if username}
                     <div
                         class="flex items-center gap-[10rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]"
                         on:click={toggleLogoutModal}
@@ -95,19 +96,11 @@
         </div>
     </div>
     <div class="justify-between hidden lg:flex">
-        {#if $isAuthenticated}
-            <a href="#/" class="topic">Главная</a>
-            <a href="#/applications" class="topic">Заявки</a>
-            <a href="#/passengers" class="topic">Пассажиры</a>
-            <a href="#/distribution" class="topic">Распределение</a>
-            <a href="#/employees" class="topic">Команда</a>
-        {:else}
-            <a href="#/" class="topic">Главная</a>
-            <a href="#/login" class="topic">Заявки</a>
-            <a href="#/login" class="topic">Пассажиры</a>
-            <a href="#/login" class="topic">Распределение</a>
-            <a href="#/login" class="topic">Команда</a>
-        {/if}
+        <a href="#/" class="topic">Главная</a>
+        <a href="#/applications" class="topic">Заявки</a>
+        <a href="#/passengers" class="topic">Пассажиры</a>
+        <a href="#/distribution" class="topic">Распределение</a>
+        <a href="#/employees" class="topic">Команда</a>
     </div>
 
     {#if showLogoutModal}
@@ -137,108 +130,38 @@
             class="flex flex-col h-[65%] gap-[48rem] justify-between"
             on:click={toggleMenu}
         >
-            {#if $isAuthenticated}
+            <div
+                class="flex items-center gap-[80rem]"
+                on:click={toggleLogoutModal}
+            >
                 <div
-                    class="flex items-center gap-[80rem]"
-                    on:click={toggleLogoutModal}
-                >
-                    <div
-                        class="w-[120rem] h-[120rem] rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
-                    ></div>
-                    <p class="text-[96rem]">{$username}</p>
-                </div>
-                <div class="flex gap-[80rem] items-center">
-                    <img
-                        class="w-[120rem]"
-                        src={ApplicationImage}
-                        alt={"заявки"}
-                    />
-                    <a href="#/applications" class="text-[96rem]">Заявки</a>
-                </div>
+                    class="w-[120rem] h-[120rem] rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                ></div>
+                <p class="text-[96rem]">{$username}</p>
+            </div>
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={ApplicationImage} alt={"заявки"} />
+                <a href="#/applications" class="text-[96rem]">Заявки</a>
+            </div>
 
-                <div class="flex gap-[80rem] items-center">
-                    <img
-                        class="w-[120rem]"
-                        src={PassengerImage}
-                        alt={"заявки"}
-                    />
-                    <a href="#/passengers" class="text-[96rem]">Пассажиры</a>
-                </div>
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={PassengerImage} alt={"заявки"} />
+                <a href="#/passengers" class="text-[96rem]">Пассажиры</a>
+            </div>
 
-                <div class="flex gap-[80rem] items-center">
-                    <img
-                        class="w-[120rem]"
-                        src={DistributionImage}
-                        alt={"Распределение"}
-                    />
-                    <a href="#/distribution" class="text-[96rem]">Распределение</a>
-                </div>
+            <div class="flex gap-[80rem] items-center">
+                <img
+                    class="w-[120rem]"
+                    src={DistributionImage}
+                    alt={"Распределение"}
+                />
+                <a href="#/distribution" class="text-[96rem]">Распределение</a>
+            </div>
 
-                <div class="flex gap-[80rem] items-center">
-                    <img
-                        class="w-[120rem]"
-                        src={EmployeeImage}
-                        alt={"заявки"}
-                    />
-                    <a href="#/employees" class="text-[96rem]">Команда</a>
-                </div>
-            {:else}
-                <a class="text-white text-[96rem] w-full" href="#/login">
-                    <button
-                        class="flex gap-[20rem] bg-[#D4212D] justify-center w-full py-[32rem] px-[26rem] rounded-[32rem] items-center"
-                    >
-                        Войти
-                        <img src={Login} alt="#" class="w-[96rem]" />
-                    </button>
-                </a>
-
-                <div class="flex gap-[80rem] items-center">
-                    <img
-                        class="w-[120rem]"
-                        src={ApplicationImage}
-                        alt={"заявки"}
-                    />
-                    <a href="#/login" class="text-[96rem]">Заявки</a>
-                </div>
-
-                <div class="flex gap-[80rem] items-center">
-                    <img
-                        class="w-[120rem]"
-                        src={PassengerImage}
-                        alt={"заявки"}
-                    />
-                    <a href="#/login" class="text-[96rem]">Пассажиры</a>
-                </div>
-
-                <div class="flex gap-[80rem] items-center">
-                    <div
-                        class="flex w-[120rem] h-[120rem] justify-between h-full"
-                    >
-                        <div class="flex flex-col justify-between h-full">
-                            {@html AimIcon}
-                            {@html AimIcon}
-                        </div>
-                        <div class="flex flex-col justify-center h-full">
-                            {@html AimIcon}
-                        </div>
-                        <div class="flex flex-col justify-between h-full">
-                            {@html AimIcon}
-                            {@html AimIcon}
-                        </div>
-                    </div>
-
-                    <a href="#/login" class="text-[96rem]">Распределение</a>
-                </div>
-
-                <div class="flex gap-[80rem] items-center">
-                    <img
-                        class="w-[120rem]"
-                        src={EmployeeImage}
-                        alt={"заявки"}
-                    />
-                    <a href="#/login" class="text-[96rem]">Команда</a>
-                </div>
-            {/if}
+            <div class="flex gap-[80rem] items-center">
+                <img class="w-[120rem]" src={EmployeeImage} alt={"заявки"} />
+                <a href="#/employees" class="text-[96rem]">Команда</a>
+            </div>
         </nav>
     </div>
 {/if}

@@ -2,29 +2,39 @@ import { writable, derived } from "svelte/store";
 
 const parseJwt = (token: string) => {
     if (!token) return null;
+    try {
 
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-        window
-            .atob(base64)
-            .split("")
-            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-            .join("")
-    );
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split("")
+                .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+                .join("")
+        );
 
-    return JSON.parse(jsonPayload);
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error("Error parsing JWT: ", error)
+        return null;
+    }
 };
 
 let initialJWT = localStorage.getItem("JWT") || null;
 export let JWT = writable(initialJWT);
 export let username = writable(null);
 
+export let jwt_value: string | null = null;
+
 JWT.subscribe((value) => {
+    jwt_value = value;
+    console.log("jwt update")
     if (value) {
         localStorage.setItem("JWT", value);
         const payload = parseJwt(value);
         if (payload) {
+            console.log("setting username")
             username.set(payload.sub);
         } else {
             username.set(null);
@@ -37,11 +47,11 @@ JWT.subscribe((value) => {
 
 export let isAuthenticated = derived(JWT, ($JWT) => !!$JWT);
 
-isAuthenticated.subscribe((auth) => {
-    if (auth && window.location.hash === "#/login") {
-        window.location.href = "/";
-    }
-});
+// isAuthenticated.subscribe((auth) => {
+//     if (auth && window.location.hash === "#/login") {
+//         window.location.href = "/";
+//     }
+// });
 
 export const login = async (username: string, password: string, API_HOST: string) => {
     try {
