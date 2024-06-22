@@ -18,6 +18,7 @@
             passengers = await backend.get<PassengerResponse[]>(
                 `/api/v1/passengers/all`,
             );
+            handleSearch();
         } catch (err) {
             errorMessage =
                 "Не удалось загрузить пассажиров. Пожалуйста, попробуйте позже.";
