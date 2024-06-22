@@ -1,10 +1,17 @@
 <script lang="ts">
     import { PUBLIC_API_HOST } from "$env/static/public";
-    import { login } from "../../utils/auth";
+    import { onMount } from "svelte";
+    import { login, isAuthenticated } from "../../utils/auth";
+    
 
     let inputUsername: string = "";
     let password: string = "";
     let errorMessage: string = "";
+    // onMount(async () => {
+    //     if (await checkAuth()) {
+    //         window.location.href = "/";
+    //     }
+    // })
 
     async function handleLogin() {
         const result = await login(inputUsername, password, PUBLIC_API_HOST);
@@ -12,6 +19,7 @@
             errorMessage = "Ошибка: " + (result.message || "Unknown error");
         } else {
             errorMessage = "";
+            document.location.reload()
         }
     }
 </script>

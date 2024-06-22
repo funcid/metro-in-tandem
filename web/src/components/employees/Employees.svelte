@@ -1,42 +1,24 @@
 <script lang="ts">
-    import { PUBLIC_API_HOST } from "$env/static/public";
-    import { JWT } from "../../utils/auth";
+    import * as backend from "../../utils/backend";
+
     import { sections } from "../Variables";
 
     let selectedSection = sections[0];
     let employees: EmployeeResponse[] = [];
     let loading = false;
     let errorMessage = "";
-    let noContent = false;
 
     const fetchEmployeesBySection = async (section: string) => {
         loading = true;
-        noContent = false;
         try {
-            const response = await fetch(
-                PUBLIC_API_HOST + `api/v1/employees?region=${section}`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${$JWT}`,
-                        "Content-Type": "application/json",
-                    },
-                },
+            employees = await backend.get<EmployeeResponse[]>(
+                `/api/v1/employees?region=${section}`,
             );
-            if (response.status === 204) {
-                employees = [];
-                noContent = true;
-            } else if (!response.ok) {
-                throw new Error("Network response was not ok");
-            } else {
-                employees = await response.json();
-            }
         } catch (err) {
-            errorMessage = "Failed to load employees. Please try again later.";
-            console.error(err);
-        } finally {
-            loading = false;
+            errorMessage =
+                "Не удалось загрузить сотрудников. Пожалуйста, попробуйте позже.";
         }
+        loading = false;
     };
 
     $: if (selectedSection) {
@@ -75,11 +57,13 @@
         <p class="text-gray-500 text-center">Загрузка сотрудников...</p>
     {:else if errorMessage}
         <p class="text-red-500 text-center">{errorMessage}</p>
-    {:else if noContent || employees.length === 0}
+    {:else if employees.length === 0}
         <p class="text-gray-500 text-center">Сотрудников не найдено</p>
     {:else}
         <div>
-            <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] text-gray-600 mb-[30rem]">
+            <div
+                class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] text-gray-600 mb-[30rem]"
+            >
                 <div>ID</div>
                 <div>ФИО</div>
                 <div>Время работы</div>
@@ -94,8 +78,16 @@
                         class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] gap-[4rem] py-[32rem] hover:bg-gray-100 cursor-pointer text-[16rem] md:text-[26rem] items-center"
                         on:click={() => handleClick(employee.id)}
                     >
-                        <div class="text-blue-600 underline hover:text-blue-800">{employee.id}</div>
-                        <div class="text-blue-600 underline hover:text-blue-800">{employee.fio}</div>
+                        <div
+                            class="text-blue-600 underline hover:text-blue-800"
+                        >
+                            {employee.id}
+                        </div>
+                        <div
+                            class="text-blue-600 underline hover:text-blue-800"
+                        >
+                            {employee.fio}
+                        </div>
                         <div>{employee.timeWork}</div>
                         <div>{employee.rank}</div>
                         <div>{employee.smena}</div>
