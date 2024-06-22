@@ -181,3 +181,181 @@ docker-compose up --build
 5. Для выхода из учетной записи нажмите на кнопку справа сверху, далее: Выйти
     
     ![Выход](/misc/images/logout.png)
+
+# Описание алгоритма распределения заявок
+
+## Компоненты
+
+- **AllocationService**: основной сервис, который управляет распределением заявок.
+- **applicationRepository**: репозиторий для работы с заявками.
+- **employeeRepository**: репозиторий для работы с сотрудниками.
+- **pathfinderService**: сервис для расчета времени перемещения между станциями.
+
+## Поля
+
+- **allocation**: карта, связывающая сотрудников с расширенными заявками.
+
+## Основные функции
+
+1. **allocateApplications(from: Long, to: Long): Map<Employee, List<ExtendedApplication>>**
+   - Извлекает всех сотрудников и подходящие заявки в указанный период.
+   - Распределяет заявки между подходящими сотрудниками.
+   - Обеспечивает наличие обеденного перерыва у всех сотрудников.
+   - Логирует неудачные распределения.
+   - Возвращает распределенные заявки.
+
+2. **findValidApplications(from: Long, to: Long): List<Application>**
+   - Находит заявки между заданными временными метками, исключая отмененные.
+
+3. **allocateToSuitableEmployees(employees: List<Employee>, applications: List<Application>)**
+   - Разделяет сотрудников на группы по рангу ("ЦИ" и "ЦСИ").
+   - Инициализирует пустые списки заявок для каждого сотрудника.
+   - Для каждой заявки ищет подходящих сотрудников и выбирает лучшего, учитывая время перемещения.
+
+4. **findSuitableEmployees(ciEmployees: List<Employee>, csiEmployees: List<Employee>, application: Application): List<Employee>**
+   - Находит подходящих сотрудников из групп "ЦИ" и "ЦСИ" для данной заявки.
+
+5. **findBestEmployeeAndTravelTime(employees: List<Employee>, application: Application): Pair<Employee, Double>**
+   - Находит лучшего сотрудника для заявки на основе минимального времени перемещения.
+
+6. **ensureLunchBreakForAllEmployees()**
+   - Обеспечивает наличие обеденного перерыва у всех сотрудников, добавляя обеденные заявки.
+
+7. **createLunchApplication(employee: Employee, lunchStart: LocalTime): Application**
+   - Создает фиктивную заявку для обеда.
+
+8. **calculateLunchTime(employee: Employee, extendedApplications: List<ExtendedApplication>): LocalTime?**
+   - Рассчитывает подходящее время для обеденного перерыва, проверяя наличие достаточного промежутка времени между заявками.
+
+9. **forceLunchBreak(employee: Employee)**
+   - Принудительно устанавливает обеденный перерыв для сотрудника, если подходящее время не найдено.
+
+10. **isEmployeeAvailable(employee: Employee, application: Application): Boolean**
+    - Проверяет, доступен ли сотрудник для новой заявки с учетом его расписания и уже назначенных заявок.
+
+11. **parseWorkTime(timeWork: String): Pair<LocalTime, LocalTime>**
+    - Парсит строку с рабочим временем сотрудника в пару значений LocalTime.
+
+12. **isWithinWorkHours(start: LocalTime, end: LocalTime, workStart: LocalTime, workEnd: LocalTime, crossesMidnight: Boolean): Boolean**
+    - Проверяет, находится ли временной интервал внутри рабочего времени сотрудника.
+
+13. **isValidLunchTime(lunchStart: LocalTime, lunchEnd: LocalTime, workStart: LocalTime, workEnd: LocalTime, applications: List<ExtendedApplication>, crossesMidnight: Boolean): Boolean**
+    - Проверяет, является ли предложенное время обеда допустимым.
+
+14. **estimateTravelTime(lastApplication: Application?, newApplication: Application): Double**
+    - Оценивает время перемещения между станциями последней заявки и новой заявки.
+
+15. **logFailedAllocations()**
+    - Логирует сотрудников, для которых не удалось распределить заявки.
+
+## Основной поток
+
+1. **Получение данных**
+   - Извлекаются все сотрудники и подходящие заявки.
+
+2. **Распределение заявок**
+   - Заявки распределяются среди подходящих сотрудников на основе их доступности и минимального времени перемещения.
+
+3. **Обеденные перерывы**
+   - Проверяется наличие обеденных перерывов у всех сотрудников, при необходимости добавляются фиктивные заявки для обеда.
+
+4. **Логирование**
+   - Сотрудники, для которых не удалось распределить заявки, логируются.
+
+Этот алгоритм обеспечивает оптимальное распределение заявок, учитывая рабочее время сотрудников, их занятость и необходимость обеденных перерывов.
+
+# Оценка сложности алгоритма распределения заявок
+
+Для оценки сложности алгоритма распределения заявок в терминах Big O рассмотрим ключевые части кода и их влияние на общую сложность.
+
+## Основная функция: `allocateApplications`
+
+1. **Получение всех сотрудников**:
+   ```kotlin
+   val employees = employeeRepository.findAll().toList().distinctBy { it.id }
+   ```
+   - Сложность: $ O(E) $ (где $ E $ — количество сотрудников).
+
+2. **Поиск валидных заявок**:
+   ```kotlin
+   val applications = findValidApplications(from, to).distinctBy { it.id }
+   ```
+   - Сложность: $ O(A) $ (где $ A $ — количество заявок).
+
+3. **Распределение заявок**:
+   ```kotlin
+   allocateToSuitableEmployees(employees, applications)
+   ```
+   - Основная сложность алгоритма скрыта в этой функции.
+
+4. **Обеспечение обеденных перерывов**:
+   ```kotlin
+   ensureLunchBreakForAllEmployees()
+   ```
+   - Сложность: $ O(E) $.
+
+## Функция `allocateToSuitableEmployees`
+
+1. **Инициализация пустых списков заявок для сотрудников**:
+   ```kotlin
+   (ciEmployees + csiEmployees).forEach { employee ->
+       allocation[employee] = mutableListOf()
+   }
+   ```
+   - Сложность: $ O(E) $.
+
+2. **Сортировка заявок по времени**:
+   ```kotlin
+   applications.sortedBy { it.time4 }
+   ```
+   - Сложность: $ O(A \log A) $.
+
+3. **Распределение каждой заявки**:
+   ```kotlin
+   applications.forEach { app ->
+       val suitableEmployees = findSuitableEmployees(ciEmployees, csiEmployees, app)
+       if (suitableEmployees.isNotEmpty()) {
+           val (employee, travelTime) = findBestEmployeeAndTravelTime(suitableEmployees, app)
+           allocation[employee]?.add(ExtendedApplication(app, travelTime))
+       }
+   }
+   ```
+   - Итерация по всем заявкам: $ O(A) $.
+   - Внутри каждой итерации:
+     - **Поиск подходящих сотрудников**: $ O(E) $.
+     - **Поиск лучшего сотрудника и времени перемещения**: $ O(E) $.
+
+## Функция `ensureLunchBreakForAllEmployees`
+
+1. **Проверка и добавление обеденных перерывов**:
+   ```kotlin
+   allocation.keys.forEach { employee ->
+       val extendedApplications = allocation[employee] ?: return@forEach
+       val lunchTime = calculateLunchTime(employee, extendedApplications)
+       if (lunchTime != null) {
+           allocation[employee]?.add(ExtendedApplication(createLunchApplication(employee, lunchTime), 0.0))
+       } else {
+           forceLunchBreak(employee)
+       }
+   }
+   ```
+   - Сложность: $ O(E \cdot A) $ (в худшем случае, проверка всех заявок каждого сотрудника).
+
+## Итоговая сложность
+
+Общая сложность алгоритма распределения заявок складывается из сложностей всех ключевых функций. Основные факторы, влияющие на сложность:
+- Сортировка заявок: $ O(A \log A) $.
+- Распределение заявок: $ O(A \cdot E) $.
+- Обеспечение обеденных перерывов: $ O(E \cdot A) $.
+
+Таким образом, итоговая сложность алгоритма:
+
+$$ O(A \log A + A \cdot E + E \cdot A) $$
+
+Так как $ A \cdot E $ доминирует, итоговая асимптотическая сложность:
+
+$$ O(A \cdot E) $$
+
+Где:
+- $ A $ — количество заявок.
+- $ E $ — количество сотрудников.
