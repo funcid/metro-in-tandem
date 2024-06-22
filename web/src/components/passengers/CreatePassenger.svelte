@@ -1,7 +1,7 @@
 <script lang="ts">
     import { PUBLIC_API_HOST } from "$env/static/public";
     import validateRussianPhoneNumber from "../../utils/validatePhoneNumber";
-    import { JWT } from "../login/Login.svelte";
+    import { JWT } from "../../utils/auth";
     import { categories } from "../Variables";
 
     let fullName = "";

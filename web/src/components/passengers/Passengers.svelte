@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { JWT } from "../login/Login.svelte";
+    import { JWT } from "../../utils/auth";
     import { PUBLIC_API_HOST } from "$env/static/public";
 
     let passengers: PassengerResponse[] = [];

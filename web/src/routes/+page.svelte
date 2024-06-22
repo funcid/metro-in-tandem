@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Router, { push } from "svelte-spa-router";
-	import { isAuthenticated } from "../components/login/Login.svelte"
+	import { isAuthenticated } from "../utils/auth"
 	import { fetchMetroStations } from "../utils/metro"
 
 	import Applications from '../components/applications/Applications.svelte';
