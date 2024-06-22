@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { JWT, isAuthenticated, username } from "./login/Login.svelte";
+    import { JWT, isAuthenticated, username } from "../utils/auth";
     import Login from "$lib/images/login.svg";
     import ApplicationImage from "$lib/images/home/advice.png";
     import PassengerImage from "$lib/images/home/question.png";

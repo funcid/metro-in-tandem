@@ -1,4 +1,4 @@
-import { JWT } from "../components/login/Login.svelte";
+import { JWT } from "../utils/auth";
 import { PUBLIC_API_HOST } from "$env/static/public";
 
 export let metroStations: MetroStation[];

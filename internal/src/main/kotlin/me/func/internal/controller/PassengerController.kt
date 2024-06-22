@@ -16,14 +16,14 @@ import java.net.URI
 class PassengerController(private val service: PassengerService) {
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
+    @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
     fun createPassenger(@RequestBody passenger: Passenger): ResponseEntity<Passenger> {
         val createdPassenger = service.createPassenger(passenger)
         return ResponseEntity(createdPassenger, HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
+    @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
     fun getPassenger(@PathVariable id: Long): ResponseEntity<PassengerDetailsResponse> {
         val passenger = service.getPassengerById(id) ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
         val response = PassengerDetailsResponse(
@@ -38,7 +38,7 @@ class PassengerController(private val service: PassengerService) {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
+    @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
     fun updatePassenger(@PathVariable id: Long, @RequestBody passenger: Passenger): ResponseEntity<Passenger> {
         val updatedPassenger = service.updatePassenger(id, passenger)
         return if (updatedPassenger != null) {
@@ -49,7 +49,7 @@ class PassengerController(private val service: PassengerService) {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('Администратор')")
+    @PreAuthorize("hasAnyAuthority('Администратор')")
     fun deletePassenger(@PathVariable id: Long): ResponseEntity<Void> {
         return if (service.deletePassenger(id)) {
             ResponseEntity.noContent().build()
@@ -59,14 +59,14 @@ class PassengerController(private val service: PassengerService) {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
+    @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
     fun searchPassengers(@RequestParam search: String): ResponseEntity<List<Passenger>> {
         val passengers = service.searchPassengers(search)
         return ResponseEntity.ok(passengers)
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('Администратор', 'Специалист', 'Оператор')")
+    @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
     fun getAllPassengers(): ResponseEntity<List<PassengerResponse>> {
         val passengers = service.getAllPassengers().map {
             PassengerResponse(
