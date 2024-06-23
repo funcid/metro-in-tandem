@@ -1,0 +1,52 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="func">
+        <createIndex indexName="full_name_index_passenger" tableName="passenger">
+            <column name="full_name"/>
+        </createIndex>
+        <createIndex indexName="category_index_passenger" tableName="passenger">
+            <column name="category"/>
+        </createIndex>
+        <createIndex indexName="id_index_passenger" tableName="passenger">
+            <column name="id"/>
+        </createIndex>
+
+        <createIndex indexName="passenger_id_index_contact_numbers" tableName="contact_numbers">
+            <column name="passenger_id"/>
+        </createIndex>
+
+        <createIndex indexName="name_index_roles" tableName="roles">
+            <column name="name"/>
+        </createIndex>
+
+        <createIndex indexName="employee_id_index_allocation" tableName="allocation">
+            <column name="employee_id"/>
+        </createIndex>
+        <createIndex indexName="application_id_index_allocation" tableName="allocation">
+            <column name="application_id"/>
+        </createIndex>
+
+        <createIndex indexName="id_pas_index_applications" tableName="applications">
+            <column name="id_pas"/>
+        </createIndex>
+        <createIndex indexName="datetime_index_applications" tableName="applications">
+            <column name="datetime"/>
+        </createIndex>
+
+        <createIndex indexName="uchastok_index_employees" tableName="employees">
+            <column name="uchastok"/>
+        </createIndex>
+        <createIndex indexName="id_index_employees" tableName="employees">
+            <column name="id"/>
+        </createIndex>
+
+        <createIndex indexName="id_index_metro_stations" tableName="metro_stations">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

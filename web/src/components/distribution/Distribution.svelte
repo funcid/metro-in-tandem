@@ -134,6 +134,7 @@
 
             const travel = alloc.allocations
                 .filter((app) => app.type == "TRAVEL")
+                .filter((app) => app.from != app.to)
                 .map((app) => {
                     const from = moment(app.from, "DD.MM.YYYY HH:mm:ss");
                     const to = moment(app.to, "DD.MM.YYYY HH:mm:ss");

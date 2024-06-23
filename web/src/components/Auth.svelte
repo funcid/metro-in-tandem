@@ -12,7 +12,6 @@
     });
 
     username.subscribe(async () => {
-        console.log("auth.svelte update")
         auth = await checkAuth();
     })
 </script>

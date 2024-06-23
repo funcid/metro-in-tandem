@@ -1,16 +1,10 @@
 import com.google.ortools.Loader
-import com.google.ortools.sat.BoolVar
-import com.google.ortools.sat.Constraint
 import com.google.ortools.sat.CpModel
 import com.google.ortools.sat.CpSolver
 import com.google.ortools.sat.Literal
 import com.google.ortools.sat.IntVar
 import com.google.ortools.sat.CpSolverStatus
-import com.google.ortools.sat.IntervalVar
-import com.google.ortools.sat.LinearArgument
 import com.google.ortools.sat.LinearExpr
-import java.util.UUID
-import kotlin.math.asin
 
 data class Task(
     val id: Int,

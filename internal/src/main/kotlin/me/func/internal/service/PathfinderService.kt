@@ -6,7 +6,6 @@ import me.func.internal.repository.MetroStationRepository
 import me.func.internal.repository.MetroTimeRepository
 import me.func.internal.repository.MetroTransferTimeRepository
 import org.springframework.stereotype.Service
-import kotlin.math.floor
 
 @Service
 class PathfinderService(
@@ -16,15 +15,13 @@ class PathfinderService(
 ) {
 
     private val metroStations = metroStationRepository.findAll().toList()
-    private val metroTimes  = metroTimeRepository.findAll().toList()
-    private val metroTransferTimes  = metroTransferTimeRepository.findAll().toList()
+    private val metroTimes = metroTimeRepository.findAll().toList()
+    private val metroTransferTimes = metroTransferTimeRepository.findAll().toList()
 
     fun findPath(
         startStationId: Int,
         endStationId: Int
     ): Pair<List<MetroStation>, Double> {
-        val startTime = System.currentTimeMillis()
-
         val shortestPath = findShortestPath(
             startStationId,
             endStationId,
@@ -33,26 +30,18 @@ class PathfinderService(
             metroTransferTimes
         )
 
-        val endTime = System.currentTimeMillis()
-        val duration = endTime - startTime
-
         var previousTime: Double? = null
         shortestPath.stations.forEachIndexed { index, metroStation ->
-            val addedTime = if (index == 0) {
-                0.0
-            } else {
-                previousTime = previousTime ?: 0.0
-                val lastStation = shortestPath.stations[index - 1]
-                val timeBetween = metroTimes.find {
-                    (it.idSt1 == lastStation.id && it.idSt2 == metroStation.id) ||
-                            (it.idSt1 == metroStation.id && it.idSt2 == lastStation.id)
-                }?.time ?: metroTransferTimes.find {
-                    (it.id1 == lastStation.id && it.id2 == metroStation.id) ||
-                            (it.id1 == metroStation.id && it.id2 == lastStation.id)
-                }?.time?.toDouble() ?: 0.0
-                previousTime = (previousTime ?: 0.0) + timeBetween
-                timeBetween
-            }
+            previousTime = previousTime ?: 0.0
+            val lastStation = shortestPath.stations[index - 1]
+            val timeBetween = metroTimes.find {
+                (it.idSt1 == lastStation.id && it.idSt2 == metroStation.id) ||
+                        (it.idSt1 == metroStation.id && it.idSt2 == lastStation.id)
+            }?.time ?: metroTransferTimes.find {
+                (it.id1 == lastStation.id && it.id2 == metroStation.id) ||
+                        (it.id1 == metroStation.id && it.id2 == lastStation.id)
+            }?.time?.toDouble() ?: 0.0
+            previousTime = (previousTime ?: 0.0) + timeBetween
         }
         return shortestPath.stations to String.format("%.1f", shortestPath.totalTime)
             .replace(',', '.')

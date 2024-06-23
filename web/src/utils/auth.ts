@@ -33,13 +33,10 @@ export let role_value: string | null = null;
 
 JWT.subscribe((value) => {
     jwt_value = value;
-    console.log("jwt update")
-    console.log(jwt_value);
     if (value) {
         localStorage.setItem("JWT", value);
         const payload = parseJwt(value);
         if (payload) {
-            console.log("setting username")
             username.set(payload.sub);
         } else {
             username.set(null);
@@ -78,8 +75,6 @@ export const login = async (username: string, password: string, API_HOST: string
         });
 
         const data = await response.json();
-
-        console.log(data);
 
         if (response.ok) {
             JWT.set(data.token);
