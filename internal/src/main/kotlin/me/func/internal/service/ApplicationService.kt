@@ -1,11 +1,8 @@
 package me.func.internal.service
 
 import jakarta.transaction.Transactional
-import me.func.internal.dto.ApplicationDetailsResponse
+import me.func.internal.dto.*
 import me.func.internal.model.ApplicationStatus
-import me.func.internal.dto.ApplicationResponse
-import me.func.internal.dto.ApplicationUpdateRequest
-import me.func.internal.dto.CreateApplicationRequest
 import me.func.internal.model.Application
 import me.func.internal.model.Passenger
 import me.func.internal.model.PassengerCategory
@@ -18,6 +15,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.sql.Time
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Service
 @Transactional
@@ -27,6 +26,13 @@ class ApplicationService(
     private val passengerRepository: PassengerRepository,
     private val stationRepository: MetroStationRepository
 ) {
+
+    fun getApplicationsByDateAndPassengerNamePrefix(date: LocalDate, namePrefix: String): List<ApplicationPassengerInfo> {
+        val startOfDay = date.atStartOfDay()
+        val endOfDay = date.atTime(23, 59, 59)
+
+        return applicationRepository.findApplicationsByDateAndPassengerNamePrefix(startOfDay, endOfDay, namePrefix)
+    }
 
     fun createApplication(application: CreateApplicationRequest): Application? {
         val passenger = passengerRepository.findByIdOrNull(application.idPas.toLong()) ?: return null
