@@ -66,8 +66,7 @@ class ApplicationController(private val applicationService: ApplicationService) 
     fun getApplicationsByDateAndPassengerNamePrefix(
         @RequestParam date: String,    // Параметр даты в виде строки
         @RequestParam namePrefix: String
-    ): ResponseEntity<List<ApplicationPassengerInfo>> {
-        // Преобразуем строку даты в LocalDate
+    ): ResponseEntity<List<ApplicationResponse>> {
         val localDate = LocalDate.parse(date)
         val applications = applicationService.getApplicationsByDateAndPassengerNamePrefix(localDate, namePrefix)
         return ResponseEntity.ok(applications)
