@@ -13,10 +13,10 @@ class AuthService(
     private val jwtUtils: JwtUtils
 ) {
 
-    fun authenticate(username: String, password: String): String {
+    fun authenticate(username: String, password: String): Pair<String, String?> {
         val authentication: Authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(username, password)
         )
-        return jwtUtils.generateJwtToken(authentication.name)
+        return jwtUtils.generateJwtToken(authentication.name) to authentication.authorities.firstOrNull()?.authority
     }
 }

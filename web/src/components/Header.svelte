@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { JWT, username } from "../utils/auth";
+    import { JWT, username, role } from "../utils/auth";
     import Login from "$lib/images/login.svg";
     import ApplicationImage from "$lib/images/home/advice.png";
     import PassengerImage from "$lib/images/home/question.png";
@@ -7,7 +7,6 @@
     import DistributionImage from "$lib/images/home/distribution.png";
     import BurgerIcon from "$lib/images/icon/burger.png";
     import Cross from "$lib/images/icon/cross.png";
-
 
     let showLogoutModal = false;
 
@@ -70,7 +69,13 @@
                         class="flex items-center gap-[10rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]"
                         on:click={toggleLogoutModal}
                     >
-                        <p>{$username}</p>
+                        <div class="flex flex-col">
+                            <p>{$username}</p>
+                            <p class="text-[16rem] text-red-700 font-bold">
+                                {$role}
+                            </p>
+                        </div>
+
                         <div
                             class="w-[60rem] h-[60rem] ml-[10rem] rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
                         ></div>
@@ -97,9 +102,11 @@
     <div class="justify-between hidden lg:flex">
         <a href="#/" class="topic">Главная</a>
         <a href="#/applications" class="topic">Заявки</a>
-        <a href="#/passengers" class="topic">Пассажиры</a>
-        <a href="#/distribution" class="topic">Распределение</a>
-        <a href="#/employees" class="topic">Команда</a>
+        {#if $role != "Сотрудник"}
+            <a href="#/passengers" class="topic">Пассажиры</a>
+            <a href="#/distribution" class="topic">Распределение</a>
+            <a href="#/employees" class="topic">Команда</a>
+        {/if}
     </div>
 
     {#if showLogoutModal}
