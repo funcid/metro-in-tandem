@@ -1,7 +1,6 @@
 <script lang="ts">
     import { PUBLIC_API_HOST } from "$env/static/public";
-    import { onMount } from "svelte";
-    import { login, isAuthenticated } from "../../utils/auth";
+    import { login } from "../../utils/auth";
     
 
     let inputUsername: string = "";
