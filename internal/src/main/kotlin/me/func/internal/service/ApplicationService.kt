@@ -26,14 +26,6 @@ class ApplicationService(
     private val passengerRepository: PassengerRepository,
     private val stationRepository: MetroStationRepository
 ) {
-
-    fun getApplicationsByDateAndPassengerNamePrefix(date: LocalDate, namePrefix: String): List<ApplicationPassengerInfo> {
-        val startOfDay = date.atStartOfDay()
-        val endOfDay = date.atTime(23, 59, 59)
-
-        return applicationRepository.findApplicationsByDateAndPassengerNamePrefix(startOfDay, endOfDay, namePrefix)
-    }
-
     fun createApplication(application: CreateApplicationRequest): Application? {
         val passenger = passengerRepository.findByIdOrNull(application.idPas.toLong()) ?: return null
 
@@ -127,6 +119,29 @@ class ApplicationService(
 
     fun getAllApplications(): List<ApplicationResponse> {
         return applicationRepository.findAllApplicationsWithPassengerInfo().map { info ->
+            ApplicationResponse(
+                info.id,
+                info.idPas,
+                info.time3.toString(),
+                info.time4.toString(),
+                info.timeOver.toString(),
+                info.status,
+                info.catPas,
+                info.datetime.toString(),
+                info.fullName,
+                info.number ?: "Мобильный номер отсутствует",
+                info.tpz.toString(),
+                stationRepository.findByIdOrNull(info.idSt1),
+                stationRepository.findByIdOrNull(info.idSt2),
+            )
+        }
+    }
+
+    fun getApplicationsByDateAndPassengerNamePrefix(date: LocalDate, namePrefix: String): List<ApplicationResponse> {
+        val startOfDay = date.atStartOfDay()
+        val endOfDay = date.atTime(23, 59, 59)
+
+        return applicationRepository.findApplicationsByDateAndPassengerNamePrefix(startOfDay, endOfDay, namePrefix).map { info ->
             ApplicationResponse(
                 info.id,
                 info.idPas,

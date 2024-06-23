@@ -31,16 +31,15 @@ interface ApplicationRepository : CrudRepository<Application, Long> {
         FROM applications a
         LEFT JOIN passenger p ON a.id_pas::bigint = p.id
         LEFT JOIN contact_numbers c ON p.id = c.passenger_id
-        WHERE a.datetime BETWEEN :startOfDay AND :endOfDay
-        AND LOWER(p.full_name) LIKE LOWER(CONCAT(:namePrefix, '%'))
-        ORDER BY a.datetime DESC;
+        WHERE (:namePrefix IS NULL OR LOWER(COALESCE(p.full_name, 'ФИО не найдено')) LIKE LOWER(CONCAT(:namePrefix, '%')))
+        AND a.datetime BETWEEN :startOfDay AND :endOfDay
+        ORDER BY a.datetime DESC
     """, nativeQuery = true)
     fun findApplicationsByDateAndPassengerNamePrefix(
         @Param("startOfDay") startOfDay: LocalDateTime,
         @Param("endOfDay") endOfDay: LocalDateTime,
         @Param("namePrefix") namePrefix: String
     ): List<ApplicationPassengerInfo>
-
     fun findAllByDatetimeBetween(from: Timestamp, to: Timestamp): List<Application>
 
 }
