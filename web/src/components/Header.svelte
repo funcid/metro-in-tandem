@@ -5,7 +5,6 @@
     import PassengerImage from "$lib/images/home/question.png";
     import EmployeeImage from "$lib/images/home/team.png";
     import DistributionImage from "$lib/images/home/distribution.png";
-    import AimIcon from "$lib/images/icon/black_aim.svg?raw";
     import BurgerIcon from "$lib/images/icon/burger.png";
     import Cross from "$lib/images/icon/cross.png";
 
@@ -66,7 +65,7 @@
             </div>
 
             <div class="hidden lg:block">
-                {#if username}
+                {#if $username}
                     <div
                         class="flex items-center gap-[10rem] cursor-pointer hover:bg-gray-100 rounded-[20rem] p-[20rem]"
                         on:click={toggleLogoutModal}
