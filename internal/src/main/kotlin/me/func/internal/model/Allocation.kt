@@ -16,6 +16,9 @@ data class Allocation(
     @Column(name = "employee_id", nullable = false)
     val employeeId: Long,
 
+    @Column(name = "employee_fio", nullable = false)
+    val employeeFio: String,
+
     @Column(name = "application_id", nullable = true)
     val applicationId: Long? = null,
 
@@ -43,6 +46,7 @@ data class Allocation(
                 from = Timestamp.valueOf(from),
                 to = Timestamp.valueOf(from.plusHours(1)),
                 allocationTime = Timestamp.from(Instant.now()),
+                employeeFio = this.fio
             )
         }
 
@@ -61,6 +65,7 @@ data class Allocation(
                     type = AllocationType.APPLICATION,
                     from = Timestamp.valueOf(from),
                     to = Timestamp.valueOf(to),
+                    employeeFio = employee.fio
                 ), Allocation(
                     employeeId = employee.id,
                     applicationId = this.id,
@@ -68,6 +73,7 @@ data class Allocation(
                     type = AllocationType.TRAVEL,
                     from = Timestamp.valueOf(from.minusSeconds(Math.round(travelTimeMinutes * 60))),
                     to = Timestamp.valueOf(from),
+                    employeeFio = employee.fio
                 )
             )
         }
