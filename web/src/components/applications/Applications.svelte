@@ -136,7 +136,7 @@
                     <div>Откуда</div>
                     <div>Куда</div>
                     <div>Время</div>
-                    <div>Работник</div>
+                    <div>Исполнители</div>
                     <div>Статус</div>
                 </div>
                 <hr />
