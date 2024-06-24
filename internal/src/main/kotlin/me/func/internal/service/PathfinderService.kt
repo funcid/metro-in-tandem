@@ -32,6 +32,9 @@ class PathfinderService(
 
         var previousTime: Double? = null
         shortestPath.stations.forEachIndexed { index, metroStation ->
+            if (index == 0) {
+                return@forEachIndexed
+            }
             previousTime = previousTime ?: 0.0
             val lastStation = shortestPath.stations[index - 1]
             val timeBetween = metroTimes.find {

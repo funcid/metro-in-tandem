@@ -32,7 +32,6 @@ class AllocationService(
         val employees = employeeRepository.findAll().toList().distinctBy { it.id }
         val applications = findValidApplications(from, to).distinctBy { it.id }
         if (reallocate) {
-
             allocationRepository.deleteAll()
 
             allocateToSuitableEmployees(employees, applications)
@@ -48,8 +47,6 @@ class AllocationService(
                 .mapKeys { employees.find { e -> it.key == e.id }!! }
                 .toMutableMap()
         }
-
-
 
         return allocation
     }
@@ -118,7 +115,6 @@ class AllocationService(
         allocation.keys.forEach { employee ->
             val extendedApplications = allocation[employee] ?: return@forEach
             val lunchTime = calculateLunchTime(employee, extendedApplications)
-            println("lunch time for ${employee.fio} $lunchTime (converts to ${Timestamp.valueOf(lunchTime)}) from $extendedApplications")
             if (lunchTime != null) {
                 allocation[employee]?.add(employee.createLunch(lunchTime))
             }
@@ -126,12 +122,9 @@ class AllocationService(
     }
 
     private fun calculateLunchTime(employee: Employee, extendedApplications: List<Allocation>): LocalDateTime? {
-        extendedApplications.sortedBy { it.from }
-
         val (workStart, _) = parseWorkTime(employee)
 
         var lunchTime = workStart.plusMinutes(60 * 3 + 30)
-        println("Work start for ${employee.fio} is $workStart $lunchTime")
 
         while (true) {
             val overlap = extendedApplications.lastOrNull {
@@ -158,9 +151,6 @@ class AllocationService(
         val (workStart, workEnd) = parseWorkTime(employee)
         val workHoursCrossMidnight = workEnd.isBefore(workStart)
 
-        if (employee.id == 709L && application.id == 489193L) {
-            println("a")
-        }
         return employeeApplications.none { existingApplication ->
             val existingStart = existingApplication.from.toLocalDateTime()
             val existingEnd = existingApplication.to.toLocalDateTime()
