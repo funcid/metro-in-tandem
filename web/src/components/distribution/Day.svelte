@@ -11,6 +11,7 @@
     import moment from "moment";
     import Flatpickr from "svelte-flatpickr";
     import "flatpickr/dist/flatpickr.css";
+    import { findMetroStationById } from "../../utils/metro";
 
     let ganttInstance: SvelteGantt | null = null;
     let allocations: Allocation[] = [];
@@ -46,7 +47,7 @@
     }
 
     async function fetchAllocations(
-        endpoint: string = "allocations",
+        endpoint: string = "day",
         method: string = "GET",
     ): Promise<Allocation[]> {
         const response = await fetch(
@@ -62,7 +63,16 @@
         if (!response.ok) {
             throw new Error("Failed to fetch allocations data");
         }
-        return await response.json();
+        let a = await response.json();
+        for (let alloc of a[0].allocations) {
+            alloc.application = a[0].applications.find(
+                (i: { id: number }) => i.id == alloc.applicationId,
+            );
+            console.log("found by id " + alloc);
+        }
+        console.log(a);
+        a[0].allocations.sort((a, b) => (a.from > b.from ? 1 : -1));
+        return a;
     }
 
     function parseTimeWork(timeWork: string, date: string) {
@@ -116,11 +126,11 @@
                         id: app.applicationId,
                         resourceId: alloc.employee.id,
                         label: (() => {
-                            let diffMinutes = to.diff(from, 'minutes');
+                            let diffMinutes = to.diff(from, "minutes");
                             // let duration = (to.minutes() - from.minutes()).toFixed(0);
                             // return Number(duration) >= -35 ? duration + "м" : " ";
                             // return to.minutes() + " " + from.minutes()
-                            return diffMinutes > 35 ? diffMinutes + "м" : " "
+                            return diffMinutes > 35 ? diffMinutes + "м" : " ";
                         })(),
                         from: from,
                         to: to,
@@ -153,11 +163,13 @@
                 })
                 .filter((task) => task !== null);
 
-            const lunchBreak = alloc.allocations.find((app) => app.type == "LUNCH_BREAK")
+            const lunchBreak = alloc.allocations.find(
+                (app) => app.type == "LUNCH_BREAK",
+            );
 
             const from = moment(lunchBreak?.from, "DD.MM.YYYY HH:mm:ss");
             const to = moment(lunchBreak?.to, "DD.MM.YYYY HH:mm:ss");
-            
+
             const lunch = {
                 id: Math.random(),
                 resourceId: alloc.employee.id,
@@ -205,13 +217,14 @@
     });
 
     async function reallocate() {
-        allocations = await fetchAllocations('reallocate', 'POST');
+        allocations = await fetchAllocations("reallocate", "POST");
         mapAllocationsToOptions(allocations);
     }
 </script>
 
 <main class="flex flex-col gap-[40rem]">
-    <p class="font-bold text-[40rem]">Распределение заявок</p>
+    <p class="font-bold text-[40rem]">Расписание на день</p>
+    <!-- {JSON.stringify(allocations)} -->
     <div class="flex flex-col mb-[30rem]">
         <div class="flex justify-between">
             <Flatpickr
@@ -224,16 +237,62 @@
                 on:change={handleDateChange}
                 class="flex w-fit text-gray-700 border border-gray-400 p-[20rem] rounded-[20rem] mb-[30rem]"
             />
-            <button
-                class="bg-[#D4212D] h-[82rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
-                on:click={reallocate}
-            >
-                Перераспределить
-            </button>
         </div>
         <hr />
         <div>
             <SvelteGantt {...options} bind:this={ganttInstance} />
+        </div>
+        <div>
+            {#if allocations && allocations[0]}
+                {#each allocations[0].allocations as a}
+                    {#if a.from != a.to}
+                        <div
+                            class=""
+                            style="margin: 6px; padding: 8px; border-radius: 16px; background-color: #f5f5f5;"
+                        >
+                            <div class="">
+                                {a.from.split(" ")[1]} - {a.to.split(" ")[1]}
+                            </div>
+
+                            <div class="" style="color: gray; padding-bottom: 6px;">{a.type == "APPLICATION" ? "Сопровождение заявки #" + a.application.id : a.type == "TRAVEL" ? "Перемещение к следующей заявке" : "Обеденный перерыв"}</div>
+                            {#if a.application}
+                                <div class="flex">
+                                    <div class="">
+                                        <img
+                                            src={findMetroStationById(
+                                                a.application.idSt1,
+                                            )?.iconUrl}
+                                            width="20px"
+                                        />
+                                    </div>
+                                    <div class="" style="padding-left: 4px;">
+                                        {findMetroStationById(
+                                            a.application.idSt1,
+                                        )?.nameStation}
+                                    </div>
+                                    <div class="" style="padding: 0px 6px;">
+                                        →
+                                    </div>
+                                    <div class="">
+                                        <img
+                                            src={findMetroStationById(
+                                                a.application.idSt2,
+                                            )?.iconUrl}
+                                            width="20px"
+                                        />
+                                    </div>
+                                    <div class="" style="padding-left: 4px;">
+                                        {findMetroStationById(
+                                            a.application.idSt2,
+                                        )?.nameStation}
+                                    </div>
+                                </div>
+                            {/if}
+                            <!-- {} -->
+                        </div>
+                    {/if}
+                {/each}
+            {/if}
         </div>
     </div>
 </main>
