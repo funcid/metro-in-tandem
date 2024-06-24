@@ -159,7 +159,7 @@
                             </div>
                             <div>{handleDatetime(app.datetime)}</div>
                             <div class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" on:click={() => handleClick(`/employees/${app.employeeId}`)}>
-                                {app.employeeFio?.split(' ')[0]}
+                                {app.employeeFio}
                             </div>
                             <div class="flex justify-center w-full">
                                 {@html handleStatus(app.status)}
