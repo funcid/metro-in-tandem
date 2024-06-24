@@ -2,10 +2,7 @@ package me.func.internal.service
 
 import jakarta.transaction.Transactional
 import me.func.internal.dto.*
-import me.func.internal.model.ApplicationStatus
-import me.func.internal.model.Application
-import me.func.internal.model.Passenger
-import me.func.internal.model.PassengerCategory
+import me.func.internal.model.*
 import java.sql.Timestamp
 import me.func.internal.repository.ApplicationRepository
 import me.func.internal.repository.MetroStationRepository
@@ -117,26 +114,6 @@ class ApplicationService(
         applicationRepository.deleteById(id)
     }
 
-    fun getAllApplications(): List<ApplicationResponse> {
-        return applicationRepository.findAllApplicationsWithPassengerInfo().map { info ->
-            ApplicationResponse(
-                info.id,
-                info.idPas,
-                info.time3.toString(),
-                info.time4.toString(),
-                info.timeOver.toString(),
-                info.status,
-                info.catPas,
-                info.datetime.toString(),
-                info.fullName,
-                info.number ?: "Мобильный номер отсутствует",
-                info.tpz.toString(),
-                stationRepository.findByIdOrNull(info.idSt1),
-                stationRepository.findByIdOrNull(info.idSt2),
-            )
-        }
-    }
-
     fun getApplicationsByDateAndPassengerNamePrefix(date: LocalDate, namePrefix: String): List<ApplicationResponse> {
         val startOfDay = date.atStartOfDay()
         val endOfDay = date.atTime(23, 59, 59)
@@ -145,17 +122,25 @@ class ApplicationService(
             ApplicationResponse(
                 info.id,
                 info.idPas,
-                info.time3.toString(),
-                info.time4.toString(),
                 info.timeOver.toString(),
                 info.status,
-                info.catPas,
                 info.datetime.toString(),
                 info.fullName,
                 info.number ?: "Мобильный номер отсутствует",
-                info.tpz.toString(),
-                stationRepository.findByIdOrNull(info.idSt1),
-                stationRepository.findByIdOrNull(info.idSt2),
+                MetroStation(
+                    id = info.stationFromId.toString(),
+                    nameStation = info.stationFromName,
+                    nameLine = info.stationFromLine,
+                    idLine = info.stationFromLineId.toString(),
+                ),
+                MetroStation(
+                    id = info.stationToId.toString(),
+                    nameStation = info.stationToName,
+                    nameLine = info.stationToLine,
+                    idLine = info.stationToLineId.toString(),
+                ),
+                info.employeeFio,
+                info.employeeId
             )
         }
     }

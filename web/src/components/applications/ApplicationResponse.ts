@@ -12,4 +12,6 @@ type ApplicationResponse = {
     tpz: string,
     stationFrom: MetroStationData | undefined,
     stationTo: MetroStationData | undefined,
+    employeeId: number | undefined,
+    employeeFio: string | undefined,
 };

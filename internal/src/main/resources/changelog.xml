@@ -11,5 +11,7 @@
     <include file="db/changelog/changelog-v1.0.5-cumulative.xml" relativeToChangelogFile="true"/>
     <include file="db/changelog/changelog-v1.0.6-cumulative.xml" relativeToChangelogFile="true"/>
     <include file="db/changelog/changelog-v1.0.7-cumulative.xml" relativeToChangelogFile="true"/>
+    <include file="db/changelog/changelog-v1.0.8-cumulative.xml" relativeToChangelogFile="true"/>
+    <include file="db/changelog/changelog-v1.0.9-cumulative.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

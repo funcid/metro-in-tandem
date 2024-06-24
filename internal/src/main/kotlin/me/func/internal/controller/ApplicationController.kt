@@ -47,13 +47,6 @@ class ApplicationController(private val applicationService: ApplicationService) 
         return ResponseEntity.noContent().build()
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
-    fun getAllApplications(): ResponseEntity<List<ApplicationResponse>> {
-        val applications = applicationService.getAllApplications()
-        return ResponseEntity.ok(applications)
-    }
-
     @GetMapping(params = ["status"])
     @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
     fun getApplicationsByStatus(@RequestParam status: ApplicationStatus): ResponseEntity<List<Application>> {

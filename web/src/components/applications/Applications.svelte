@@ -70,7 +70,7 @@
 
         return `
             <span 
-                class="w-fit border rounded-[16rem] px-[20rem] py-[16rem]" 
+                class="w-fit border rounded-[16rem] px-[14rem] py-[10rem]" 
                 style="
                     background-color: rgba(${color}, 0.05); 
                     border-color: rgba(${color}, 0.8); 
@@ -130,18 +130,19 @@
         {:else}
             <hr />
             <div>
-                <div class="grid grid-cols-[1fr,2fr,2fr,2fr,1fr,1fr] text-gray-600 mb-[30rem]">
+                <div class="grid grid-cols-[1fr,2fr,2fr,2fr,1fr,1fr,1fr] text-gray-600 mb-[30rem] text-[32rem]">
                     <div class="hidden md:block">ID</div>
                     <div>ФИО</div>
                     <div>Откуда</div>
                     <div>Куда</div>
                     <div>Время</div>
+                    <div>Работник</div>
                     <div>Статус</div>
                 </div>
                 <hr />
                 <ul class="list-none p-0">
                     {#each applications as app}
-                        <li class="grid grid-cols-[1fr,2fr,2fr,2fr,1fr,1fr] gap-[4rem] py-[26rem] hover:bg-gray-100 cursor-pointer text-[16rem] md:text-[26rem] items-center">
+                        <li class="grid grid-cols-[1fr,2fr,2fr,2fr,1fr,1fr,1fr] gap-[2rem] py-[26rem] hover:bg-gray-100 cursor-pointer text-[26rem] items-center">
                             <div on:click={() => handleClick(`/applications/${app.id}`)} class="hidden md:block underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
                                 {app.id}
                             </div>
@@ -157,6 +158,9 @@
                                 {app.stationTo?.nameStation}
                             </div>
                             <div>{handleDatetime(app.datetime)}</div>
+                            <div class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" on:click={() => handleClick(`/employees/${app.employeeId}`)}>
+                                {app.employeeFio?.split(' ')[0]}
+                            </div>
                             <div class="flex justify-center w-full">
                                 {@html handleStatus(app.status)}
                             </div>
