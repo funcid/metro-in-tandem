@@ -11,7 +11,6 @@ class PassengerCategoryConverter : AttributeConverter<PassengerCategory, String>
     }
 
     override fun convertToEntityAttribute(dbData: String?): PassengerCategory? {
-        println("Converting dbData: $dbData")
         return dbData?.let {
             val category = PassengerCategory.fromCode(it.uppercase())
             if (category == null) {
