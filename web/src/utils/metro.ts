@@ -63,7 +63,7 @@ export const findMetroStationByName = (name: string) => {
     if (find) return createMetroStation(find)
 }
 
-export const findMetroStationById = (id: number) => {
+export const findMetroStationById = (id: any) => {
     let find = metroStations.find((station) => station.id === id);
     if (find) return createMetroStation(find)
 }

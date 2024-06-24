@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.sql.Time
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Service
 @Transactional
@@ -147,5 +146,9 @@ class ApplicationService(
 
     fun getApplicationsByStatus(status: ApplicationStatus): List<Application> {
         return applicationRepository.findByStatus(status)
+    }
+
+    fun getApplicationsByIds(ids: List<Long>): List<Application>? {
+        return applicationRepository.findAll().filter { ids.contains(it.id) }
     }
 }
