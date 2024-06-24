@@ -113,11 +113,14 @@
                     const to = moment(app.to, "DD.MM.YYYY HH:mm:ss");
 
                     return {
-                        id: app.application.id,
+                        id: app.applicationId,
                         resourceId: alloc.employee.id,
                         label: (() => {
-                            let duration = (to.minutes() - from.minutes()).toFixed(0);
-                            return Number(duration) >= 35 ? duration + "м" : " ";
+                            let diffMinutes = to.diff(from, 'minutes');
+                            // let duration = (to.minutes() - from.minutes()).toFixed(0);
+                            // return Number(duration) >= -35 ? duration + "м" : " ";
+                            // return to.minutes() + " " + from.minutes()
+                            return diffMinutes > 35 ? diffMinutes + "м" : " "
                         })(),
                         from: from,
                         to: to,

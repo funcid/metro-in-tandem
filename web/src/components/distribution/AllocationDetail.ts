@@ -4,7 +4,7 @@ type AllocationDetail = {
     datetime: string;
     from: string;
     to: string;
-    application: Application;
+    applicationId: number;
 }
 
 type Application = {

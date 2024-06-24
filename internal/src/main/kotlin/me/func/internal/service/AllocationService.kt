@@ -1,5 +1,6 @@
 package me.func.internal.service
 
+import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import me.func.internal.model.Allocation
 import me.func.internal.model.Allocation.Companion.createLunch
@@ -15,6 +16,8 @@ import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 @Service
 @Transactional
@@ -22,32 +25,39 @@ class AllocationService(
     private val applicationRepository: ApplicationRepository,
     private val employeeRepository: EmployeeRepository,
     private val pathfinderService: PathfinderService,
-    private val allocationRepository: AllocationRepository
+    private val allocationRepository: AllocationRepository,
+    private val entityManager: EntityManager
 ) {
     private var allocation = mutableMapOf<Employee, MutableList<Allocation>>()
 
     fun allocateApplications(from: Long, to: Long, reallocate: Boolean): Map<Employee, List<Allocation>> {
         allocation.clear()
 
+        val employees = employeeRepository.findAll().toList().distinctBy { it.id }
+        val applications = findValidApplications(from, to).distinctBy { it.id }
         if (reallocate) {
-            val employees = employeeRepository.findAll().toList().distinctBy { it.id }
-            val applications = findValidApplications(from, to).distinctBy { it.id }
+
+            allocationRepository.deleteAll()
 
             allocateToSuitableEmployees(employees, applications)
-
             ensureLunchBreakForAllEmployees()
-
             logFailedAllocations()
 
-            allocationRepository.saveAll(
-                allocation.values.flatten()
-            )
+            allocationRepository.saveAllAndFlush(allocation.values.flatten())
+            // allocation.values.flatten().forEach {
+            //     entityManager.persist(it)
+            // }
+            // entityManager.flush()
         } else {
             val db = allocationRepository.findAll()
-            allocation = db.groupBy { it.employee }
-                .mapValues { (_, value) -> value.distinctBy { it.employee.id }.toMutableList() }
+
+            allocation = db.groupBy { it.employeeId }
+                .mapValues { (_, value) -> value.toMutableList() }
+                .mapKeys { employees.find { e -> it.key == e.id }!! }
                 .toMutableMap()
         }
+
+
 
         return allocation
     }
@@ -72,7 +82,7 @@ class AllocationService(
             val suitableEmployees = findSuitableEmployees(ciEmployees, csiEmployees, app)
 
             if (suitableEmployees.isNotEmpty()) {
-                val (employee, travelTime) = findBestEmployeeAndTravelTime(suitableEmployees, app)
+                val (employee, travelTime) = findBestEmployeeAndTravelTime(suitableEmployees, app, applications)
                 allocation[employee]?.addAll(app.fromApplication(employee, travelTime))
             } else {
                 println("Не удалось найти подходящего сотрудника для заявки ${app.id}")
@@ -95,12 +105,18 @@ class AllocationService(
         }
     }
 
-    private fun findBestEmployeeAndTravelTime(employees: List<Employee>, application: Application): Pair<Employee, Double> {
+    private fun findBestEmployeeAndTravelTime(
+        employees: List<Employee>, application: Application,
+        applications: List<Application>
+    ): Pair<Employee, Double> {
         return employees.map { employee ->
-            employee to estimateTravelTime(allocation[employee]
-                ?.filter { it.type == AllocationType.APPLICATION }
-                ?.maxByOrNull { it.to }
-                ?.application,
+            employee to estimateTravelTime(
+                applications.find { app ->
+                    app.id == allocation[employee]
+                        ?.filter { it.type == AllocationType.APPLICATION }
+                        ?.maxByOrNull { it.to }
+                        ?.applicationId
+                },
                 application
             )
         }.minByOrNull { it.second } ?: throw IllegalStateException("No suitable employee found")
@@ -110,10 +126,11 @@ class AllocationService(
         allocation.keys.forEach { employee ->
             val extendedApplications = allocation[employee] ?: return@forEach
             val lunchTime = calculateLunchTime(employee, extendedApplications)
+            println("lunch time for ${employee.fio} $lunchTime (converts to ${Timestamp.valueOf(lunchTime)}) from $extendedApplications")
             if (lunchTime != null) {
                 allocation[employee]?.add(employee.createLunch(lunchTime))
             } else {
-                forceLunchBreak(employee)
+                // forceLunchBreak(employee)
             }
         }
     }
@@ -122,26 +139,20 @@ class AllocationService(
         val sortedApplications = extendedApplications.sortedBy { it.from }
 
         val (workStart, workEnd) = parseWorkTime(employee)
-        val workHoursCrossMidnight = workEnd.isBefore(workStart)
 
-        for (i in 0 until sortedApplications.size - 1) {
-            val currentApplication = sortedApplications[i]
-            val nextApplication = sortedApplications[i + 1]
+        var lunchTime = workStart.plusMinutes(60 * 3 + 30)
+        println("Work start for ${employee.fio} is $workStart $lunchTime")
 
-            val availableTime = nextApplication.from.toLocalDateTime().toLocalTime()
-                .toSecondOfDay() - currentApplication.to.toLocalDateTime().toLocalTime().toSecondOfDay()
-
-            if (availableTime >= 3600) {
-                val potentialLunchStart = currentApplication.to.toLocalDateTime().plusMinutes(10)
-                val potentialLunchEnd = potentialLunchStart.plusHours(1)
-
-                if (isValidLunchTime(potentialLunchStart, potentialLunchEnd, workStart, workEnd, sortedApplications, workHoursCrossMidnight)) {
-                    return potentialLunchStart
-                }
+        while (true) {
+            val overlap = extendedApplications.lastOrNull {
+                it.from.toLocalDateTime().isBefore(lunchTime.plusHours(1)) &&
+                    it.to.toLocalDateTime().isAfter(lunchTime)
             }
+            if (overlap == null) break
+            lunchTime = overlap.to.toLocalDateTime()
         }
 
-        return null
+        return lunchTime
     }
 
     private fun forceLunchBreak(employee: Employee) {
@@ -166,8 +177,12 @@ class AllocationService(
         val employeeApplications = allocation[employee] ?: emptyList()
 
         val (workStart, workEnd) = parseWorkTime(employee)
+        // println("availability ${employee.fio} ${application.id} ${application.time3} ${application.time4} ${applicationStart} ${applicationEnd} ${workStart} $workEnd")
         val workHoursCrossMidnight = workEnd.isBefore(workStart)
 
+        if (employee.id == 709L && application.id == 489193L) {
+            println("a")
+        }
         return employeeApplications.none { existingApplication ->
             val existingStart = existingApplication.from.toLocalDateTime()
             val existingEnd = existingApplication.to.toLocalDateTime()
@@ -206,10 +221,10 @@ class AllocationService(
     ): Boolean {
         val isWithinHours = if (!crossesMidnight) {
             lunchStart.isAfter(workStart.plusHours(3).plusMinutes(30)) &&
-                    lunchEnd.isBefore(workEnd.minusHours(1))
+                lunchEnd.isBefore(workEnd.minusHours(1))
         } else {
             (lunchStart.isAfter(workStart.plusHours(3).plusMinutes(30)) && lunchEnd.isBefore(LocalDateTime.MAX)) ||
-                    (lunchStart.isAfter(LocalDateTime.MIN) && lunchEnd.isBefore(workEnd.minusHours(1)))
+                (lunchStart.isAfter(LocalDateTime.MIN) && lunchEnd.isBefore(workEnd.minusHours(1)))
         }
 
         val doesNotOverlap = applications.none { application ->

@@ -5,34 +5,30 @@ import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.*
 
 @Entity
 @Table(name = "allocation")
 data class Allocation(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    val employee: Employee,
+    @Column(name = "employee_id", nullable = false)
+    val employeeId: Long,
 
-    @ManyToOne
-    @JoinColumn(name = "application_id", nullable = true)
-    val application: Application? = null,
+    @Column(name = "application_id", nullable = true)
+    val applicationId: Long? = null,
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     val type: AllocationType,
 
     @Column(name = "fr", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss", timezone = "Europe/Moscow")
     val from: Timestamp,
 
     @Column(name = "destination", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss", timezone = "Europe/Moscow")
     val to: Timestamp,
 
     @Column(name = "allocation_time", nullable = false)
@@ -42,42 +38,36 @@ data class Allocation(
     companion object {
         fun Employee.createLunch(from: LocalDateTime): Allocation {
             return Allocation(
-                employee = this,
+                employeeId = this.id!!,
                 type = AllocationType.LUNCH_BREAK,
-                from = Timestamp.from(from.toInstant(ZoneOffset.UTC)),
-                to = Timestamp.from(from.plusHours(1).toInstant(ZoneOffset.UTC)),
+                from = Timestamp.valueOf(from),
+                to = Timestamp.valueOf(from.plusHours(1)),
                 allocationTime = Timestamp.from(Instant.now()),
             )
         }
 
         fun Application.fromApplication(employee: Employee, travelTimeMinutes: Double): List<Allocation> {
-            val startOfDay = datetime
-                .toLocalDateTime()
-                .toLocalDate()
-                .atStartOfDay()
-                .toInstant(ZoneOffset.UTC)
-            val from = startOfDay.toEpochMilli() + time3
-                .toLocalTime()
-                .toSecondOfDay() * 1_000
-            val to = startOfDay.toEpochMilli() + time4
-                .toLocalTime()
-                .toSecondOfDay() * 1_000
+            val startOfDay = datetime.toLocalDateTime().toLocalDate().atStartOfDay()
+            val from = startOfDay
+                .plusSeconds(time3.toLocalTime().toSecondOfDay().toLong())
+            val to = startOfDay
+                .plusSeconds(time4.toLocalTime().toSecondOfDay().toLong())
 
             return listOf(
                     Allocation(
-                    employee = employee,
-                    application = this,
+                    employeeId = employee.id!!,
+                    applicationId = this.id,
                     allocationTime = Timestamp.from(Instant.now()),
                     type = AllocationType.APPLICATION,
-                    from = Timestamp.from(Date(from).toInstant()),
-                    to = Timestamp.from(Date(to).toInstant()),
+                    from = Timestamp.valueOf(from),
+                    to = Timestamp.valueOf(to),
                 ), Allocation(
-                    employee = employee,
-                    application = this,
+                    employeeId = employee.id,
+                    applicationId = this.id,
                     allocationTime = Timestamp.from(Instant.now()),
                     type = AllocationType.TRAVEL,
-                    from = Timestamp.from(Date(from).toInstant().minusSeconds(Math.round(travelTimeMinutes * 60))),
-                    to = Timestamp.from(Date(from).toInstant()),
+                    from = Timestamp.valueOf(from.minusSeconds(Math.round(travelTimeMinutes * 60))),
+                    to = Timestamp.valueOf(from),
                 )
             )
         }
