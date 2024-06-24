@@ -25,10 +25,11 @@ class DayController(
         @RequestParam("from") from: Long,
         @RequestParam("to") to: Long,
     ): List<AllocationResponse> {
+        val (employee, allocations) = allocationService.allocateApplications(from, to, reallocate = false)
+            .entries
+            .first()
 
-        return allocationService.allocateApplications(from, to, reallocate = false)
-            .filterKeys { key -> key.fio == "Теленкова В.А." }
-            .map { (employee, allocations) ->
+        return allocations.map {
             AllocationResponse(
                 employee = employee,
                 allocations = allocations,
