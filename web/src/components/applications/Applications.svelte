@@ -130,7 +130,7 @@
         {:else}
             <hr />
             <div>
-                <div class="grid grid-cols-[1fr,2fr,2fr,2fr,1fr,1fr,1fr] text-gray-600 mb-[30rem] text-[32rem]">
+                <div class="grid grid-cols-[1fr,2fr,1.5fr,1.5fr,1fr,1.5fr,1fr] gap-[16rem] text-gray-600 mb-[30rem] text-[32rem]">
                     <div class="hidden md:block">ID</div>
                     <div>ФИО</div>
                     <div>Откуда</div>
@@ -142,7 +142,7 @@
                 <hr />
                 <ul class="list-none p-0">
                     {#each applications as app}
-                        <li class="grid grid-cols-[1fr,2fr,2fr,2fr,1fr,1fr,1fr] gap-[2rem] py-[26rem] hover:bg-gray-100 cursor-pointer text-[26rem] items-center">
+                        <li class="grid grid-cols-[1fr,2fr,1.5fr,1.5fr,1fr,1.5fr,1fr] gap-[16rem] py-[26rem] hover:bg-gray-100 cursor-pointer text-[26rem] items-center">
                             <div on:click={() => handleClick(`/applications/${app.id}`)} class="hidden md:block underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
                                 {app.id}
                             </div>
