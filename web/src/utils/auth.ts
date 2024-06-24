@@ -22,14 +22,19 @@ const parseJwt = (token: string) => {
 };
 
 let initialJWT = localStorage.getItem("JWT") || null;
+let initialRole = localStorage.getItem("role") || null;
+
 export let JWT = writable(initialJWT);
+export let role = writable(initialRole);
 export let username = writable(null);
 
 export let jwt_value: string | null = null;
+export let role_value: string | null = null;
 
 JWT.subscribe((value) => {
     jwt_value = value;
     console.log("jwt update")
+    console.log(jwt_value);
     if (value) {
         localStorage.setItem("JWT", value);
         const payload = parseJwt(value);
@@ -42,6 +47,15 @@ JWT.subscribe((value) => {
     } else {
         username.set(null);
         localStorage.removeItem("JWT");
+    }
+});
+
+role.subscribe((value) => {
+    role_value = value;
+    if (value) {
+        localStorage.setItem("role", value);
+    } else {
+        localStorage.removeItem("role");
     }
 });
 
@@ -65,8 +79,11 @@ export const login = async (username: string, password: string, API_HOST: string
 
         const data = await response.json();
 
+        console.log(data);
+
         if (response.ok) {
             JWT.set(data.token);
+            role.set(data.role);
             return { success: true, token: data.token };
         } else {
             return { success: false, message: data.message || "Unknown error" };

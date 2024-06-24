@@ -20,8 +20,11 @@ class AuthController(
 
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<Any> {
-        val jwt = authService.authenticate(loginRequest.username, loginRequest.password)
-        return ResponseEntity.ok(mapOf("token" to jwt))
+        val (jwt, role) = authService.authenticate(loginRequest.username, loginRequest.password)
+        return ResponseEntity.ok(mapOf(
+            "token" to jwt,
+            "role" to role
+        ))
     }
 
     @GetMapping("/check")

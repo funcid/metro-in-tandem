@@ -1,16 +1,14 @@
 package me.func.internal.controller
 
-import me.func.internal.dto.ApplicationDetailsResponse
-import me.func.internal.model.ApplicationStatus
-import me.func.internal.dto.ApplicationResponse
-import me.func.internal.dto.ApplicationUpdateRequest
-import me.func.internal.dto.CreateApplicationRequest
+import me.func.internal.dto.*
 import me.func.internal.model.Application
+import me.func.internal.model.ApplicationStatus
 import me.func.internal.service.ApplicationService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/v1/applications")
@@ -60,6 +58,17 @@ class ApplicationController(private val applicationService: ApplicationService) 
     @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
     fun getApplicationsByStatus(@RequestParam status: ApplicationStatus): ResponseEntity<List<Application>> {
         val applications = applicationService.getApplicationsByStatus(status)
+        return ResponseEntity.ok(applications)
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyAuthority('Администратор', 'Специалист', 'Оператор')")
+    fun getApplicationsByDateAndPassengerNamePrefix(
+        @RequestParam date: String,    // Параметр даты в виде строки
+        @RequestParam namePrefix: String
+    ): ResponseEntity<List<ApplicationResponse>> {
+        val localDate = LocalDate.parse(date)
+        val applications = applicationService.getApplicationsByDateAndPassengerNamePrefix(localDate, namePrefix)
         return ResponseEntity.ok(applications)
     }
 }
