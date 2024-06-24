@@ -18,7 +18,6 @@
     const searchApplications = async () => {
         try {
             const formattedTime = formatDate(time);
-            console.log(formattedTime);
             const response = await fetch(
                 `${PUBLIC_API_HOST}api/v1/applications/search?date=${formattedTime}&namePrefix=${searchQuery}`,
                 {

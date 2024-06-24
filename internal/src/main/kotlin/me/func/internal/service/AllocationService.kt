@@ -1,6 +1,5 @@
 package me.func.internal.service
 
-import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import me.func.internal.model.Allocation
 import me.func.internal.model.Allocation.Companion.createLunch
@@ -16,8 +15,6 @@ import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 @Service
 @Transactional
@@ -26,7 +23,6 @@ class AllocationService(
     private val employeeRepository: EmployeeRepository,
     private val pathfinderService: PathfinderService,
     private val allocationRepository: AllocationRepository,
-    private val entityManager: EntityManager
 ) {
     private var allocation = mutableMapOf<Employee, MutableList<Allocation>>()
 
@@ -44,10 +40,6 @@ class AllocationService(
             logFailedAllocations()
 
             allocationRepository.saveAllAndFlush(allocation.values.flatten())
-            // allocation.values.flatten().forEach {
-            //     entityManager.persist(it)
-            // }
-            // entityManager.flush()
         } else {
             val db = allocationRepository.findAll()
 
@@ -129,16 +121,14 @@ class AllocationService(
             println("lunch time for ${employee.fio} $lunchTime (converts to ${Timestamp.valueOf(lunchTime)}) from $extendedApplications")
             if (lunchTime != null) {
                 allocation[employee]?.add(employee.createLunch(lunchTime))
-            } else {
-                // forceLunchBreak(employee)
             }
         }
     }
 
     private fun calculateLunchTime(employee: Employee, extendedApplications: List<Allocation>): LocalDateTime? {
-        val sortedApplications = extendedApplications.sortedBy { it.from }
+        extendedApplications.sortedBy { it.from }
 
-        val (workStart, workEnd) = parseWorkTime(employee)
+        val (workStart, _) = parseWorkTime(employee)
 
         var lunchTime = workStart.plusMinutes(60 * 3 + 30)
         println("Work start for ${employee.fio} is $workStart $lunchTime")
@@ -155,17 +145,6 @@ class AllocationService(
         return lunchTime
     }
 
-    private fun forceLunchBreak(employee: Employee) {
-        val (workStart, workEnd) = parseWorkTime(employee)
-        val workHoursCrossMidnight = workEnd.isBefore(workStart)
-        val forcedLunchStart = if (!workHoursCrossMidnight) {
-            workStart.plusHours(3).plusMinutes(30)
-        } else {
-            workStart.plusHours(3).plusMinutes(30)
-        }
-        allocation[employee]?.add(employee.createLunch(forcedLunchStart))
-    }
-
     private fun isEmployeeAvailable(employee: Employee, application: Application): Boolean {
         val applicationStart = application.time3.toLocalTime()
             .toLocalDateTime(employee)
@@ -177,7 +156,6 @@ class AllocationService(
         val employeeApplications = allocation[employee] ?: emptyList()
 
         val (workStart, workEnd) = parseWorkTime(employee)
-        // println("availability ${employee.fio} ${application.id} ${application.time3} ${application.time4} ${applicationStart} ${applicationEnd} ${workStart} $workEnd")
         val workHoursCrossMidnight = workEnd.isBefore(workStart)
 
         if (employee.id == 709L && application.id == 489193L) {
@@ -209,31 +187,6 @@ class AllocationService(
         } else {
             start.isAfter(workStart) || end.isBefore(workEnd)
         }
-    }
-
-    private fun isValidLunchTime(
-        lunchStart: LocalDateTime,
-        lunchEnd: LocalDateTime,
-        workStart: LocalDateTime,
-        workEnd: LocalDateTime,
-        applications: List<Allocation>,
-        crossesMidnight: Boolean
-    ): Boolean {
-        val isWithinHours = if (!crossesMidnight) {
-            lunchStart.isAfter(workStart.plusHours(3).plusMinutes(30)) &&
-                lunchEnd.isBefore(workEnd.minusHours(1))
-        } else {
-            (lunchStart.isAfter(workStart.plusHours(3).plusMinutes(30)) && lunchEnd.isBefore(LocalDateTime.MAX)) ||
-                (lunchStart.isAfter(LocalDateTime.MIN) && lunchEnd.isBefore(workEnd.minusHours(1)))
-        }
-
-        val doesNotOverlap = applications.none { application ->
-            val appStart = application.from.toLocalDateTime()
-            val appEnd = application.to.toLocalDateTime()
-            !(lunchEnd.isBefore(appStart) || lunchStart.isAfter(appEnd))
-        }
-
-        return isWithinHours && doesNotOverlap
     }
 
     private fun estimateTravelTime(lastApplication: Application?, newApplication: Application): Double {
