@@ -126,8 +126,6 @@ class AllocationService(
     }
 
     private fun calculateLunchTime(employee: Employee, extendedApplications: List<Allocation>): LocalDateTime? {
-        extendedApplications.sortedBy { it.from }
-
         val (workStart, _) = parseWorkTime(employee)
 
         var lunchTime = workStart.plusMinutes(60 * 3 + 30)
