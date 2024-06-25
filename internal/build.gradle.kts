@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("org.springframework.boot") version "3.2.6"
+	id("org.springframework.boot") version "3.3.0"
 	id("io.spring.dependency-management") version "1.1.5"
 	kotlin("plugin.jpa") version "1.9.24"
 	kotlin("jvm") version "1.9.24"
@@ -35,6 +35,7 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 	implementation("javax.servlet:servlet-api:2.5")
 	implementation("com.google.ortools:ortools-java:9.10.4067")
+	implementation("io.micrometer:micrometer-registry-prometheus")
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 
