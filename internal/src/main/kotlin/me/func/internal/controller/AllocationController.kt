@@ -1,5 +1,6 @@
 package me.func.internal.controller
 
+import me.func.internal.dto.AllocationOperationResponse
 import me.func.internal.dto.AllocationResponse
 import me.func.internal.model.AllocationType
 import me.func.internal.service.AllocationService
@@ -20,25 +21,33 @@ class AllocationController(
     fun getAllocations(
         @RequestParam("from") from: Long,
         @RequestParam("to") to: Long,
-    ): List<AllocationResponse> {
-        return allocationService.allocateApplications(from, to, reallocate = false).map { (employee, allocations) ->
-            AllocationResponse(
-                employee = employee,
-                allocations = allocations,
-            )
-        }
+    ): AllocationOperationResponse {
+        val result = allocationService.allocateApplications(from, to, reallocate = false)
+        return AllocationOperationResponse(
+            allocations = result.allocations.map { (employee, allocations) ->
+                AllocationResponse(
+                    employee = employee,
+                    allocations = allocations,
+                )
+            },
+            failedToAllocate = result.failedApplications
+        )
     }
 
     @PostMapping("/reallocate")
     fun reallocateApplications(
         @RequestParam("from") from: Long,
         @RequestParam("to") to: Long,
-    ): List<AllocationResponse> {
-        return allocationService.allocateApplications(from, to, reallocate = true).map { (employee, allocations) ->
-            AllocationResponse(
-                employee = employee,
-                allocations = allocations,
-            )
-        }
+    ): AllocationOperationResponse {
+        val result = allocationService.allocateApplications(from, to, reallocate = true)
+        return AllocationOperationResponse(
+            allocations = result.allocations.map { (employee, allocations) ->
+                AllocationResponse(
+                    employee = employee,
+                    allocations = allocations,
+                )
+            },
+            failedToAllocate = result.failedApplications
+        )
     }
 }
