@@ -1,6 +1,7 @@
 package me.func.internal.service
 
 import jakarta.transaction.Transactional
+import me.func.internal.dto.AllocationProcessResult
 import me.func.internal.model.Allocation
 import me.func.internal.model.Allocation.Companion.createLunch
 import me.func.internal.model.Allocation.Companion.fromApplication
@@ -26,29 +27,31 @@ class AllocationService(
 ) {
     private var allocation = mutableMapOf<Employee, MutableList<Allocation>>()
 
-    fun allocateApplications(from: Long, to: Long, reallocate: Boolean): Map<Employee, List<Allocation>> {
+    fun allocateApplications(from: Long, to: Long, reallocate: Boolean): AllocationProcessResult {
         allocation.clear()
 
         val employees = employeeRepository.findAll().toList().distinctBy { it.id }
         val applications = findValidApplications(from, to).distinctBy { it.id }
+
         if (reallocate) {
             allocationRepository.deleteAll()
 
-            allocateToSuitableEmployees(employees, applications)
+            val failedToAllocation = allocateToSuitableEmployees(employees, applications)
             ensureLunchBreakForAllEmployees()
             logFailedAllocations()
 
             allocationRepository.saveAllAndFlush(allocation.values.flatten())
-        } else {
-            val db = allocationRepository.findAll()
-
-            allocation = db.groupBy { it.employeeId }
-                .mapValues { (_, value) -> value.toMutableList() }
-                .mapKeys { employees.find { e -> it.key == e.id }!! }
-                .toMutableMap()
+            return AllocationProcessResult(allocation, failedToAllocation)
         }
 
-        return allocation
+        val db = allocationRepository.findAll()
+
+        allocation = db.groupBy { it.employeeId }
+            .mapValues { (_, value) -> value.toMutableList() }
+            .mapKeys { employees.find { e -> it.key == e.id }!! }
+            .toMutableMap()
+
+        return AllocationProcessResult(allocation, listOf())
     }
 
     private fun findValidApplications(from: Long, to: Long): List<Application> {
@@ -59,9 +62,11 @@ class AllocationService(
             .filter { !it.status.isCancelled() }
     }
 
-    private fun allocateToSuitableEmployees(employees: List<Employee>, applications: List<Application>) {
+    private fun allocateToSuitableEmployees(employees: List<Employee>, applications: List<Application>): List<Application> {
         val ciEmployees = employees.filter { it.rank == "ЦИ" }
         val csiEmployees = employees.filter { it.rank == "ЦСИ" }
+
+        val failedToAllocationList = mutableListOf<Application>()
 
         (ciEmployees + csiEmployees).forEach { employee ->
             allocation[employee] = mutableListOf()
@@ -74,9 +79,12 @@ class AllocationService(
                 val (employee, travelTime) = findBestEmployeeAndTravelTime(suitableEmployees, app, applications)
                 allocation[employee]?.addAll(app.fromApplication(employee, travelTime))
             } else {
+                failedToAllocationList.add(app)
                 println("Не удалось найти подходящего сотрудника для заявки ${app.id}")
             }
         }
+
+        return failedToAllocationList
     }
 
     private fun findSuitableEmployees(

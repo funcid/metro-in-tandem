@@ -26,6 +26,7 @@ class DayController(
         @RequestParam("to") to: Long,
     ): List<AllocationResponse> {
         val (employee, allocations) = allocationService.allocateApplications(from, to, reallocate = false)
+            .allocations
             .entries
             .first()
 

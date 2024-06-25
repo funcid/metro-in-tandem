@@ -13,8 +13,9 @@
     import "flatpickr/dist/flatpickr.css";
 
     let ganttInstance: SvelteGantt | null = null;
-    let allocations: Allocation[] = [];
+    let data: AllocationResponse | null = null;
     let time: string = "24.4.2024";
+    let allocationProcess: boolean = false;
 
     let options = {
         rows: [] as { id: number; label: string; timeWork: string }[],
@@ -40,8 +41,8 @@
         if (selectedDates.length > 0) {
             options.from = Number(selectedDates[0]) + 1000 * 60 * 60 * 5.5;
             options.to = Number(selectedDates[0]) + 1000 * 60 * 60 * 25;
-            allocations = await fetchAllocations();
-            mapAllocationsToOptions(allocations);
+            data = await fetchAllocations();
+            mapAllocationsToOptions(data.allocations);
         }
     }
 
@@ -49,6 +50,9 @@
         endpoint: string = "allocations",
         method: string = "GET",
     ): Promise<Allocation[]> {
+        if (method == "POST") {
+            allocationProcess = true;
+        }
         const response = await fetch(
             `${PUBLIC_API_HOST}api/v1/${endpoint}?&from=${options.from}&to=${options.to}`,
             {
@@ -59,6 +63,7 @@
                 },
             },
         );
+        allocationProcess = false;
         if (!response.ok) {
             throw new Error("Failed to fetch allocations data");
         }
@@ -116,11 +121,11 @@
                         id: app.applicationId,
                         resourceId: alloc.employee.id,
                         label: (() => {
-                            let diffMinutes = to.diff(from, 'minutes');
+                            let diffMinutes = to.diff(from, "minutes");
                             // let duration = (to.minutes() - from.minutes()).toFixed(0);
                             // return Number(duration) >= -35 ? duration + "м" : " ";
                             // return to.minutes() + " " + from.minutes()
-                            return diffMinutes > 35 ? diffMinutes + "м" : " "
+                            return diffMinutes > 35 ? diffMinutes + "м" : " ";
                         })(),
                         from: from,
                         to: to,
@@ -153,11 +158,13 @@
                 })
                 .filter((task) => task !== null);
 
-            const lunchBreak = alloc.allocations.find((app) => app.type == "LUNCH_BREAK")
+            const lunchBreak = alloc.allocations.find(
+                (app) => app.type == "LUNCH_BREAK",
+            );
 
             const from = moment(lunchBreak?.from, "DD.MM.YYYY HH:mm:ss");
             const to = moment(lunchBreak?.to, "DD.MM.YYYY HH:mm:ss");
-            
+
             const lunch = {
                 id: Math.random(),
                 resourceId: alloc.employee.id,
@@ -205,14 +212,18 @@
     });
 
     async function reallocate() {
-        allocations = await fetchAllocations('reallocate', 'POST');
-        mapAllocationsToOptions(allocations);
+        data = await fetchAllocations("reallocate", "POST");
+        mapAllocationsToOptions(data.allocations);
+    }
+
+    function goApplication(id: number) {
+        window.location.hash = `/applications/${id}`;
     }
 </script>
 
 <main class="flex flex-col gap-[40rem]">
     <p class="font-bold text-[40rem]">Распределение заявок</p>
-    <div class="flex flex-col mb-[30rem]">
+    <div class="flex flex-col gap-[30rem]">
         <div class="flex justify-between">
             <Flatpickr
                 options={{
@@ -225,14 +236,38 @@
                 class="flex w-fit text-gray-700 border border-gray-400 p-[20rem] rounded-[20rem] mb-[30rem]"
             />
             <button
-                class="bg-[#D4212D] h-[82rem] hover:bg-red-700 py-[12rem] px-[26rem] rounded-[20rem] items-center text-white"
+                class="h-[82rem] py-[12rem] px-[26rem] rounded-[20rem] items-center text-white {allocationProcess
+                    ? 'bg-red-300 hover:bg-red-300'
+                    : 'bg-[#D4212D] hover:bg-red-700'}"
                 on:click={reallocate}
+                disabled={allocationProcess}
             >
-                Перераспределить
+                {allocationProcess
+                    ? "Перераспределение..."
+                    : "Перераспределить"}
             </button>
         </div>
-        <hr />
+        {#if data && data?.failedToAllocate?.length > 0}
+            <div class="flex flex-col text-red-700">
+                Не удалось распределить {data?.failedToAllocate?.length} заявок:
+                <div class="flex flex-wrap gap-2">
+                    {#each data.failedToAllocate as key, index}
+                        <p 
+                            class="text-blue-600 underline hover:text-blue-800"
+                            on:click={() => goApplication(key.id)}
+                        >
+                            #{key.id}
+                            {#if index != data?.failedToAllocate?.length - 1} 
+                                ,                                
+                            {/if}
+                        </p>
+                        &nbsp;
+                    {/each}
+                </div>
+            </div>
+        {/if}
         <div>
+            <hr />
             <SvelteGantt {...options} bind:this={ganttInstance} />
         </div>
     </div>
