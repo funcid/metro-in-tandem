@@ -6,11 +6,6 @@
     let inputUsername: string = "";
     let password: string = "";
     let errorMessage: string = "";
-    // onMount(async () => {
-    //     if (await checkAuth()) {
-    //         window.location.href = "/";
-    //     }
-    // })
 
     async function handleLogin() {
         const result = await login(inputUsername, password, PUBLIC_API_HOST);

@@ -58,12 +58,6 @@ role.subscribe((value) => {
 
 export let isAuthenticated = derived(JWT, ($JWT) => !!$JWT);
 
-// isAuthenticated.subscribe((auth) => {
-//     if (auth && window.location.hash === "#/login") {
-//         window.location.href = "/";
-//     }
-// });
-
 export const login = async (username: string, password: string, API_HOST: string) => {
     try {
         const response = await fetch(`${API_HOST}auth/login`, {
