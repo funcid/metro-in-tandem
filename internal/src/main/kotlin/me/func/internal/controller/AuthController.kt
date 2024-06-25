@@ -5,6 +5,7 @@ import me.func.internal.dto.LoginRequest
 import me.func.internal.dto.RegisterRequest
 import me.func.internal.model.Role
 import me.func.internal.model.User
+import me.func.internal.repository.EmployeeRepository
 import me.func.internal.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.*
 class AuthController(
     private val authService: AuthService,
     private val userService: UserService,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val employeeRepository: EmployeeRepository
 ) {
 
     @PostMapping("/login")
@@ -41,7 +43,8 @@ class AuthController(
         val user = User(
             username = registerRequest.username,
             password = passwordEncoder.encode(registerRequest.password),
-            role = Role(1, "Сотрудник")
+            role = Role(1, "Сотрудник"),
+            employee = employeeRepository.findAll().toList().random() // make mapping resolver
         )
 
         userService.save(user)

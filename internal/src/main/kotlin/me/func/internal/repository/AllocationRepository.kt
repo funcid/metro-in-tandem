@@ -8,6 +8,6 @@ import java.sql.Timestamp
 @Repository
 interface AllocationRepository : JpaRepository<Allocation, Long> {
 
-    fun findAllByFromBetween(from: Timestamp, to: Timestamp): List<Allocation>
+    fun findAllByEmployeeId(employeeId: Long): List<Allocation>
 
 }

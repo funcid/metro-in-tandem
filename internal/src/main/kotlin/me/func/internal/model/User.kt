@@ -12,5 +12,7 @@ data class User(
     val password: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
-    val role: Role
+    val role: Role,
+    @OneToOne(fetch  = FetchType.EAGER)
+    val employee: Employee,
 )

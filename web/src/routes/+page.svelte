@@ -22,7 +22,6 @@
 	import Header from "../components/Header.svelte";
 	import Footer from "../components/Footer.svelte";
 	import Auth from "../components/Auth.svelte";
-    import Day from "../components/distribution/Day.svelte";
 
 	const routes = {
 		"/": Home,
@@ -36,7 +35,6 @@
 		"/employees": Employees,
 		"/employees/:id": EmployeeDetail,
 		"/create-employee": CreateEmployee,
-		"/day": Day,
 		"/login": Login,
 	};
 
