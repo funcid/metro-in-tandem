@@ -51,10 +51,14 @@ export function createMetroStation(station: MetroStationData | undefined): Metro
     let url = getMetroLineIconUrl(station.idLine);
     let old = isOld(station.idLine);
     
+    const isMobile = window.innerWidth <= 768;
+    const width = isMobile ? (old ? 16 : 20) : (old ? 22 : 30);
+    const maxHeight = isMobile ? 34 : 36;
+    
     return {
         ...station,
         iconUrl: url,
-        iconHtml: `<img width="${old ? 20 : 32}rem" style='max-height: 26rem; transform: translateY(-2rem);' src=${url} alt=${station.nameStation}/>`,
+        iconHtml: `<img width="${width}rem" style='max-height: ${maxHeight}rem; transform: translateY(-2rem);' src=${url} alt=${station.nameStation}/>`,
     };
 }
 

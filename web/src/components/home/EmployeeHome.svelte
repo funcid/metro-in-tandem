@@ -92,8 +92,8 @@
                                       : "Обеденный перерыв"}
                             </div>
                             {#if alloc.type == "APPLICATION" && getApplication(alloc.applicationId)}
-                                <div class="flex p-[16rem] gap-[16rem]">
-                                    <div class="flex gap-[4rem]">
+                                <div class="flex gap-[10rem]">
+                                    <div class="flex gap-[6rem]">
                                         {@html findMetroStationById(
                                             getApplication(alloc.applicationId)
                                                 ?.idSt1,
@@ -104,7 +104,7 @@
                                         )?.nameStation}
                                     </div>
                                     ➜
-                                    <div class="flex gap-[4rem]">
+                                    <div class="flex gap-[6rem]">
                                         {@html findMetroStationById(
                                             getApplication(alloc.applicationId)
                                                 ?.idSt2,
