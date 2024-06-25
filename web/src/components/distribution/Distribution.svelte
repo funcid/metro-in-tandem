@@ -13,7 +13,7 @@
     import "flatpickr/dist/flatpickr.css";
 
     let ganttInstance: SvelteGantt | null = null;
-    let data: AllocationResponse | null = null;
+    let data: AllocationProcessResponse | null = null;
     let time: string = "24.4.2024";
     let allocationProcess: boolean = false;
 

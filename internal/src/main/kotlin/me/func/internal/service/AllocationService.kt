@@ -27,6 +27,10 @@ class AllocationService(
 ) {
     private var allocation = mutableMapOf<Employee, MutableList<Allocation>>()
 
+    fun findByEmployeeId(employeeId: Long): List<Allocation> {
+        return allocationRepository.findAllByEmployeeId(employeeId)
+    }
+
     fun allocateApplications(from: Long, to: Long, reallocate: Boolean): AllocationProcessResult {
         allocation.clear()
 

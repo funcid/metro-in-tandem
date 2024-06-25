@@ -99,15 +99,15 @@
             </div>
         </div>
     </div>
-    <div class="justify-between hidden lg:flex">
-        <a href="#/" class="topic">Главная</a>
-        <a href="#/applications" class="topic">Заявки</a>
-        {#if $role != "Сотрудник"}
+    {#if $role != "Сотрудник"}
+        <div class="justify-between hidden lg:flex">
+            <a href="#/" class="topic">Главная</a>
+            <a href="#/applications" class="topic">Заявки</a>
             <a href="#/passengers" class="topic">Пассажиры</a>
             <a href="#/distribution" class="topic">Распределение</a>
             <a href="#/employees" class="topic">Команда</a>
-        {/if}
-    </div>
+        </div>
+    {/if}
 
     {#if showLogoutModal}
         <div
